@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#89986D">
+<title>Mon Salon — Salonify</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="dash-top">
+  <div class="dt-inner">
+    <a href="dashboard_salon.html" class="dt-tab">Vue generale</a>
+    <a href="gestion_services.html" class="dt-tab">Services</a>
+    <a href="gestion_employes.html" class="dt-tab">Equipe</a>
+    <a href="disponibilites.html" class="dt-tab">Disponibilites</a>
+    <a href="mes_reservations.html" class="dt-tab">Reservations</a>
+    <a href="profil_salon_edit.html" class="dt-tab on">Mon salon</a>
+  </div>
+</div>
+
+<div class="pse-header">
+  <div class="wrap pse-header-inner">
+    <div>
+      <div class="pse-header-title">Mon salon</div>
+      <div class="pse-header-sub">Modifier les informations de votre etablissement</div>
+    </div>
+    <div class="pse-header-actions">
+      <a href="profil_salon.html" class="btn-topbar-ghost" style="padding:.5rem 1.1rem;font-size:.74rem;text-decoration:none;display:inline-block">&#128065; Voir la page publique</a>
+    </div>
+  </div>
+</div>
+
+<div class="pse-subnav">
+  <div class="pse-subnav-inner">
+    <a href="#" class="pse-tab on">Informations</a>
+    <a href="#" class="pse-tab">Photos</a>
+    <a href="#" class="pse-tab">Horaires</a>
+    <a href="#" class="pse-tab">Localisation</a>
+    <a href="#" class="pse-tab">Paiement</a>
+  </div>
+</div>
+
+<div class="pse-layout">
+
+  <div>
+
+    <div class="pse-card">
+      <div class="pse-card-head">
+        <div class="pse-card-title">Photos du salon</div>
+        <span class="valide-badge">&#10003; Valide</span>
+      </div>
+      <div class="pse-photo-hero">
+        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80" alt="Elegance Coiffure">
+        <div class="pse-photo-overlay">
+          <div class="pse-photo-overlay-ic">&#128247;</div>
+          <div class="pse-photo-overlay-t">Changer la photo principale</div>
+        </div>
+      </div>
+      <div class="pse-gallery-row">
+        <div class="pse-gal-thumb">
+          <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=200&h=200&fit=crop&q=80" alt="">
+          <button class="pse-gal-del">&#10005;</button>
+        </div>
+        <div class="pse-gal-thumb">
+          <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=200&h=200&fit=crop&q=80" alt="">
+          <button class="pse-gal-del">&#10005;</button>
+        </div>
+        <div class="pse-gal-thumb">
+          <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=200&h=200&fit=crop&q=80" alt="">
+          <button class="pse-gal-del">&#10005;</button>
+        </div>
+        <div class="pse-gal-thumb">
+          <img src="https://images.unsplash.com/photo-1519415943484-9fa1873496d4?w=200&h=200&fit=crop&q=80" alt="">
+          <button class="pse-gal-del">&#10005;</button>
+        </div>
+        <div class="pse-gal-add">
+          <div class="pse-gal-add-ic">+</div>
+          <div class="pse-gal-add-t">Ajouter</div>
+        </div>
+      </div>
+      <div style="padding:.8rem 1.4rem;font-size:.76rem;color:var(--ink-m)">5 photos sur 10 maximum · Formats acceptes : JPG, PNG, WEBP · Max 5 Mo par photo</div>
+    </div>
+
+    <div class="pse-card">
+      <div class="pse-card-head">
+        <div class="pse-card-title">Informations generales</div>
+      </div>
+      <div class="pse-card-body">
+        <div class="pse-fields-grid">
+          <div class="pse-field-full">
+            <label class="pse-label">Nom du salon</label>
+            <input class="pse-input" type="text" value="Elegance Coiffure">
+          </div>
+          <div>
+            <label class="pse-label">Telephone</label>
+            <input class="pse-input" type="tel" value="05 37 XX XX XX">
+          </div>
+          <div>
+            <label class="pse-label">Email du salon</label>
+            <input class="pse-input" type="email" value="contact@elegance-rabat.ma">
+          </div>
+          <div class="pse-field-full">
+            <label class="pse-label">Description</label>
+            <textarea class="pse-input" style="min-height:120px">Salon de coiffure et de beaute au coeur d'Agdal, Rabat. Nous proposons des services haut de gamme dans un cadre chaleureux et moderne. Notre equipe de professionnels qualifies vous accueille du lundi au samedi.</textarea>
+          </div>
+          <div>
+            <label class="pse-label">Categorie principale</label>
+            <select class="pse-input">
+              <option selected>Coiffure & Beaute</option>
+              <option>Coiffure uniquement</option>
+              <option>Institut de beaute</option>
+              <option>Spa & Bien-etre</option>
+              <option>Barbier</option>
+            </select>
+          </div>
+          <div>
+            <label class="pse-label">RIB bancaire</label>
+            <input class="pse-input" type="text" value="MA 012 345 678 9012 345 6" placeholder="Numero de compte bancaire">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pse-card">
+      <div class="pse-card-head">
+        <div class="pse-card-title">Adresse & Localisation</div>
+      </div>
+      <div class="pse-card-body">
+        <div class="pse-fields-grid">
+          <div class="pse-field-full">
+            <label class="pse-label">Adresse complete</label>
+            <input class="pse-input" type="text" value="12, Rue Ibn Sina, Agdal">
+          </div>
+          <div>
+            <label class="pse-label">Quartier</label>
+            <select class="pse-input">
+              <option selected>Agdal</option>
+              <option>Hay Riad</option>
+              <option>Souissi</option>
+              <option>Hassan</option>
+              <option>Centre Ville</option>
+              <option>Ocean</option>
+              <option>Akkari</option>
+            </select>
+          </div>
+          <div>
+            <label class="pse-label">Code postal</label>
+            <input class="pse-input" type="text" value="10090">
+          </div>
+          <div>
+            <label class="pse-label">Ville</label>
+            <select class="pse-input">
+              <option selected>Rabat</option>
+              <option>Casablanca</option>
+              <option>Sale</option>
+              <option>Temara</option>
+              <option>Kenitra</option>
+            </select>
+          </div>
+          <div>
+            <label class="pse-label">Latitude (GPS)</label>
+            <input class="pse-input" type="text" value="33.9922" placeholder="ex: 33.9716">
+          </div>
+          <div>
+            <label class="pse-label">Longitude (GPS)</label>
+            <input class="pse-input" type="text" value="-6.8545" placeholder="ex: -6.8498">
+          </div>
+          <div class="pse-field-full" style="text-align:right">
+            <button class="btn-add" style="padding:.5rem 1.2rem;font-size:.74rem">&#127759; Recalculer depuis l'adresse</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pse-card">
+      <div class="pse-card-head">
+        <div class="pse-card-title">Horaires d'ouverture</div>
+      </div>
+      <div class="pse-card-body">
+        <table class="horaires-table">
+          <div class="hor-row" style="padding-bottom:.5rem;border-bottom:1.5px solid var(--border2);margin-bottom:.3rem">
+            <div style="font-size:.64rem;font-weight:700;text-transform:uppercase;color:var(--ink-m)">Jour</div>
+            <div style="font-size:.64rem;font-weight:700;text-transform:uppercase;color:var(--ink-m)">Ouverture</div>
+            <div style="font-size:.64rem;font-weight:700;text-transform:uppercase;color:var(--ink-m)">Fermeture</div>
+            <div style="font-size:.64rem;font-weight:700;text-transform:uppercase;color:var(--ink-m);text-align:center">Ferme</div>
+          </div>
+          <div class="hor-row">
+            <div class="hor-day today-d">Lundi</div>
+            <input class="hor-input" type="time" value="09:00">
+            <input class="hor-input" type="time" value="18:00">
+            <div class="hor-closed-toggle"><input type="checkbox" style="width:16px;height:16px;accent-color:var(--p4)"></div>
+          </div>
+          <div class="hor-row">
+            <div class="hor-day">Mardi</div>
+            <input class="hor-input" type="time" value="09:00">
+            <input class="hor-input" type="time" value="18:00">
+            <div class="hor-closed-toggle"><input type="checkbox" style="width:16px;height:16px;accent-color:var(--p4)"></div>
+          </div>
+          <div class="hor-row">
+            <div class="hor-day">Mercredi</div>
+            <input class="hor-input" type="time" value="09:00">
+            <input class="hor-input" type="time" value="18:00">
+            <div class="hor-closed-toggle"><input type="checkbox" style="width:16px;height:16px;accent-color:var(--p4)"></div>
+          </div>
+          <div class="hor-row">
+            <div class="hor-day">Jeudi</div>
+            <input class="hor-input" type="time" value="09:00">
+            <input class="hor-input" type="time" value="18:00">
+            <div class="hor-closed-toggle"><input type="checkbox" style="width:16px;height:16px;accent-color:var(--p4)"></div>
+          </div>
+          <div class="hor-row">
+            <div class="hor-day">Vendredi</div>
+            <input class="hor-input" type="time" value="09:00">
+            <input class="hor-input" type="time" value="18:00">
+            <div class="hor-closed-toggle"><input type="checkbox" style="width:16px;height:16px;accent-color:var(--p4)"></div>
+          </div>
+          <div class="hor-row">
+            <div class="hor-day">Samedi</div>
+            <input class="hor-input" type="time" value="10:00">
+            <input class="hor-input" type="time" value="17:00">
+            <div class="hor-closed-toggle"><input type="checkbox" style="width:16px;height:16px;accent-color:var(--p4)"></div>
+          </div>
+          <div class="hor-row fermee">
+            <div class="hor-day" style="color:var(--ink-d)">Dimanche</div>
+            <input class="hor-input" type="time" value="" disabled>
+            <input class="hor-input" type="time" value="" disabled>
+            <div class="hor-closed-toggle"><input type="checkbox" checked style="width:16px;height:16px;accent-color:var(--p4)" id="dimClose"></div>
+          </div>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <div>
+
+    <div style="border:2px solid var(--p3);background:var(--p1);padding:1.4rem;margin-bottom:1.4rem">
+      <div style="font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink-m);margin-bottom:1rem">Statut du salon</div>
+      <div class="pse-stat-row"><span class="pse-stat-k">Validation</span><span class="valide-badge">&#10003; Valide</span></div>
+      <div class="pse-stat-row"><span class="pse-stat-k">Note globale</span><span><span class="note-stars">&#9733;</span> <strong>4.8</strong> / 5</span></div>
+      <div class="pse-stat-row"><span class="pse-stat-k">Avis clients</span><span class="pse-stat-v">186</span></div>
+      <div class="pse-stat-row"><span class="pse-stat-k">Membres actifs</span><span class="pse-stat-v green">6 employes</span></div>
+      <div class="pse-stat-row"><span class="pse-stat-k">Services actifs</span><span class="pse-stat-v">12</span></div>
+      <div class="pse-stat-row"><span class="pse-stat-k">Profil complet</span><span class="pse-stat-v green">94%</span></div>
+    </div>
+
+    <div class="map-preview-card">
+      <div class="map-preview-img">
+        <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=600&h=300&fit=crop&q=80" alt="Carte">
+        <div class="map-preview-overlay">
+          <div class="map-preview-label">&#128205; Agdal, Rabat</div>
+        </div>
+      </div>
+      <div class="map-preview-body">
+        <div class="map-preview-addr">12, Rue Ibn Sina, Agdal</div>
+        <div class="map-coords">33.9922° N, 6.8545° O</div>
+        <button class="btn-add" style="width:100%;justify-content:center;padding:.5rem;font-size:.74rem">&#127917; Ouvrir dans Google Maps</button>
+      </div>
+    </div>
+
+    <div style="border:2px solid var(--border2);background:#fff;padding:1.4rem;margin-bottom:1.4rem">
+      <div style="font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink-m);margin-bottom:.9rem">Conseils d'optimisation</div>
+      <div class="tip">
+        <div class="tip-ic">&#10003;</div>
+        <div class="tip-t">Photo principale de qualite professionnelle ajoutee</div>
+      </div>
+      <div class="tip">
+        <div class="tip-ic">&#10003;</div>
+        <div class="tip-t">Description complete et detaillee (280 caracteres)</div>
+      </div>
+      <div class="tip" style="opacity:.55">
+        <div class="tip-ic" style="background:var(--border2);color:var(--ink-m)">!</div>
+        <div class="tip-t">Ajoutez une video de presentation pour +30% de visibilite</div>
+      </div>
+      <div class="tip" style="opacity:.55">
+        <div class="tip-ic" style="background:var(--border2);color:var(--ink-m)">!</div>
+        <div class="tip-t">Completez vos liens reseaux sociaux</div>
+      </div>
+    </div>
+
+    <div style="border:2px solid #FAD6D6;background:#fff;padding:1.4rem">
+      <div style="font-size:.82rem;font-weight:700;color:#6A0404;margin-bottom:.3rem">Zone sensible</div>
+      <div style="font-size:.76rem;color:#8B2222;margin-bottom:.9rem">La desactivation suspend temporairement votre salon sur la plateforme.</div>
+      <button class="danger-l" style="width:100%;text-align:center">Suspendre mon salon</button>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="pse-save-bar">
+  <div class="pse-save-hint">Les modifications ne sont pas encore enregistrees</div>
+  <div class="pse-save-actions">
+    <button class="btn-gh" style="padding:.6rem 1.6rem;font-size:.76rem">Annuler</button>
+    <button class="btn-ol" style="padding:.6rem 2rem;font-size:.76rem">Enregistrer les modifications</button>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="foot-bar">
+    <div class="fl">hello@Salonify.ma</div>
+    <div class="fm"><div class="fm-t">Pour plus d'informations</div><div class="fm-r"></div></div>
+    <div class="fr">+(212) 7 63456-7890</div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.pse-tab').forEach(function(t){
+  t.addEventListener('click',function(e){
+    e.preventDefault();
+    document.querySelectorAll('.pse-tab').forEach(function(x){x.classList.remove('on');});
+    this.classList.add('on');
+  });
+});
+document.getElementById('dimClose').addEventListener('change',function(){
+  var row=this.closest('.hor-row');
+  row.classList.toggle('fermee',this.checked);
+});
+document.querySelectorAll('.hor-row input[type=checkbox]').forEach(function(cb){
+  cb.addEventListener('change',function(){
+    var row=this.closest('.hor-row');
+    row.classList.toggle('fermee',this.checked);
+  });
+});
+document.querySelectorAll('.pse-gal-thumb').forEach(function(t){
+  t.addEventListener('mouseenter',function(){this.querySelector('.pse-gal-del').style.display='flex';});
+  t.addEventListener('mouseleave',function(){this.querySelector('.pse-gal-del').style.display='none';});
+});
+</script>
+</body>
+</html>

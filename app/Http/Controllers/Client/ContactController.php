@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Http\Controllers\Client;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\Mail;
+
+class ContactController extends Controller
+{
+    public function show(): View
+    {
+        return view('public.contact');
+    }
+
+    public function send(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'nom'     => ['required', 'string', 'max:120'],
+            'email'   => ['required', 'email', 'max:180'],
+            'sujet'   => ['required', 'string', 'max:180'],
+            'message' => ['required', 'string', 'min:20', 'max:2000'],
+        ], [
+            'nom.required'     => 'Votre nom est obligatoire.',
+            'email.required'   => 'Votre email est obligatoire.',
+            'sujet.required'   => 'Le sujet est obligatoire.',
+            'message.required' => 'Le message est obligatoire.',
+            'message.min'      => 'Le message doit contenir au moins 20 caractères.',
+        ]);
+
+        // Envoi email (configurer MAIL_* dans .env)
+        // Mail::to('contact@salonify.ma')->send(new \App\Mail\ContactMail($request->all()));
+
+        // Log en attendant la config mail
+        \Illuminate\Support\Facades\Log::info('Contact Salonify', [
+            'nom'     => $request->nom,
+            'email'   => $request->email,
+            'sujet'   => $request->sujet,
+            'message' => $request->message,
+        ]);
+
+        return back()->with('success',
+            'Votre message a bien été envoyé. Nous vous répondrons sous 24h.'
+        );
+    }
+}

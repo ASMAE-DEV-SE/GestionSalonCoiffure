@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#89986D">
+<title>Disponibilites — Salonify</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="dash-top">
+  <div class="dt-inner">
+    <a href="dashboard_salon.html" class="dt-tab">Vue generale</a>
+    <a href="gestion_services.html" class="dt-tab">Services</a>
+    <a href="gestion_employes.html" class="dt-tab">Equipe</a>
+    <a href="disponibilites.html" class="dt-tab on">Disponibilites</a>
+    <a href="mes_reservations.html" class="dt-tab">Reservations</a>
+    <a href="profil_salon_edit.html" class="dt-tab">Mon salon</a>
+  </div>
+</div>
+
+<div class="dispo-header">
+  <div class="wrap dispo-header-inner">
+    <div>
+      <div class="dispo-title">Disponibilites de l'equipe</div>
+      <div class="dispo-subtitle">Semaine du 17 au 21 mars 2026 &nbsp;·&nbsp; Elegance Coiffure</div>
+    </div>
+    <div style="display:flex;gap:.65rem">
+      <button class="btn-ol" style="padding:.56rem 1.3rem;font-size:.74rem">+ Bloquer un creneau</button>
+    </div>
+  </div>
+</div>
+
+<div class="dispo-controls">
+  <div class="dispo-controls-inner">
+    <div class="week-nav">
+      <button class="week-nav-btn">&#8592;</button>
+      <div class="week-label">17 – 21 Mars 2026</div>
+      <button class="week-nav-btn">&#8594;</button>
+    </div>
+    <div class="view-toggle">
+      <button class="view-btn on">Semaine</button>
+      <button class="view-btn">Jour</button>
+      <button class="view-btn">Mois</button>
+    </div>
+    <div class="emp-filter-row">
+      <button class="emp-pill on"><span class="emp-pill-dot" style="background:var(--p4)"></span>Tous</button>
+      <button class="emp-pill"><span class="emp-pill-dot" style="background:#E87A5D"></span>Fatima Z.</button>
+      <button class="emp-pill"><span class="emp-pill-dot" style="background:#4A7C9E"></span>Sara M.</button>
+      <button class="emp-pill"><span class="emp-pill-dot" style="background:#9E6B8A"></span>Nadia B.</button>
+      <button class="emp-pill"><span class="emp-pill-dot" style="background:#D4A844"></span>Imane T.</button>
+    </div>
+  </div>
+</div>
+
+<div class="dispo-wrap">
+
+  <div class="dispo-legend">
+    <div class="legend-item"><div class="legend-dot" style="background:rgba(197,216,157,.55);border-left:3px solid var(--p4)"></div>Confirme</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#FCECC0;border-left:3px solid #D4A844"></div>En attente</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--border2);border-left:3px solid var(--border)"></div>Bloque</div>
+    <div class="legend-item"><div class="legend-dot" style="background:rgba(197,216,157,.12);border:1.5px dashed rgba(156,171,132,.5)"></div>Disponible</div>
+  </div>
+
+  <div class="dispo-two-col">
+
+    <div>
+      <div class="cal-grid">
+        <div class="cal-header-row cols-5">
+          <div class="cal-corner"></div>
+          <div class="cal-day-head">
+            <div class="cal-day-name">Lundi</div>
+            <div class="cal-day-num">17</div>
+          </div>
+          <div class="cal-day-head today">
+            <div class="cal-day-name">Mardi</div>
+            <div class="cal-day-num">18</div>
+          </div>
+          <div class="cal-day-head">
+            <div class="cal-day-name">Mercredi</div>
+            <div class="cal-day-num">19</div>
+          </div>
+          <div class="cal-day-head">
+            <div class="cal-day-name">Jeudi</div>
+            <div class="cal-day-num">20</div>
+          </div>
+          <div class="cal-day-head">
+            <div class="cal-day-name">Vendredi</div>
+            <div class="cal-day-num">21</div>
+          </div>
+        </div>
+
+        <div class="cal-body-row cols-5">
+          <div class="cal-time-cell">09h00</div>
+          <div class="cal-slot">
+            <div class="cal-event ev-confirmed">
+              <div class="cal-event-title">Salma B. — Coupe</div>
+              <div class="cal-event-sub">09:00 · Fatima Z. · 45 min</div>
+            </div>
+          </div>
+          <div class="cal-slot">
+            <div class="cal-event ev-free">
+              <div class="cal-event-title">Disponible</div>
+            </div>
+          </div>
+          <div class="cal-slot">
+            <div class="cal-event ev-confirmed">
+              <div class="cal-event-title">Nadia H. — Brushing</div>
+              <div class="cal-event-sub">09:00 · Imane T. · 30 min</div>
+            </div>
+          </div>
+          <div class="cal-slot">
+            <div class="cal-event ev-free">
+              <div class="cal-event-title">Disponible</div>
+            </div>
+          </div>
+          <div class="cal-slot">
+            <div class="cal-event ev-pending">
+              <div class="cal-event-title">Karim M. — Coupe homme</div>
+              <div class="cal-event-sub">09:00 · En attente · 30 min</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cal-body-row cols-5">
+          <div class="cal-time-cell">10h00</div>
+          <div class="cal-slot">
+            <div class="cal-event ev-confirmed">
+              <div class="cal-event-title">Imane T. — Coloration</div>
+              <div class="cal-event-sub">10:00 · Nadia B. · 90 min</div>
+            </div>
+          </div>
+          <div class="cal-slot">
+            <div class="cal-event ev-confirmed">
+              <div class="cal-event-title">Leila A. — Soin visage</div>
+              <div class="cal-event-sub">10:00 · Sara M. · 60 min</div>
+            </div>
+          </div>
+          <div class="cal-slot">
+            <div class="cal-event ev-free">
+              <div class="cal-event-title">Disponible</div>
+            </div>
+          </div>
+          <div class="cal-slot">
+            <div class="cal-event ev-confirmed">
+              <div class="cal-event-title">Yousra K. — Meches</div>
+              <div class="cal-event-sub">10:00 · Nadia B. · 120 min</div>
+            </div>
+          </div>
+          <div class="cal-slot">
+            <div class="cal-event ev-free">
+              <div class="cal-event-title">Disponible</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cal-body-row cols-5">
+          <div class="cal-time-cell">11h00</div>
+          <div class="cal-slot">
+            <div class="cal-event ev-free"><div class="cal-event-title">Disponible</div></div>
+          </div>
+          <div class="cal-slot">
+            <div class="cal-event ev-confirmed">
+              <div class="cal-event-title">Rania S. — Coupe + Brushing</div>
+              <div class="cal-event-sub">11:00 · Fatima Z. · 60 min</div>
+            </div>
+          </div>
+          <div class="cal-slot">
+            <div class="cal-event ev-pending">
+              <div class="cal-event-title">Maryam L. — Lissage</div>
+              <div class="cal-event-sub">11:30 · En attente · 90 min</div>
+            </div>
+          </div>
+          <div class="cal-slot">
+            <div class="cal-event ev-free"><div class="cal-event-title">Disponible</div></div>
+          </div>
+          <div class="cal-slot blocked">
+            <div class="cal-event ev-blocked">
+              <div class="cal-event-title">Fermeture exceptionnelle</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cal-body-row cols-5">
+          <div class="cal-time-cell">12h00</div>
+          <div class="cal-slot blocked"><div class="cal-event ev-blocked"><div class="cal-event-title">Pause dejeuner</div></div></div>
+          <div class="cal-slot blocked"><div class="cal-event ev-blocked"><div class="cal-event-title">Pause dejeuner</div></div></div>
+          <div class="cal-slot blocked"><div class="cal-event ev-blocked"><div class="cal-event-title">Pause dejeuner</div></div></div>
+          <div class="cal-slot blocked"><div class="cal-event ev-blocked"><div class="cal-event-title">Pause dejeuner</div></div></div>
+          <div class="cal-slot blocked"><div class="cal-event ev-blocked"><div class="cal-event-title">Fermeture exceptionnelle</div></div></div>
+        </div>
+
+        <div class="cal-body-row cols-5">
+          <div class="cal-time-cell">14h00</div>
+          <div class="cal-slot">
+            <div class="cal-event ev-confirmed">
+              <div class="cal-event-title">Houda M. — Soin corps</div>
+              <div class="cal-event-sub">14:00 · Sara M. · 75 min</div>
+            </div>
+          </div>
+          <div class="cal-slot">
+            <div class="cal-event ev-free"><div class="cal-event-title">Disponible</div></div>
+          </div>
+          <div class="cal-slot">
+            <div class="cal-event ev-confirmed">
+              <div class="cal-event-title">Salma B. — Soin visage</div>
+              <div class="cal-event-sub">14:30 · Sara M. · 60 min</div>
+            </div>
+          </div>
+          <div class="cal-slot">
+            <div class="cal-event ev-confirmed">
+              <div class="cal-event-title">Zineb A. — Coupe enfant</div>
+              <div class="cal-event-sub">14:00 · Imane T. · 30 min</div>
+            </div>
+          </div>
+          <div class="cal-slot blocked"><div class="cal-event ev-blocked"><div class="cal-event-title">Fermeture exceptionnelle</div></div></div>
+        </div>
+
+        <div class="cal-body-row cols-5">
+          <div class="cal-time-cell">16h00</div>
+          <div class="cal-slot">
+            <div class="cal-event ev-pending">
+              <div class="cal-event-title">Assia T. — Coloration</div>
+              <div class="cal-event-sub">16:00 · En attente · 90 min</div>
+            </div>
+          </div>
+          <div class="cal-slot">
+            <div class="cal-event ev-confirmed">
+              <div class="cal-event-title">Mina H. — Balayage</div>
+              <div class="cal-event-sub">16:00 · Nadia B. · 120 min</div>
+            </div>
+          </div>
+          <div class="cal-slot">
+            <div class="cal-event ev-free"><div class="cal-event-title">Disponible</div></div>
+          </div>
+          <div class="cal-slot">
+            <div class="cal-event ev-free"><div class="cal-event-title">Disponible</div></div>
+          </div>
+          <div class="cal-slot blocked"><div class="cal-event ev-blocked"><div class="cal-event-title">Fermeture exceptionnelle</div></div></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div>
+      <div class="emp-dispo-sidebar">
+        <div class="emp-dispo-head">Charge par employe — Sem. 17–21</div>
+        <div class="emp-dispo-item">
+          <div class="emp-dispo-av"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&q=80" alt="Fatima"></div>
+          <div>
+            <div class="emp-dispo-name">Fatima Zahra</div>
+            <div class="emp-dispo-rdv">5 RDV confirmés · 1 en attente</div>
+          </div>
+          <div class="emp-dispo-count">6</div>
+        </div>
+        <div class="emp-dispo-item">
+          <div class="emp-dispo-av"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=80&h=80&fit=crop&q=80" alt="Sara"></div>
+          <div>
+            <div class="emp-dispo-name">Sara Moussaoui</div>
+            <div class="emp-dispo-rdv">4 RDV confirmés</div>
+          </div>
+          <div class="emp-dispo-count">4</div>
+        </div>
+        <div class="emp-dispo-item">
+          <div class="emp-dispo-av"><img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=80&h=80&fit=crop&q=80" alt="Nadia"></div>
+          <div>
+            <div class="emp-dispo-name">Nadia Benali</div>
+            <div class="emp-dispo-rdv">3 RDV confirmés · 1 en attente</div>
+          </div>
+          <div class="emp-dispo-count">4</div>
+        </div>
+        <div class="emp-dispo-item">
+          <div class="emp-dispo-av"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&q=80" alt="Imane"></div>
+          <div>
+            <div class="emp-dispo-name">Imane Tazi</div>
+            <div class="emp-dispo-rdv">2 RDV confirmés</div>
+          </div>
+          <div class="emp-dispo-count">2</div>
+        </div>
+      </div>
+
+      <div style="border:2px solid var(--border2);background:#fff;padding:1.4rem;margin-top:1.2rem">
+        <div style="font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink-m);margin-bottom:1rem">Resume semaine</div>
+        <div class="pse-stat-row"><span class="pse-stat-k">RDV confirmes</span><span class="pse-stat-v green">14</span></div>
+        <div class="pse-stat-row"><span class="pse-stat-k">En attente</span><span class="pse-stat-v" style="color:#D4A844">3</span></div>
+        <div class="pse-stat-row"><span class="pse-stat-k">Creneaux libres</span><span class="pse-stat-k">8</span></div>
+        <div class="pse-stat-row"><span class="pse-stat-k">Taux occupation</span><span class="pse-stat-v">67%</span></div>
+        <div class="pse-stat-row"><span class="pse-stat-k">CA estime</span><span class="pse-stat-v gold">2 840 MAD</span></div>
+      </div>
+
+      <div style="border:2px solid var(--border2);background:#fff;padding:1.4rem;margin-top:1.2rem">
+        <div style="font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink-m);margin-bottom:1rem">Prochains rappels SMS</div>
+        <div style="font-size:.8rem;color:var(--ink-s);line-height:1.6">
+          <div style="padding:.4rem 0;border-bottom:1px solid var(--border2);display:flex;justify-content:space-between">
+            <span>Salma B. — 19 mars 10h</span>
+            <span style="color:var(--p4);font-weight:700;font-size:.72rem">24h</span>
+          </div>
+          <div style="padding:.4rem 0;border-bottom:1px solid var(--border2);display:flex;justify-content:space-between">
+            <span>Nadia H. — 17 mars 9h</span>
+            <span style="color:var(--p4);font-weight:700;font-size:.72rem">2h</span>
+          </div>
+          <div style="padding:.4rem 0;display:flex;justify-content:space-between">
+            <span>Rania S. — 18 mars 11h</span>
+            <span style="color:var(--ink-m);font-size:.72rem">Envoye</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="foot-bar">
+    <div class="fl">hello@Salonify.ma</div>
+    <div class="fm"><div class="fm-t">Pour plus d'informations</div><div class="fm-r"></div></div>
+    <div class="fr">+(212) 7 63456-7890</div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.view-btn').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.view-btn').forEach(function(x){x.classList.remove('on');});
+    this.classList.add('on');
+  });
+});
+document.querySelectorAll('.emp-pill').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.emp-pill').forEach(function(x){x.classList.remove('on');});
+    this.classList.add('on');
+  });
+});
+</script>
+</body>
+</html>

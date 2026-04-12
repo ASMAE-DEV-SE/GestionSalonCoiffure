@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#89986D">
+<title>Gestion Equipe — Salonify</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="dash-top">
+  <div class="dt-inner">
+    <a href="dashboard_salon.html" class="dt-tab">Vue generale</a>
+    <a href="gestion_services.html" class="dt-tab">Services</a>
+    <a href="gestion_employes.html" class="dt-tab on">Equipe</a>
+    <a href="disponibilites.html" class="dt-tab">Disponibilites</a>
+    <a href="mes_reservations.html" class="dt-tab">Reservations</a>
+    <a href="profil_salon_edit.html" class="dt-tab">Mon salon</a>
+  </div>
+</div>
+
+<div class="gs-ph">
+  <div class="wrap gs-ph-inner">
+    <div>
+      <div class="gs-ph-t">Gestion de l'equipe</div>
+      <div class="gs-ph-s">Elegance Coiffure &nbsp;·&nbsp; Agdal, Rabat</div>
+    </div>
+    <button class="btn-add" onclick="openModal()">+ Ajouter un employe</button>
+  </div>
+</div>
+
+<div class="ge-wrap">
+
+  <div class="emp-stats-row">
+    <div class="emp-kpi green">
+      <div class="emp-kpi-val">6</div>
+      <div class="emp-kpi-lbl">Employes actifs</div>
+    </div>
+    <div class="emp-kpi sage">
+      <div class="emp-kpi-val">4</div>
+      <div class="emp-kpi-lbl">Coiffeurs / Stylistes</div>
+    </div>
+    <div class="emp-kpi blue">
+      <div class="emp-kpi-val">48</div>
+      <div class="emp-kpi-lbl">RDV ce mois</div>
+    </div>
+    <div class="emp-kpi amber">
+      <div class="emp-kpi-val">4.7</div>
+      <div class="emp-kpi-lbl">Note moyenne equipe</div>
+    </div>
+  </div>
+
+  <div class="ge-toolbar">
+    <div class="ge-toolbar-l">
+      <div class="ge-search">
+        <div class="ge-search-ic">&#128269;</div>
+        <input class="ge-search-input" type="text" placeholder="Rechercher un employe...">
+      </div>
+      <button class="ge-filter-pill on">Tous</button>
+      <button class="ge-filter-pill">Actifs</button>
+      <button class="ge-filter-pill">Inactifs</button>
+      <button class="ge-filter-pill">Coiffure</button>
+      <button class="ge-filter-pill">Soin</button>
+    </div>
+  </div>
+
+  <div class="emp-table-card">
+    <div class="emp-table-head">
+      <div class="emp-table-title">Employes <span style="font-family:var(--fb);font-size:.82rem;font-weight:500;color:var(--ink-m)">(6)</span></div>
+      <a href="disponibilites.html" class="dash-section-link" style="font-size:.74rem">Voir le calendrier</a>
+    </div>
+    <div style="overflow-x:auto">
+    <table class="emp-table">
+      <thead>
+        <tr>
+          <th>Employe</th>
+          <th>Specialites</th>
+          <th>Horaires</th>
+          <th>RDV ce mois</th>
+          <th>Note</th>
+          <th>Statut</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="emp-cell-avatar">
+              <div class="emp-tbl-av"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&q=80" alt="Fatima"></div>
+              <div>
+                <div class="emp-tbl-name">Fatima Zahra</div>
+                <div class="emp-tbl-role">Coiffeuse principale</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="svc-tag">Coupe femme</span>
+            <span class="svc-tag">Coloration</span>
+            <span class="svc-tag">Lissage</span>
+          </td>
+          <td><span class="horaire-badge">Lun–Sam 9h–18h</span></td>
+          <td><strong>18</strong></td>
+          <td>&#9733; 4.9</td>
+          <td><span class="status-on"><span class="status-dot-g"></span>Actif</span></td>
+          <td>
+            <div class="emp-actions-cell">
+              <button class="tbl-btn tbl-btn-e" onclick="openEditModal('Fatima Zahra')">Modifier</button>
+              <button class="tbl-btn tbl-btn-h">Horaires</button>
+              <button class="tbl-btn tbl-btn-r">Desactiver</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="emp-cell-avatar">
+              <div class="emp-tbl-av"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=80&h=80&fit=crop&q=80" alt="Sara"></div>
+              <div>
+                <div class="emp-tbl-name">Sara Moussaoui</div>
+                <div class="emp-tbl-role">Estheticienne</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="svc-tag">Soin visage</span>
+            <span class="svc-tag">Epilation</span>
+            <span class="svc-tag">Maquillage</span>
+          </td>
+          <td><span class="horaire-badge">Mar–Dim 10h–19h</span></td>
+          <td><strong>14</strong></td>
+          <td>&#9733; 4.8</td>
+          <td><span class="status-on"><span class="status-dot-g"></span>Actif</span></td>
+          <td>
+            <div class="emp-actions-cell">
+              <button class="tbl-btn tbl-btn-e" onclick="openEditModal('Sara Moussaoui')">Modifier</button>
+              <button class="tbl-btn tbl-btn-h">Horaires</button>
+              <button class="tbl-btn tbl-btn-r">Desactiver</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="emp-cell-avatar">
+              <div class="emp-tbl-av"><img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=80&h=80&fit=crop&q=80" alt="Nadia"></div>
+              <div>
+                <div class="emp-tbl-name">Nadia Benali</div>
+                <div class="emp-tbl-role">Coloriste</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="svc-tag">Coloration</span>
+            <span class="svc-tag">Meches</span>
+            <span class="svc-tag">Balayage</span>
+          </td>
+          <td><span class="horaire-badge">Lun–Ven 9h–17h</span></td>
+          <td><strong>9</strong></td>
+          <td>&#9733; 4.7</td>
+          <td><span class="status-on"><span class="status-dot-g"></span>Actif</span></td>
+          <td>
+            <div class="emp-actions-cell">
+              <button class="tbl-btn tbl-btn-e" onclick="openEditModal('Nadia Benali')">Modifier</button>
+              <button class="tbl-btn tbl-btn-h">Horaires</button>
+              <button class="tbl-btn tbl-btn-r">Desactiver</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="emp-cell-avatar">
+              <div class="emp-tbl-av"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&q=80" alt="Imane"></div>
+              <div>
+                <div class="emp-tbl-name">Imane Tazi</div>
+                <div class="emp-tbl-role">Coupe & Brushing</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="svc-tag">Coupe femme</span>
+            <span class="svc-tag">Brushing</span>
+            <span class="svc-tag">Chignon</span>
+          </td>
+          <td><span class="horaire-badge">Mer–Lun 10h–18h</span></td>
+          <td><strong>7</strong></td>
+          <td>&#9733; 4.6</td>
+          <td><span class="status-on"><span class="status-dot-g"></span>Actif</span></td>
+          <td>
+            <div class="emp-actions-cell">
+              <button class="tbl-btn tbl-btn-e" onclick="openEditModal('Imane Tazi')">Modifier</button>
+              <button class="tbl-btn tbl-btn-h">Horaires</button>
+              <button class="tbl-btn tbl-btn-r">Desactiver</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="emp-cell-avatar">
+              <div class="emp-tbl-av"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=80&h=80&fit=crop&q=80" alt="Khadija"></div>
+              <div>
+                <div class="emp-tbl-name">Khadija El Idrissi</div>
+                <div class="emp-tbl-role">Prothesiste ongulaire</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="svc-tag">Manucure</span>
+            <span class="svc-tag">Pose gel</span>
+            <span class="svc-tag">Nail art</span>
+          </td>
+          <td><span class="horaire-badge">Lun–Sam 10h–19h</span></td>
+          <td><strong>0</strong></td>
+          <td>—</td>
+          <td><span class="status-off"><span class="status-dot-gr"></span>Inactif</span></td>
+          <td>
+            <div class="emp-actions-cell">
+              <button class="tbl-btn tbl-btn-e" onclick="openEditModal('Khadija El Idrissi')">Modifier</button>
+              <button class="tbl-btn tbl-btn-h">Horaires</button>
+              <button class="tbl-btn tbl-btn-e">Activer</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="emp-cell-avatar">
+              <div class="emp-tbl-av"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&q=80" alt="Zineb"></div>
+              <div>
+                <div class="emp-tbl-name">Zineb Alaoui</div>
+                <div class="emp-tbl-role">Masseuse / Spa</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="svc-tag">Massage</span>
+            <span class="svc-tag">Soin corps</span>
+            <span class="svc-tag">Hammam</span>
+          </td>
+          <td><span class="horaire-badge">Lun–Ven 9h–17h</span></td>
+          <td><strong>0</strong></td>
+          <td>—</td>
+          <td><span class="status-off"><span class="status-dot-gr"></span>Inactif</span></td>
+          <td>
+            <div class="emp-actions-cell">
+              <button class="tbl-btn tbl-btn-e" onclick="openEditModal('Zineb Alaoui')">Modifier</button>
+              <button class="tbl-btn tbl-btn-h">Horaires</button>
+              <button class="tbl-btn tbl-btn-e">Activer</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+</div>
+
+<footer class="foot">
+  <div class="foot-bar">
+    <div class="fl">hello@Salonify.ma</div>
+    <div class="fm"><div class="fm-t">Pour plus d'informations</div><div class="fm-r"></div></div>
+    <div class="fr">+(212) 7 63456-7890</div>
+  </div>
+</footer>
+
+<div class="modal-bg" id="empModal" style="display:none">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-t" id="modalTitle">Ajouter un employe</div>
+      <button class="modal-close" onclick="closeModal()">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;gap:1.2rem;align-items:flex-start;margin-bottom:1.5rem">
+        <div style="width:80px;height:80px;border:2px dashed var(--p3);background:var(--p1);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0">
+          <div style="font-size:1.4rem;color:var(--p4)">&#128247;</div>
+          <div style="font-size:.58rem;font-weight:700;color:var(--p4d);text-transform:uppercase;margin-top:.3rem">Photo</div>
+        </div>
+        <div style="flex:1">
+          <div class="row2m">
+            <div class="fg"><label>Prenom</label><input class="fi" type="text" placeholder="Fatima"></div>
+            <div class="fg"><label>Nom</label><input class="fi" type="text" placeholder="Zahra"></div>
+          </div>
+          <div class="fg"><label>Role / Titre</label><input class="fi" type="text" placeholder="Coiffeuse principale"></div>
+        </div>
+      </div>
+      <div class="row2m">
+        <div class="fg"><label>Email</label><input class="fi" type="email" placeholder="employe@salon.ma"></div>
+        <div class="fg"><label>Telephone</label><input class="fi" type="tel" placeholder="06 XX XX XX XX"></div>
+      </div>
+      <div class="fg">
+        <label>Specialites</label>
+        <div class="ge-modal-spe">
+          <label class="spe-check"><input type="checkbox" checked> Coupe femme</label>
+          <label class="spe-check on"><input type="checkbox" checked> Coloration</label>
+          <label class="spe-check"><input type="checkbox"> Soin visage</label>
+          <label class="spe-check"><input type="checkbox"> Epilation</label>
+          <label class="spe-check on"><input type="checkbox" checked> Lissage</label>
+          <label class="spe-check"><input type="checkbox"> Manucure</label>
+          <label class="spe-check"><input type="checkbox"> Brushing</label>
+          <label class="spe-check"><input type="checkbox"> Massage</label>
+          <label class="spe-check"><input type="checkbox"> Maquillage</label>
+        </div>
+      </div>
+      <div class="fg">
+        <label>Horaires de travail</label>
+        <div class="horaire-grid" style="margin-bottom:.4rem;padding-bottom:.4rem;border-bottom:1px solid var(--border2)">
+          <div style="font-size:.64rem;font-weight:700;text-transform:uppercase;color:var(--ink-m)">Jour</div>
+          <div style="font-size:.64rem;font-weight:700;text-transform:uppercase;color:var(--ink-m)">Debut</div>
+          <div style="font-size:.64rem;font-weight:700;text-transform:uppercase;color:var(--ink-m)">Fin</div>
+          <div style="font-size:.64rem;font-weight:700;text-transform:uppercase;color:var(--ink-m);text-align:center">Ferme</div>
+        </div>
+        <div class="horaire-grid"><div class="horaire-day-lbl">Lundi</div><input class="horaire-time" type="time" value="09:00"><input class="horaire-time" type="time" value="18:00"><input type="checkbox" style="width:16px;height:16px;accent-color:var(--p4);margin:auto"></div>
+        <div class="horaire-grid"><div class="horaire-day-lbl">Mardi</div><input class="horaire-time" type="time" value="09:00"><input class="horaire-time" type="time" value="18:00"><input type="checkbox" style="width:16px;height:16px;accent-color:var(--p4);margin:auto"></div>
+        <div class="horaire-grid"><div class="horaire-day-lbl">Mercredi</div><input class="horaire-time" type="time" value="09:00"><input class="horaire-time" type="time" value="18:00"><input type="checkbox" style="width:16px;height:16px;accent-color:var(--p4);margin:auto"></div>
+        <div class="horaire-grid"><div class="horaire-day-lbl">Jeudi</div><input class="horaire-time" type="time" value="09:00"><input class="horaire-time" type="time" value="18:00"><input type="checkbox" style="width:16px;height:16px;accent-color:var(--p4);margin:auto"></div>
+        <div class="horaire-grid"><div class="horaire-day-lbl">Vendredi</div><input class="horaire-time" type="time" value="09:00"><input class="horaire-time" type="time" value="18:00"><input type="checkbox" style="width:16px;height:16px;accent-color:var(--p4);margin:auto"></div>
+        <div class="horaire-grid"><div class="horaire-day-lbl">Samedi</div><input class="horaire-time" type="time" value="10:00"><input class="horaire-time" type="time" value="17:00"><input type="checkbox" style="width:16px;height:16px;accent-color:var(--p4);margin:auto"></div>
+        <div class="horaire-grid"><div class="horaire-day-lbl" style="color:var(--p4d)">Dimanche</div><input class="horaire-time" type="time" value="" disabled style="opacity:.4"><input class="horaire-time" type="time" value="" disabled style="opacity:.4"><input type="checkbox" checked style="width:16px;height:16px;accent-color:var(--p4);margin:auto"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-xs btn-xs-r" onclick="closeModal()">Annuler</button>
+      <button class="btn-add" style="padding:.54rem 1.6rem;font-size:.76rem">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function openModal(){document.getElementById('empModal').style.display='flex';document.getElementById('modalTitle').textContent='Ajouter un employe';}
+function openEditModal(n){document.getElementById('empModal').style.display='flex';document.getElementById('modalTitle').textContent='Modifier — '+n;}
+function closeModal(){document.getElementById('empModal').style.display='none';}
+document.getElementById('empModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.querySelectorAll('.spe-check').forEach(function(el){
+  el.addEventListener('click',function(){this.classList.toggle('on');});
+});
+document.querySelectorAll('.ge-filter-pill').forEach(function(b){
+  b.addEventListener('click',function(){document.querySelectorAll('.ge-filter-pill').forEach(function(x){x.classList.remove('on');});this.classList.add('on');});
+});
+</script>
+</body>
+</html>

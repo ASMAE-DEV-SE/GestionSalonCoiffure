@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Statistiques — Salonify Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="admin-topbar">
+  <div class="admin-topbar-inner">
+    <a href="accueil.html" class="admin-brand">
+      <div class="admin-brand-icon">S</div>
+      <div><div class="admin-brand-name">Salonify</div><div class="admin-brand-sub">Administration</div></div>
+    </a>
+    <nav class="admin-topnav">
+      <a href="dashboard_admin.html" class="admin-topnav-tab">Vue generale</a>
+      <a href="#" class="admin-topnav-tab">Salons</a>
+      <a href="#" class="admin-topnav-tab">Utilisateurs</a>
+      <a href="#" class="admin-topnav-tab">Reservations</a>
+      <a href="admin_avis.html" class="admin-topnav-tab">Avis</a>
+      <a href="admin_villes.html" class="admin-topnav-tab">Villes</a>
+    </nav>
+    <div class="admin-topbar-right">
+      <div class="admin-notif-btn">&#9993;<div class="admin-notif-dot"></div></div>
+      <div class="admin-user-chip">
+        <div class="admin-user-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&q=80" alt="Admin"></div>
+        <div class="admin-user-name">Admin Salonify</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="admin-layout">
+
+  <aside class="admin-sidebar">
+    <span class="admin-sidebar-section-label">Vue d'ensemble</span>
+    <a href="dashboard_admin.html" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#9962;</div>Tableau de bord</a>
+    <a href="admin_statistiques.html" class="admin-sidebar-link active"><div class="admin-sidebar-icon">&#9830;</div>Statistiques</a>
+    <div class="admin-sidebar-divider"></div>
+    <span class="admin-sidebar-section-label">Gestion</span>
+    <a href="#" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#9986;</div>Salons</a>
+    <a href="#" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#9786;</div>Utilisateurs</a>
+    <a href="#" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#128197;</div>Reservations</a>
+    <a href="admin_avis.html" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#9733;</div>Avis<span class="admin-sidebar-badge danger">5</span></a>
+    <a href="admin_villes.html" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#127968;</div>Villes</a>
+    <div class="admin-sidebar-divider"></div>
+    <span class="admin-sidebar-section-label">Plateforme</span>
+    <a href="#" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#128269;</div>Signalements</a>
+    <a href="#" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#9881;</div>Configuration</a>
+    <a href="admin_statistiques.html" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#128196;</div>Rapports</a>
+  </aside>
+
+  <main class="admin-main">
+
+    <div class="admin-page-header">
+      <div>
+        <div class="admin-page-title">Statistiques & Rapports</div>
+        <div class="admin-page-subtitle">Analyse des performances de la plateforme Salonify Maroc</div>
+      </div>
+      <div class="admin-header-actions">
+        <button class="export-btn">&#128196; Export PDF</button>
+        <button class="export-btn">&#128190; Export CSV complet</button>
+      </div>
+    </div>
+
+    <div class="stat-period-bar">
+      <button class="period-btn">7 jours</button>
+      <button class="period-btn">30 jours</button>
+      <button class="period-btn on">3 mois</button>
+      <button class="period-btn">6 mois</button>
+      <button class="period-btn">1 an</button>
+      <div class="period-sep"></div>
+      <button class="export-btn">Jan 2026 — Mar 2026</button>
+    </div>
+
+    <div class="admin-kpi-grid">
+      <div class="admin-kpi-card green">
+        <div class="admin-kpi-top"><div class="admin-kpi-label">Reservations totales</div><div class="admin-kpi-icon kpi-icon-green">&#128197;</div></div>
+        <div class="admin-kpi-value">3 870</div>
+        <div class="admin-kpi-trend trend-up">&#9650; +18% vs trimestre precedent</div>
+      </div>
+      <div class="admin-kpi-card gold">
+        <div class="admin-kpi-top"><div class="admin-kpi-label">Chiffre d'affaires est.</div><div class="admin-kpi-icon kpi-icon-gold">&#9733;</div></div>
+        <div class="admin-kpi-value">284 K</div>
+        <div class="admin-kpi-trend trend-up">&#9650; +22% MAD ce trimestre</div>
+      </div>
+      <div class="admin-kpi-card blue">
+        <div class="admin-kpi-top"><div class="admin-kpi-label">Nouveaux inscrits</div><div class="admin-kpi-icon kpi-icon-blue">&#9786;</div></div>
+        <div class="admin-kpi-value">412</div>
+        <div class="admin-kpi-trend trend-up">&#9650; +34% ce trimestre</div>
+      </div>
+      <div class="admin-kpi-card red">
+        <div class="admin-kpi-top"><div class="admin-kpi-label">Taux d'annulation</div><div class="admin-kpi-icon kpi-icon-red">&#10005;</div></div>
+        <div class="admin-kpi-value">8.4%</div>
+        <div class="admin-kpi-trend trend-up">&#9660; -1.2% amelioration</div>
+      </div>
+    </div>
+
+    <div class="stat-two-col">
+
+      <div class="stat-chart-card">
+        <div class="stat-chart-head">
+          <div>
+            <div class="stat-chart-title">Reservations par mois</div>
+            <div class="stat-chart-sub">Janvier — Mars 2026</div>
+          </div>
+          <button class="export-btn" style="font-size:.68rem;padding:.3rem .7rem">CSV</button>
+        </div>
+        <div class="stat-chart-body">
+          <div style="position:relative;height:160px;display:flex;align-items:flex-end;gap:.5rem;padding-bottom:1.6rem;border-bottom:1px solid var(--border2)">
+            <div style="position:absolute;bottom:1.6rem;left:0;right:0;top:0;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none">
+              <div style="border-top:1px dashed var(--border2);font-size:.62rem;color:var(--ink-d);padding-left:.2rem">1500</div>
+              <div style="border-top:1px dashed var(--border2);font-size:.62rem;color:var(--ink-d);padding-left:.2rem">1000</div>
+              <div style="border-top:1px dashed var(--border2);font-size:.62rem;color:var(--ink-d);padding-left:.2rem">500</div>
+              <div style="border-top:1px solid var(--border2);font-size:.62rem;color:var(--ink-d);padding-left:.2rem">0</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.3rem;position:relative;z-index:1">
+              <div style="width:100%;background:var(--p3);border-radius:2px 2px 0 0;height:72%" data-val="1080"></div>
+              <div style="font-size:.64rem;font-weight:700;color:var(--ink-m)">Jan</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.3rem;position:relative;z-index:1">
+              <div style="width:100%;background:var(--p3);border-radius:2px 2px 0 0;height:84%"></div>
+              <div style="font-size:.64rem;font-weight:700;color:var(--ink-m)">Fev</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.3rem;position:relative;z-index:1">
+              <div style="width:100%;background:var(--p4);border-radius:2px 2px 0 0;height:100%"></div>
+              <div style="font-size:.64rem;font-weight:700;color:var(--p4d)">Mars</div>
+            </div>
+          </div>
+          <div class="stat-metric-row">
+            <div class="stat-metric"><div class="stat-metric-val">1 080</div><div class="stat-metric-lbl">Janvier</div><div class="stat-metric-delta trend-up-ic">&#9650; +12%</div></div>
+            <div class="stat-metric"><div class="stat-metric-val">1 260</div><div class="stat-metric-lbl">Fevrier</div><div class="stat-metric-delta trend-up-ic">&#9650; +17%</div></div>
+            <div class="stat-metric"><div class="stat-metric-val">1 530</div><div class="stat-metric-lbl">Mars</div><div class="stat-metric-delta trend-up-ic">&#9650; +21%</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-chart-card">
+        <div class="stat-chart-head">
+          <div>
+            <div class="stat-chart-title">Repartition par ville</div>
+            <div class="stat-chart-sub">Reservations totales Q1 2026</div>
+          </div>
+          <button class="export-btn" style="font-size:.68rem;padding:.3rem .7rem">CSV</button>
+        </div>
+        <div class="stat-chart-body">
+          <div class="donut-wrap">
+            <svg class="donut-svg" viewBox="0 0 120 120" width="120" height="120">
+              <circle cx="60" cy="60" r="46" fill="none" stroke="var(--border2)" stroke-width="18"/>
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#89986D" stroke-width="18" stroke-dasharray="130 159" stroke-dashoffset="0" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#4A7C9E" stroke-width="18" stroke-dasharray="60 229" stroke-dashoffset="-130" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#D4A844" stroke-width="18" stroke-dasharray="36 253" stroke-dashoffset="-190" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#9CAB84" stroke-width="18" stroke-dasharray="22 267" stroke-dashoffset="-226" transform="rotate(-90 60 60)"/>
+              <text x="60" y="55" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="14" font-weight="700" fill="var(--ink-h)">3 870</text>
+              <text x="60" y="68" text-anchor="middle" font-family="Jost,sans-serif" font-size="7" fill="var(--ink-m)">RDV totaux</text>
+            </svg>
+            <div class="donut-legend">
+              <div class="donut-legend-item"><div class="donut-dot" style="background:#89986D"></div><span class="donut-legend-label">Rabat</span><span class="donut-legend-pct">45%</span></div>
+              <div class="donut-legend-item"><div class="donut-dot" style="background:#4A7C9E"></div><span class="donut-legend-label">Casablanca</span><span class="donut-legend-pct">21%</span></div>
+              <div class="donut-legend-item"><div class="donut-dot" style="background:#D4A844"></div><span class="donut-legend-label">Marrakech</span><span class="donut-legend-pct">13%</span></div>
+              <div class="donut-legend-item"><div class="donut-dot" style="background:#9CAB84"></div><span class="donut-legend-label">Fes</span><span class="donut-legend-pct">8%</span></div>
+              <div class="donut-legend-item"><div class="donut-dot" style="background:var(--border2)"></div><span class="donut-legend-label">Autres</span><span class="donut-legend-pct">13%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="stat-two-col">
+
+      <div class="stat-chart-card">
+        <div class="stat-chart-head">
+          <div>
+            <div class="stat-chart-title">Top 8 salons par reservations</div>
+            <div class="stat-chart-sub">Q1 2026 — toutes villes confondues</div>
+          </div>
+          <button class="export-btn" style="font-size:.68rem;padding:.3rem .7rem">CSV</button>
+        </div>
+        <div class="stat-chart-body">
+          <div class="bar-h-chart">
+            <div class="bar-h-row"><span class="bar-h-label">L'Atelier Beaute</span><div class="bar-h-track"><div class="bar-h-fill" style="width:100%"><span class="bar-h-val">208</span></div></div><span class="bar-h-count">208</span></div>
+            <div class="bar-h-row"><span class="bar-h-label">Elegance Coif.</span><div class="bar-h-track"><div class="bar-h-fill" style="width:89%"><span class="bar-h-val">186</span></div></div><span class="bar-h-count">186</span></div>
+            <div class="bar-h-row"><span class="bar-h-label">Prestige Hair</span><div class="bar-h-track"><div class="bar-h-fill alt" style="width:68%"><span class="bar-h-val">142</span></div></div><span class="bar-h-count">142</span></div>
+            <div class="bar-h-row"><span class="bar-h-label">Studio Casa</span><div class="bar-h-track"><div class="bar-h-fill alt" style="width:55%"><span class="bar-h-val">115</span></div></div><span class="bar-h-count">115</span></div>
+            <div class="bar-h-row"><span class="bar-h-label">Beldi Beaute</span><div class="bar-h-track"><div class="bar-h-fill alt" style="width:45%"><span class="bar-h-val">94</span></div></div><span class="bar-h-count">94</span></div>
+            <div class="bar-h-row"><span class="bar-h-label">Palais Marr.</span><div class="bar-h-track"><div class="bar-h-fill dark" style="width:38%"><span class="bar-h-val">79</span></div></div><span class="bar-h-count">79</span></div>
+            <div class="bar-h-row"><span class="bar-h-label">Style & Co</span><div class="bar-h-track"><div class="bar-h-fill dark" style="width:31%"><span class="bar-h-val">64</span></div></div><span class="bar-h-count">64</span></div>
+            <div class="bar-h-row"><span class="bar-h-label">Coif. Medina</span><div class="bar-h-track"><div class="bar-h-fill dark" style="width:26%"><span class="bar-h-val">54</span></div></div><span class="bar-h-count">54</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-chart-card">
+        <div class="stat-chart-head">
+          <div>
+            <div class="stat-chart-title">Repartition par categorie</div>
+            <div class="stat-chart-sub">Services les plus reserves Q1 2026</div>
+          </div>
+        </div>
+        <div class="stat-chart-body">
+          <div class="bar-h-chart">
+            <div class="bar-h-row"><span class="bar-h-label">Coupe femme</span><div class="bar-h-track"><div class="bar-h-fill" style="width:100%;background:#89986D"><span class="bar-h-val">38%</span></div></div><span class="bar-h-count">38%</span></div>
+            <div class="bar-h-row"><span class="bar-h-label">Coloration</span><div class="bar-h-track"><div class="bar-h-fill" style="width:62%;background:#C5843C"><span class="bar-h-val">24%</span></div></div><span class="bar-h-count">24%</span></div>
+            <div class="bar-h-row"><span class="bar-h-label">Soin visage</span><div class="bar-h-track"><div class="bar-h-fill" style="width:38%;background:#7B9E87"><span class="bar-h-val">15%</span></div></div><span class="bar-h-count">15%</span></div>
+            <div class="bar-h-row"><span class="bar-h-label">Brushing</span><div class="bar-h-track"><div class="bar-h-fill" style="width:28%;background:#4A7C9E"><span class="bar-h-val">11%</span></div></div><span class="bar-h-count">11%</span></div>
+            <div class="bar-h-row"><span class="bar-h-label">Onglerie</span><div class="bar-h-track"><div class="bar-h-fill" style="width:18%;background:#9E6B8A"><span class="bar-h-val">7%</span></div></div><span class="bar-h-count">7%</span></div>
+            <div class="bar-h-row"><span class="bar-h-label">Autres</span><div class="bar-h-track"><div class="bar-h-fill" style="width:13%;background:var(--ink-m)"><span class="bar-h-val">5%</span></div></div><span class="bar-h-count">5%</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="stat-chart-card" style="margin-bottom:1.8rem">
+      <div class="stat-chart-head">
+        <div>
+          <div class="stat-chart-title">Performance par quartier — Rabat</div>
+          <div class="stat-chart-sub">Reservations et salons actifs par quartier Q1 2026</div>
+        </div>
+        <button class="export-btn" style="font-size:.68rem;padding:.3rem .7rem">Export CSV</button>
+      </div>
+      <div class="stat-chart-body">
+        <table class="geo-table">
+          <thead>
+            <tr><th>Quartier</th><th>Salons actifs</th><th>Reservations</th><th>Note moy.</th><th>CA estime (MAD)</th><th>Evolution</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Agdal</strong></td>
+              <td>8</td>
+              <td><div class="geo-bar-inline" style="width:90px"></div>982</td>
+              <td>&#9733; 4.8</td>
+              <td><strong>72 400</strong></td>
+              <td><span class="trend-up-ic">&#9650; +24%</span></td>
+            </tr>
+            <tr>
+              <td><strong>Centre Ville</strong></td>
+              <td>9</td>
+              <td><div class="geo-bar-inline" style="width:80px"></div>870</td>
+              <td>&#9733; 4.6</td>
+              <td><strong>64 200</strong></td>
+              <td><span class="trend-up-ic">&#9650; +18%</span></td>
+            </tr>
+            <tr>
+              <td><strong>Souissi</strong></td>
+              <td>7</td>
+              <td><div class="geo-bar-inline" style="width:68px"></div>740</td>
+              <td>&#9733; 4.9</td>
+              <td><strong>58 600</strong></td>
+              <td><span class="trend-up-ic">&#9650; +31%</span></td>
+            </tr>
+            <tr>
+              <td><strong>Hay Riad</strong></td>
+              <td>6</td>
+              <td><div class="geo-bar-inline" style="width:58px"></div>630</td>
+              <td>&#9733; 4.7</td>
+              <td><strong>47 800</strong></td>
+              <td><span class="trend-up-ic">&#9650; +15%</span></td>
+            </tr>
+            <tr>
+              <td><strong>Hassan</strong></td>
+              <td>5</td>
+              <td><div class="geo-bar-inline" style="width:42px"></div>458</td>
+              <td>&#9733; 4.4</td>
+              <td><strong>32 100</strong></td>
+              <td><span class="trend-dn-ic">&#9660; -3%</span></td>
+            </tr>
+            <tr>
+              <td><strong>Ocean</strong></td>
+              <td>4</td>
+              <td><div class="geo-bar-inline" style="width:30px"></div>328</td>
+              <td>&#9733; 4.5</td>
+              <td><strong>22 400</strong></td>
+              <td><span class="trend-up-ic">&#9650; +8%</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="stat-three-col">
+
+      <div class="stat-chart-card">
+        <div class="stat-chart-head">
+          <div><div class="stat-chart-title">Inscriptions clients</div><div class="stat-chart-sub">Nouveaux comptes par semaine</div></div>
+        </div>
+        <div class="stat-chart-body">
+          <div style="display:flex;align-items:flex-end;gap:.4rem;height:100px;border-bottom:1px solid var(--border2);padding-bottom:.5rem;margin-bottom:.8rem">
+            <div style="flex:1;background:var(--p2);border-radius:2px 2px 0 0;height:45%"></div>
+            <div style="flex:1;background:var(--p2);border-radius:2px 2px 0 0;height:60%"></div>
+            <div style="flex:1;background:var(--p3);border-radius:2px 2px 0 0;height:55%"></div>
+            <div style="flex:1;background:var(--p3);border-radius:2px 2px 0 0;height:72%"></div>
+            <div style="flex:1;background:var(--p4);border-radius:2px 2px 0 0;height:88%"></div>
+            <div style="flex:1;background:var(--p4);border-radius:2px 2px 0 0;height:100%"></div>
+          </div>
+          <div class="stat-metric-row" style="grid-template-columns:1fr 1fr;padding:.5rem 0 0">
+            <div class="stat-metric"><div class="stat-metric-val">412</div><div class="stat-metric-lbl">Ce trimestre</div></div>
+            <div class="stat-metric"><div class="stat-metric-val">69</div><div class="stat-metric-lbl">Ce mois</div><div class="stat-metric-delta trend-up-ic">&#9650; +34%</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-chart-card">
+        <div class="stat-chart-head">
+          <div><div class="stat-chart-title">Taux de conversion</div><div class="stat-chart-sub">Visiteurs → Reservations</div></div>
+        </div>
+        <div class="stat-chart-body">
+          <div style="text-align:center;padding:1rem 0">
+            <div style="font-family:var(--fh);font-size:3.5rem;font-weight:700;color:var(--p4);line-height:1">14.2%</div>
+            <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--ink-m);margin-top:.4rem">Taux de conversion</div>
+            <div style="font-size:.76rem;color:var(--p4d);font-weight:600;margin-top:.5rem">&#9650; +2.1% vs trimestre precedent</div>
+          </div>
+          <div class="stat-metric-row" style="grid-template-columns:1fr 1fr;padding:.5rem 0 0;border-top:1.5px solid var(--border2);margin-top:.5rem">
+            <div class="stat-metric"><div class="stat-metric-val">27 K</div><div class="stat-metric-lbl">Visites</div></div>
+            <div class="stat-metric"><div class="stat-metric-val">3 870</div><div class="stat-metric-lbl">Reservations</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-chart-card">
+        <div class="stat-chart-head">
+          <div><div class="stat-chart-title">Satisfaction clients</div><div class="stat-chart-sub">Distribution des notes Q1 2026</div></div>
+        </div>
+        <div class="stat-chart-body">
+          <div class="bar-h-chart">
+            <div class="bar-h-row"><span class="bar-h-label" style="width:50px">&#9733;&#9733;&#9733;&#9733;&#9733;</span><div class="bar-h-track"><div class="bar-h-fill" style="width:68%;background:#89986D"><span class="bar-h-val">68%</span></div></div></div>
+            <div class="bar-h-row"><span class="bar-h-label" style="width:50px">&#9733;&#9733;&#9733;&#9733;</span><div class="bar-h-track"><div class="bar-h-fill" style="width:20%;background:#9CAB84"><span class="bar-h-val">20%</span></div></div></div>
+            <div class="bar-h-row"><span class="bar-h-label" style="width:50px">&#9733;&#9733;&#9733;</span><div class="bar-h-track"><div class="bar-h-fill" style="width:8%;background:#D4A844"><span class="bar-h-val">8%</span></div></div></div>
+            <div class="bar-h-row"><span class="bar-h-label" style="width:50px">&#9733;&#9733;</span><div class="bar-h-track"><div class="bar-h-fill" style="width:3%;background:#E87A5D"><span class="bar-h-val">3%</span></div></div></div>
+            <div class="bar-h-row"><span class="bar-h-label" style="width:50px">&#9733;</span><div class="bar-h-track"><div class="bar-h-fill" style="width:1%;background:#C04A3D;min-width:20px"><span class="bar-h-val">1%</span></div></div></div>
+          </div>
+          <div style="text-align:center;margin-top:1rem;font-size:.8rem;color:var(--ink-m)">Note moyenne : <strong style="color:var(--ink-h)">&#9733; 4.6 / 5</strong> &nbsp;·&nbsp; 1 892 avis</div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<footer class="foot">
+  <div class="foot-bar">
+    <div class="fl">hello@Salonify.ma</div>
+    <div class="fm"><div class="fm-t">Pour plus d'informations</div><div class="fm-r"></div></div>
+    <div class="fr">+(212) 7 63456-7890</div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.period-btn').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.period-btn').forEach(function(x){x.classList.remove('on');});
+    this.classList.add('on');
+  });
+});
+document.querySelectorAll('.admin-topnav-tab').forEach(function(t){t.addEventListener('click',function(){document.querySelectorAll('.admin-topnav-tab').forEach(function(x){x.classList.remove('active');});this.classList.add('active');});});
+</script>
+</body>
+</html>

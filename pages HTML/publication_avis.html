@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#89986D">
+<title>Publier un avis — Salonify</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="nav">
+  <div class="nav-r1">
+    <a href="accueil.html" class="brand">
+      <div class="brand-box"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 230" fill="none" style="width:52px;height:60px">
+  <path d="M78 170 C70 150 66 128 68 108 C70 88 76 72 84 60 C90 50 98 44 106 42" stroke="#89986D" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <path d="M72 130 C58 122 50 108 56 98 C62 112 68 122 72 130Z" fill="#89986D" opacity="0.85"/>
+  <path d="M70 148 C56 144 48 132 54 124 C60 136 66 144 70 148Z" fill="#89986D" opacity="0.65"/>
+  <path d="M90 64 C82 54 80 40 86 32 C90 44 90 56 90 64Z" fill="none" stroke="#89986D" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M100 58 C94 46 94 32 100 26 C106 32 106 46 100 58Z" fill="none" stroke="#89986D" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M110 60 C106 48 108 34 114 28 C118 34 118 50 110 60Z" fill="none" stroke="#89986D" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M120 66 C118 54 122 40 128 36 C130 48 126 60 120 66Z" fill="none" stroke="#89986D" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="104" cy="62" rx="10" ry="9" fill="none" stroke="#89986D" stroke-width="2.4"/>
+  <circle cx="104" cy="62" r="4" fill="#89986D" opacity="0.4"/>
+  <path d="M84 60 C76 66 70 76 68 90 C66 104 68 120 72 136 C74 148 74 160 70 172" stroke="#89986D" stroke-width="3.8" stroke-linecap="round" fill="none"/>
+  <path d="M90 58 C84 66 80 80 80 96 C80 114 84 132 82 150" stroke="#89986D" stroke-width="2.4" stroke-linecap="round" fill="none" opacity="0.6"/>
+  <path d="M106 42 C120 44 132 54 138 68 C144 82 142 100 136 114 C132 124 124 132 116 136 C110 140 104 138 100 134 C96 130 94 124 92 118" stroke="#89986D" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+  <path d="M136 116 C142 112 148 110 154 112" stroke="#89986D" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+  <rect x="148" y="114" width="28" height="6" rx="3" fill="#89986D"/>
+  <line x1="150" y1="120" x2="150" y2="134" stroke="#89986D" stroke-width="2.8" stroke-linecap="round"/>
+  <line x1="155" y1="120" x2="155" y2="134" stroke="#89986D" stroke-width="2.8" stroke-linecap="round"/>
+  <line x1="160" y1="120" x2="160" y2="134" stroke="#89986D" stroke-width="2.8" stroke-linecap="round"/>
+  <line x1="165" y1="120" x2="165" y2="134" stroke="#89986D" stroke-width="2.8" stroke-linecap="round"/>
+  <line x1="170" y1="120" x2="170" y2="134" stroke="#89986D" stroke-width="2.8" stroke-linecap="round"/>
+  <line x1="175" y1="120" x2="175" y2="134" stroke="#89986D" stroke-width="2.8" stroke-linecap="round"/>
+</svg></div>
+      <div>
+        <div class="brand-name">Salonify</div>
+        <div class="brand-sub">Reservation Beaute</div>
+      </div>
+    </a>
+    <button class="burger" id="brg"><span></span><span></span><span></span></button>
+    <div class="nav-acts"><a href="connexion_inscription.html" class="btn-log">Connexion</a><a href="connexion_inscription.html" class="btn-ins">Inscription</a></div>
+  </div>
+  <span class="nav-line"></span>
+  <div class="nav-r2"><a href="accueil.html" class="on">Accueil</a><a href="#">A propos</a><a href="liste_salons.html">Emplacements</a><a href="#">Galerie</a><a href="#">Contact</a></div>
+  <nav class="mob" id="mm"><a href="accueil.html" class="on">Accueil</a><a href="#">A propos</a><a href="liste_salons.html">Emplacements</a><a href="#">Galerie</a><a href="#">Contact</a><div class="mob-cta"><a href="connexion_inscription.html" class="mc">Connexion</a><a href="connexion_inscription.html" class="mi">Inscription</a></div></nav>
+</header>
+
+<!-- PAGE HEADER -->
+<div class="av-ph">
+  <div class="wrap">
+    <h1>Publier un avis</h1>
+    <p>Partagez votre experience avec la communaute Salonify</p>
+  </div>
+</div>
+
+<div class="av-l">
+  <!-- COLONNE PRINCIPALE -->
+  <div>
+
+    <!-- RECAP SALON -->
+    <div class="salon-recap">
+      <div class="sr-ph">
+        <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=160&h=160&fit=crop&q=80" alt="Prestige Hair Studio">
+      </div>
+      <div class="sr-body">
+        <div class="sr-name">Prestige Hair Studio</div>
+        <div class="sr-sub">Hay Riad, Rabat &nbsp;·&nbsp; Lundi 3 mars 2026 &nbsp;·&nbsp; 11h00</div>
+        <div class="sr-svc">Balayage &mdash; 350 MAD</div>
+      </div>
+    </div>
+
+    <!-- FORMULAIRE -->
+    <div class="fcard">
+      <div class="fc-ttl">Votre evaluation</div>
+      <div class="fc-sub">Votre avis aide les autres clients a faire le bon choix. Soyez precis et honnete.</div>
+
+      <!-- NOTE GLOBALE -->
+      <div class="stars-wrap">
+        <div class="sw-lbl">Note globale *</div>
+        <div class="stars-big" id="stars-global">
+          <span class="star-b on" data-v="1">&#9733;</span>
+          <span class="star-b on" data-v="2">&#9733;</span>
+          <span class="star-b on" data-v="3">&#9733;</span>
+          <span class="star-b on" data-v="4">&#9733;</span>
+          <span class="star-b on" data-v="5">&#9733;</span>
+        </div>
+        <div class="stars-hint" id="hint-global">Excellent &mdash; Vous avez adore votre experience</div>
+      </div>
+
+      <!-- CRITERES -->
+      <div style="font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#2E2A1E;margin-bottom:.9rem">Notes par critere</div>
+      <div class="crit-grid">
+        <div class="crit-item">
+          <div class="crit-nm">Qualite du service</div>
+          <div class="stars-sm" id="c1">
+            <span class="star-s on">&#9733;</span><span class="star-s on">&#9733;</span>
+            <span class="star-s on">&#9733;</span><span class="star-s on">&#9733;</span>
+            <span class="star-s on">&#9733;</span>
+          </div>
+        </div>
+        <div class="crit-item">
+          <div class="crit-nm">Accueil & ambiance</div>
+          <div class="stars-sm" id="c2">
+            <span class="star-s on">&#9733;</span><span class="star-s on">&#9733;</span>
+            <span class="star-s on">&#9733;</span><span class="star-s on">&#9733;</span>
+            <span class="star-s">&#9733;</span>
+          </div>
+        </div>
+        <div class="crit-item">
+          <div class="crit-nm">Proprete du salon</div>
+          <div class="stars-sm" id="c3">
+            <span class="star-s on">&#9733;</span><span class="star-s on">&#9733;</span>
+            <span class="star-s on">&#9733;</span><span class="star-s on">&#9733;</span>
+            <span class="star-s on">&#9733;</span>
+          </div>
+        </div>
+        <div class="crit-item">
+          <div class="crit-nm">Rapport qualite / prix</div>
+          <div class="stars-sm" id="c4">
+            <span class="star-s on">&#9733;</span><span class="star-s on">&#9733;</span>
+            <span class="star-s on">&#9733;</span><span class="star-s on">&#9733;</span>
+            <span class="star-s">&#9733;</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TITRE -->
+      <div class="fg">
+        <label>Titre de votre avis *</label>
+        <div class="fg-title-wrap">
+          <input type="text" class="fi" placeholder="Resumez votre experience en quelques mots..." value="Un balayage parfait, je recommande vivement !" id="title-inp" maxlength="80">
+          <span class="char-ctr" id="ctr">44/80</span>
+        </div>
+      </div>
+
+      <!-- CONTENU -->
+      <div class="fg">
+        <label>Votre avis detaille *</label>
+        <textarea class="fi" rows="5" placeholder="Decrivez votre experience : la qualite du service, l'ambiance du salon, le professionnalisme de l'equipe...">Yassine a fait un travail impeccable sur mon balayage. Les couleurs sont exactement ce que je voulais, naturelles et lumineuses. L'ambiance du salon est tres agreable et le personnel est accueillant. Je repartirais sans hesitation !</textarea>
+      </div>
+
+      <!-- RECOMMANDATION -->
+      <div class="fg">
+        <label>Recommanderiez-vous ce salon ?</label>
+        <div class="reco-row">
+          <div class="reco-opt yes sel">
+            <div class="reco-ic">&#128077;</div>
+            <div class="reco-t">Oui, je recommande</div>
+            <div class="reco-s">Je reviendrai avec plaisir</div>
+          </div>
+          <div class="reco-opt no">
+            <div class="reco-ic">&#128078;</div>
+            <div class="reco-t">Non, je ne recommande pas</div>
+            <div class="reco-s">L'experience n'etait pas a la hauteur</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHOTOS -->
+      <div class="fg">
+        <label>Photos <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.75rem;color:#6B6350">(optionnel &mdash; 3 max)</span></label>
+        <div class="photos-row">
+          <div class="ph-prev">
+            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=164&h=164&fit=crop&q=80" alt="">
+            <button class="ph-del">&#10005;</button>
+          </div>
+          <div class="ph-prev">
+            <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=164&h=164&fit=crop&q=80" alt="">
+            <button class="ph-del">&#10005;</button>
+          </div>
+          <div class="ph-add">
+            <div class="ph-add-ic">+</div>
+            <div class="ph-add-t">Ajouter</div>
+          </div>
+        </div>
+        <div style="font-size:.74rem;color:#6B6350;font-weight:500;margin-top:.5rem">Formats acceptes : JPG, PNG &mdash; 5 Mo max par photo</div>
+      </div>
+
+      <!-- FOOTER FORM -->
+      <div class="av-nav">
+        <a href="mes_reservations.html" class="btn-back">&#8592; Annuler</a>
+        <a href="mes_reservations.html" class="btn-pub">Publier mon avis &#8594;</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sb">
+
+    <!-- APERCU SCORE -->
+    <div class="sb-card">
+      <div class="sb-t">Apercu de votre note</div>
+      <div class="score-live">
+        <div class="score-n">4.8</div>
+        <div class="score-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="score-lbl">Note calculee en temps reel</div>
+      </div>
+      <div style="font-size:.76rem;color:#6B6350;font-weight:500;line-height:1.7">
+        Votre note influencera la moyenne du salon actuellement a <strong style="color:#1C1A14">4.7 / 5</strong> (62 avis).
+      </div>
+    </div>
+
+    <!-- CONSEILS -->
+    <div class="sb-card">
+      <div class="sb-t">Conseils pour un bon avis</div>
+      <div class="tip">
+        <div class="tip-ic">1</div>
+        <div class="tip-t">Soyez specifique : mentionnez le service exact et le styliste.</div>
+      </div>
+      <div class="tip">
+        <div class="tip-ic">2</div>
+        <div class="tip-t">Restez honnete et constructif, meme si l'experience etait negative.</div>
+      </div>
+      <div class="tip">
+        <div class="tip-ic">3</div>
+        <div class="tip-t">Ajoutez des photos pour illustrer le resultat final.</div>
+      </div>
+      <div class="tip">
+        <div class="tip-ic">4</div>
+        <div class="tip-t">Evitez les informations personnelles et les contenus hors sujet.</div>
+      </div>
+    </div>
+
+    <!-- AUTRES AVIS DU SALON -->
+    <div class="sb-card">
+      <div class="sb-t">Avis recents du salon</div>
+      <div class="oa">
+        <div class="oa-top"><span class="oa-name">Salma B.</span><span class="oa-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+        <div class="oa-txt">Balayage parfait, equipe tres professionnelle.</div>
+      </div>
+      <div class="oa">
+        <div class="oa-top"><span class="oa-name">Karim M.</span><span class="oa-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+        <div class="oa-txt">Tres bon accueil, salon propre et moderne.</div>
+      </div>
+      <div class="oa">
+        <div class="oa-top"><span class="oa-name">Nadia H.</span><span class="oa-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></div>
+        <div class="oa-txt">Resultat impeccable, juste un peu d'attente.</div>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<script>
+// Note globale interactive
+var hints=['Tres mauvais','Mauvais','Moyen &mdash; Experience correcte','Bien &mdash; Satisfait','Excellent &mdash; Vous avez adore votre experience'];
+var gl=document.querySelectorAll('#stars-global .star-b');
+var hintEl=document.getElementById('hint-global');
+gl.forEach(function(s,i){
+  s.addEventListener('mouseenter',function(){
+    gl.forEach(function(x,j){x.classList.toggle('on',j<=i)});
+    hintEl.innerHTML=hints[i];
+  });
+  s.addEventListener('click',function(){
+    gl.forEach(function(x,j){x.dataset.sel=(j<=i?'1':'0');x.classList.toggle('on',j<=i)});
+  });
+});
+document.getElementById('stars-global').addEventListener('mouseleave',function(){
+  gl.forEach(function(x){x.classList.toggle('on',x.dataset.sel==='1'||x.classList.contains('on'))});
+});
+// Compteur titre
+var inp=document.getElementById('title-inp'),ctr=document.getElementById('ctr');
+inp.addEventListener('input',function(){ctr.textContent=inp.value.length+'/80'});
+// Reco toggle
+document.querySelectorAll('.reco-opt').forEach(function(opt){
+  opt.addEventListener('click',function(){
+    document.querySelectorAll('.reco-opt').forEach(function(o){o.classList.remove('sel')});
+    opt.classList.add('sel');
+  });
+});
+// Criteres etoiles
+['c1','c2','c3','c4'].forEach(function(id){
+  var ss=document.querySelectorAll('#'+id+' .star-s');
+  ss.forEach(function(s,i){
+    s.addEventListener('click',function(){ss.forEach(function(x,j){x.classList.toggle('on',j<=i)})});
+    s.addEventListener('mouseenter',function(){ss.forEach(function(x,j){x.classList.toggle('on',j<=i)})});
+  });
+  document.getElementById(id).addEventListener('mouseleave',function(){
+    var last=-1;ss.forEach(function(x,j){if(x.classList.contains('on'))last=j});
+    ss.forEach(function(x,j){x.classList.toggle('on',j<=last)});
+  });
+});
+</script>
+
+<footer class="foot">
+  <div class="foot-bar">
+    <div class="fl"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="076f626b6b684754666b68696e617e296a66">[email&#160;protected]</a></div>
+    <div class="fm"><div class="fm-t">Pour plus d'informations</div><div class="fm-r"></div></div>
+    <div class="fr">+(212) 7 63456-7890</div>
+  </div>
+</footer>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+</body>
+</html>

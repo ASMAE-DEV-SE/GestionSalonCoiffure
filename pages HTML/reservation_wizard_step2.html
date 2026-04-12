@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#89986D">
+<title>Reservation — Choix du creneau — Salonify</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-r1">
+    <a href="accueil.html" class="brand">
+      <div class="brand-box"><img src="..\images\logo1.png" alt="Salonify Logo" class="logo-img"></div>
+      <div><div class="brand-name">Salonify</div><div class="brand-sub">Reservation Beaute</div></div>
+    </a>
+    <button class="burger" id="brg"><span></span><span></span><span></span></button>
+    <div class="nav-acts">
+      <a href="mes_reservations.html" class="btn-log">Mes reservations</a>
+      <a href="connexion_inscription.html" class="btn-ins">Deconnexion</a>
+    </div>
+  </div>
+  <span class="nav-line"></span>
+  <div class="nav-r2">
+    <a href="accueil.html">Accueil</a>
+    <a href="villes.html">Emplacements</a>
+    <a href="mes_reservations.html">Mes reservations</a>
+  </div>
+  <nav class="mob" id="mm">
+    <a href="accueil.html">Accueil</a>
+    <a href="villes.html">Emplacements</a>
+    <div class="mob-cta">
+      <a href="accueil.html" class="mc">Accueil</a>
+      <a href="connexion_inscription.html" class="mi">Deconnexion</a>
+    </div>
+  </nav>
+</header>
+
+<div class="booking-page-header">
+  <div class="wrap">
+    <h1>Nouvelle reservation</h1>
+    <div class="booking-page-subtitle">Elegance Coiffure &nbsp;·&nbsp; Agdal, Rabat &nbsp;·&nbsp; &#9733; 4.8</div>
+  </div>
+</div>
+
+<div class="stepper-bar-wrap">
+  <div class="stepper-bar">
+    <div class="step done">
+      <div class="step-dot">&#10003;</div>
+      <div class="step-label">Service</div>
+    </div>
+    <div class="step current">
+      <div class="step-dot">2</div>
+      <div class="step-label">Creneau</div>
+    </div>
+    <div class="step">
+      <div class="step-dot">3</div>
+      <div class="step-label">Vos infos</div>
+    </div>
+    <div class="step">
+      <div class="step-dot">4</div>
+      <div class="step-label">Confirmation</div>
+    </div>
+  </div>
+</div>
+
+<div class="wizard-two-col">
+  <div>
+
+    <div class="completed-step">
+      <div>
+        <div class="completed-step-label">Service choisi</div>
+        <div class="completed-step-value">Coupe + Brushing</div>
+        <div class="completed-step-meta">60 minutes</div>
+      </div>
+      <div class="completed-step-right">
+        <div class="completed-step-price">160 MAD</div>
+        <a href="reservation_wizard_step1.html" class="btn-edit-step">Modifier</a>
+      </div>
+    </div>
+
+    <div class="emp-select-section">
+      <div class="emp-select-head">
+        <div>
+          <div class="emp-select-title">Choisissez votre styliste</div>
+          <div class="emp-select-sub">Optionnel — nous choisirons pour vous si non specifie</div>
+        </div>
+      </div>
+
+      <div class="emp-select-row selected" id="empAny" onclick="selectEmp(this,'any','Pas de preference')">
+        <div style="width:46px;height:46px;border-radius:50%;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;border:2.5px solid var(--border)">&#9786;</div>
+        <div>
+          <div class="emp-select-name">Pas de preference</div>
+          <div class="emp-select-role">Premier disponible selon votre creneau</div>
+        </div>
+        <div class="emp-select-check">&#10003;</div>
+      </div>
+
+      <div class="emp-select-row" id="empFatima" onclick="selectEmp(this,'fatima','Fatima Zahra')">
+        <div class="emp-select-av"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&q=80" alt="Fatima"></div>
+        <div>
+          <div class="emp-select-name">Fatima Zahra</div>
+          <div class="emp-select-role">Coiffeuse principale · Coupe, Coloration</div>
+          <div class="emp-select-note">&#9733; 4.9 · 186 avis</div>
+        </div>
+        <span class="emp-select-dispo">8 creneaux</span>
+        <div class="emp-select-check">&#10003;</div>
+      </div>
+
+      <div class="emp-select-row" id="empSara" onclick="selectEmp(this,'sara','Sara Moussaoui')">
+        <div class="emp-select-av"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop&q=80" alt="Sara"></div>
+        <div>
+          <div class="emp-select-name">Sara Moussaoui</div>
+          <div class="emp-select-role">Estheticienne · Soin visage, Coupe</div>
+          <div class="emp-select-note">&#9733; 4.8 · 142 avis</div>
+        </div>
+        <span class="emp-select-dispo">5 creneaux</span>
+        <div class="emp-select-check">&#10003;</div>
+      </div>
+
+      <div class="emp-select-row" id="empImane" onclick="selectEmp(this,'imane','Imane Tazi')">
+        <div class="emp-select-av"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&q=80" alt="Imane"></div>
+        <div>
+          <div class="emp-select-name">Imane Tazi</div>
+          <div class="emp-select-role">Coupe & Brushing · Chignon</div>
+          <div class="emp-select-note">&#9733; 4.6 · 98 avis</div>
+        </div>
+        <span class="emp-select-dispo">3 creneaux</span>
+        <div class="emp-select-check">&#10003;</div>
+      </div>
+    </div>
+
+    <div class="cal-wrap">
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="prevMonth()">&#8592;</button>
+        <div class="cal-nav-month" id="calTitle">Mars 2026</div>
+        <button class="cal-nav-btn" onclick="nextMonth()">&#8594;</button>
+      </div>
+      <div class="cal-weekdays">
+        <div class="cal-wd">Lun</div>
+        <div class="cal-wd">Mar</div>
+        <div class="cal-wd">Mer</div>
+        <div class="cal-wd">Jeu</div>
+        <div class="cal-wd">Ven</div>
+        <div class="cal-wd we">Sam</div>
+        <div class="cal-wd we">Dim</div>
+      </div>
+      <div class="cal-days" id="calDays"></div>
+      <div class="cal-legend">
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--p4)"></div>Creneaux disponibles</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--border2)"></div>Complet / Ferme</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--ink-h)"></div>Aujourd'hui</div>
+      </div>
+    </div>
+
+    <div class="slots-section" id="slotsSection" style="display:none">
+      <div class="slots-head">
+        <div>
+          <div class="slots-title">Creneaux disponibles</div>
+          <div class="slots-date-lbl" id="slotsDate">Mardi 19 mars 2026</div>
+        </div>
+      </div>
+      <div class="slots-body">
+        <div class="slots-period-label">Matin</div>
+        <div class="slots-grid">
+          <div class="time-slot available" onclick="selectSlot(this,'09:00')">09:00</div>
+          <div class="time-slot unavailable">09:30</div>
+          <div class="time-slot available" onclick="selectSlot(this,'10:00')">10:00</div>
+          <div class="time-slot unavailable">10:30</div>
+          <div class="time-slot available" onclick="selectSlot(this,'11:00')">11:00</div>
+          <div class="time-slot available" onclick="selectSlot(this,'11:30')">11:30</div>
+          <div class="time-slot unavailable">12:00</div>
+          <div class="time-slot unavailable">12:30</div>
+        </div>
+        <div class="slots-period-label">Apres-midi</div>
+        <div class="slots-grid">
+          <div class="time-slot unavailable">14:00</div>
+          <div class="time-slot available" onclick="selectSlot(this,'14:30')">14:30</div>
+          <div class="time-slot available" onclick="selectSlot(this,'15:00')">15:00</div>
+          <div class="time-slot unavailable">15:30</div>
+          <div class="time-slot available" onclick="selectSlot(this,'16:00')">16:00</div>
+          <div class="time-slot available selected" onclick="selectSlot(this,'16:30')">16:30</div>
+          <div class="time-slot available" onclick="selectSlot(this,'17:00')">17:00</div>
+          <div class="time-slot unavailable">17:30</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card" style="padding:1.6rem;margin-top:1.5rem">
+      <div class="wizard-navigation">
+        <a href="reservation_wizard_step1.html" class="btn-wizard-back">&#8592; Service</a>
+        <a href="reservation.html" class="btn-wizard-confirm" id="btnNext3" style="opacity:.4;pointer-events:none">Mes coordonnees &#8594;</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="recap-sidebar">
+    <div class="recap-header">
+      <div class="recap-header-title">Votre reservation</div>
+    </div>
+    <div class="recap-body">
+      <div class="recap-salon" style="margin-bottom:1.2rem;padding-bottom:1.2rem;border-bottom:1.5px solid var(--p2)">
+        <div class="recap-salon-photo">
+          <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=120&h=120&fit=crop&q=80" alt="Elegance Coiffure">
+        </div>
+        <div>
+          <div class="recap-salon-name">Elegance Coiffure</div>
+          <div class="recap-salon-location">Agdal, Rabat</div>
+        </div>
+      </div>
+
+      <div class="recap-row">
+        <span class="recap-key">Service</span>
+        <span class="recap-value">Coupe + Brushing</span>
+      </div>
+      <div class="recap-row">
+        <span class="recap-key">Duree</span>
+        <span class="recap-value">60 min</span>
+      </div>
+      <div class="recap-row">
+        <span class="recap-key">Styliste</span>
+        <span class="recap-value" id="recapEmp">Au choix</span>
+      </div>
+      <div class="recap-row">
+        <span class="recap-key">Date</span>
+        <span class="recap-value" id="recapDate" style="color:var(--ink-d)">A choisir</span>
+      </div>
+      <div class="recap-row">
+        <span class="recap-key">Heure</span>
+        <span class="recap-value" id="recapTime" style="color:var(--ink-d)">A choisir</span>
+      </div>
+
+      <div class="recap-total-row">
+        <span class="recap-total-label">Total</span>
+        <span class="recap-total-amount">160 MAD</span>
+      </div>
+
+      <div style="margin-top:1.2rem;padding:1rem;background:rgba(197,216,157,.15);border:1px solid var(--p2)">
+        <div style="font-size:.72rem;color:var(--ink-s);line-height:1.7">
+          &#128197; Reservation gratuite — paiement au salon<br>
+          &#10003; Annulation libre jusqu'a 24h avant
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="foot-bar">
+    <div class="fl">hello@Salonify.ma</div>
+    <div class="fm"><div class="fm-t">Pour plus d'informations</div><div class="fm-r"></div></div>
+    <div class="fr">+(212) 7 63456-7890</div>
+  </div>
+</footer>
+
+<script>
+var burger=document.getElementById('brg'),menu=document.getElementById('mm');
+if(burger)burger.addEventListener('click',function(){menu.classList.toggle('open');});
+
+var selectedEmp='any', selectedDate=null, selectedTime=null;
+var currentMonth=2, currentYear=2026;
+var months=['Janvier','Fevrier','Mars','Avril','Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Decembre'];
+var monthsFr=['janvier','fevrier','mars','avril','mai','juin','juillet','aout','septembre','octobre','novembre','decembre'];
+var daysFr=['lun','mar','mer','jeu','ven','sam','dim'];
+
+var available={
+  '2026-03-17':8,'2026-03-18':5,'2026-03-19':6,'2026-03-20':4,
+  '2026-03-21':7,'2026-03-23':3,'2026-03-24':8,'2026-03-25':6,
+  '2026-03-26':2,'2026-03-27':5,'2026-03-30':7,'2026-03-31':4,
+  '2026-04-01':6,'2026-04-02':8,'2026-04-03':5,'2026-04-06':7
+};
+
+function pad(n){return n<10?'0'+n:String(n);}
+function dateKey(y,m,d){return y+'-'+pad(m+1)+'-'+pad(d);}
+
+function buildCal(){
+  var title=document.getElementById('calTitle');
+  title.textContent=months[currentMonth]+' '+currentYear;
+  var grid=document.getElementById('calDays');
+  grid.innerHTML='';
+  var first=new Date(currentYear,currentMonth,1).getDay();
+  first=(first===0)?6:first-1;
+  var days=new Date(currentYear,currentMonth+1,0).getDate();
+  var prevDays=new Date(currentYear,currentMonth,0).getDate();
+  var today=new Date();
+  for(var i=0;i<first;i++){
+    var d=document.createElement('div');
+    d.className='cal-day other-month past';
+    d.innerHTML='<span class="cal-day-num">'+(prevDays-first+1+i)+'</span>';
+    grid.appendChild(d);
+  }
+  for(var day=1;day<=days;day++){
+    var d=document.createElement('div');
+    var key=dateKey(currentYear,currentMonth,day);
+    var isPast=(new Date(currentYear,currentMonth,day)<new Date(today.getFullYear(),today.getMonth(),today.getDate()));
+    var isToday=(day===today.getDate()&&currentMonth===today.getMonth()&&currentYear===today.getFullYear());
+    var hasSlots=available[key]&&!isPast;
+    var classes=['cal-day'];
+    if(isPast)classes.push('past');
+    else if(!hasSlots)classes.push('disabled');
+    if(isToday)classes.push('today');
+    if(hasSlots)classes.push('has-slots');
+    if(key===selectedDate)classes.push('selected');
+    d.className=classes.join(' ');
+    d.innerHTML='<span class="cal-day-num">'+day+'</span>'+(hasSlots?'<span class="cal-day-dot"></span>':'');
+    if(hasSlots){
+      (function(k,dn){
+        d.addEventListener('click',function(){selectDate(k,dn);});
+      })(key,day);
+    }
+    grid.appendChild(d);
+  }
+  var total=first+days;
+  var remaining=total%7===0?0:7-(total%7);
+  for(var i=1;i<=remaining;i++){
+    var d=document.createElement('div');
+    d.className='cal-day other-month past';
+    d.innerHTML='<span class="cal-day-num">'+i+'</span>';
+    grid.appendChild(d);
+  }
+}
+
+function selectDate(key, dayNum){
+  selectedDate=key;
+  selectedTime=null;
+  buildCal();
+  var parts=key.split('-');
+  var m=parseInt(parts[1])-1;
+  var jsFull=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+  var jsDate=new Date(parseInt(parts[0]),m,parseInt(parts[2]));
+  var wd=jsDate.getDay();
+  var wdIdx=(wd===0)?6:wd-1;
+  var label=jsFull[wdIdx]+' '+dayNum+' '+monthsFr[m]+' '+parts[0];
+  document.getElementById('slotsDate').textContent=label;
+  document.getElementById('slotsSection').style.display='block';
+  document.getElementById('recapDate').textContent=dayNum+' '+monthsFr[m];
+  document.getElementById('recapDate').style.color='';
+  document.getElementById('recapTime').textContent='A choisir';
+  document.getElementById('recapTime').style.color='var(--ink-d)';
+  document.querySelectorAll('.time-slot.selected').forEach(function(s){s.classList.remove('selected');});
+  checkComplete();
+}
+
+function selectSlot(el, time){
+  document.querySelectorAll('.time-slot').forEach(function(s){s.classList.remove('selected');});
+  el.classList.add('selected');
+  selectedTime=time;
+  document.getElementById('recapTime').textContent=time;
+  document.getElementById('recapTime').style.color='';
+  checkComplete();
+}
+
+function selectEmp(row, id, name){
+  document.querySelectorAll('.emp-select-row').forEach(function(r){r.classList.remove('selected');});
+  row.classList.add('selected');
+  selectedEmp=id;
+  document.getElementById('recapEmp').textContent=(id==='any')?'Au choix':name;
+}
+
+function checkComplete(){
+  var btn=document.getElementById('btnNext3');
+  if(selectedDate&&selectedTime){
+    btn.style.opacity='1'; btn.style.pointerEvents='auto';
+  } else {
+    btn.style.opacity='.4'; btn.style.pointerEvents='none';
+  }
+}
+
+function prevMonth(){
+  currentMonth--;
+  if(currentMonth<0){currentMonth=11;currentYear--;}
+  buildCal();
+}
+function nextMonth(){
+  currentMonth++;
+  if(currentMonth>11){currentMonth=0;currentYear++;}
+  buildCal();
+}
+
+buildCal();
+selectDate('2026-03-19',19);
+document.querySelectorAll('.time-slot').forEach(function(s){
+  if(s.textContent==='16:30')s.classList.add('selected'),selectedTime='16:30';
+});
+document.getElementById('recapTime').textContent='16:30';
+document.getElementById('recapTime').style.color='';
+checkComplete();
+</script>
+</body>
+</html>

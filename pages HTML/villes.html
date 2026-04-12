@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#89986D">
+  <title>Choisir une ville — Salonify</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-r1">
+    <a href="accueil.html" class="brand">
+      <div class="brand-box">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 230" fill="none" style="width:52px;height:60px">
+          <path d="M78 170 C70 150 66 128 68 108 C70 88 76 72 84 60 C90 50 98 44 106 42" stroke="#89986D" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <path d="M72 130 C58 122 50 108 56 98 C62 112 68 122 72 130Z" fill="#89986D" opacity="0.85"/>
+          <path d="M70 148 C56 144 48 132 54 124 C60 136 66 144 70 148Z" fill="#89986D" opacity="0.65"/>
+          <path d="M90 64 C82 54 80 40 86 32 C90 44 90 56 90 64Z" fill="none" stroke="#89986D" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M100 58 C94 46 94 32 100 26 C106 32 106 46 100 58Z" fill="none" stroke="#89986D" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M110 60 C106 48 108 34 114 28 C118 34 118 50 110 60Z" fill="none" stroke="#89986D" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M120 66 C118 54 122 40 128 36 C130 48 126 60 120 66Z" fill="none" stroke="#89986D" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <ellipse cx="104" cy="62" rx="10" ry="9" fill="none" stroke="#89986D" stroke-width="2.4"/>
+          <circle cx="104" cy="62" r="4" fill="#89986D" opacity="0.4"/>
+          <path d="M84 60 C76 66 70 76 68 90 C66 104 68 120 72 136 C74 148 74 160 70 172" stroke="#89986D" stroke-width="3.8" stroke-linecap="round" fill="none"/>
+          <path d="M90 58 C84 66 80 80 80 96 C80 114 84 132 82 150" stroke="#89986D" stroke-width="2.4" stroke-linecap="round" fill="none" opacity="0.6"/>
+          <path d="M106 42 C120 44 132 54 138 68 C144 82 142 100 136 114 C132 124 124 132 116 136 C110 140 104 138 100 134 C96 130 94 124 92 118" stroke="#89986D" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+          <path d="M136 116 C142 112 148 110 154 112" stroke="#89986D" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+          <rect x="148" y="114" width="28" height="6" rx="3" fill="#89986D"/>
+          <line x1="150" y1="120" x2="150" y2="134" stroke="#89986D" stroke-width="2.8" stroke-linecap="round"/>
+          <line x1="155" y1="120" x2="155" y2="134" stroke="#89986D" stroke-width="2.8" stroke-linecap="round"/>
+          <line x1="160" y1="120" x2="160" y2="134" stroke="#89986D" stroke-width="2.8" stroke-linecap="round"/>
+          <line x1="165" y1="120" x2="165" y2="134" stroke="#89986D" stroke-width="2.8" stroke-linecap="round"/>
+          <line x1="170" y1="120" x2="170" y2="134" stroke="#89986D" stroke-width="2.8" stroke-linecap="round"/>
+          <line x1="175" y1="120" x2="175" y2="134" stroke="#89986D" stroke-width="2.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name">Salonify</div>
+        <div class="brand-sub">Reservation Beaute</div>
+      </div>
+    </a>
+    <button class="burger" id="brg"><span></span><span></span><span></span></button>
+    <div class="nav-acts">
+      <a href="connexion_inscription.html" class="btn-log">Connexion</a>
+      <a href="connexion_inscription.html" class="btn-ins">Inscription</a>
+    </div>
+  </div>
+  <span class="nav-line"></span>
+  <div class="nav-r2">
+    <a href="accueil.html">Accueil</a>
+    <a href="#">A propos</a>
+    <a href="villes.html" class="on">Emplacements</a>
+    <a href="#">Galerie</a>
+    <a href="#">Contact</a>
+  </div>
+  <nav class="mob" id="mm">
+    <a href="accueil.html">Accueil</a>
+    <a href="#">A propos</a>
+    <a href="villes.html" class="on">Emplacements</a>
+    <a href="#">Galerie</a>
+    <a href="#">Contact</a>
+    <div class="mob-cta">
+      <a href="connexion_inscription.html" class="mc">Connexion</a>
+      <a href="connexion_inscription.html" class="mi">Inscription</a>
+    </div>
+  </nav>
+</header>
+
+<div class="cities-hero">
+  <div class="wrap cities-hero-content">
+    <div class="cities-hero-tag">&#9670; Disponible dans tout le Maroc</div>
+    <h1>Trouvez votre salon<br>dans votre ville</h1>
+    <p class="cities-hero-sub">Plus de 320 salons verifies — beaute, coiffure, soins et bien-etre</p>
+    <div class="cities-search-bar">
+      <div style="display:flex;align-items:center;padding:0 .8rem;color:rgba(255,255,255,.5);font-size:.9rem">&#128269;</div>
+      <input type="text" class="cities-search-input" placeholder="Rechercher une ville...">
+      <button class="cities-search-btn">Rechercher</button>
+    </div>
+    <div class="cities-stats">
+      <div><div class="city-stat-val">320+</div><div class="city-stat-lbl">Salons verifies</div></div>
+      <div><div class="city-stat-val">12</div><div class="city-stat-lbl">Villes couvertes</div></div>
+      <div><div class="city-stat-val">4.8</div><div class="city-stat-lbl">Note moyenne</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="cities-section">
+  <div class="cities-section-header">
+    <h2>Villes populaires</h2>
+    <span class="cities-section-sub">Cliquez sur une ville pour voir ses salons</span>
+  </div>
+  <div class="cities-grid">
+
+    <a href="liste_salons.html" class="city-card large">
+      <img class="city-card-img" src="https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?w=800&q=85" alt="Rabat">
+      <div class="city-card-overlay">
+        <div class="city-card-featured">Ville phare</div>
+        <div class="city-card-name">Rabat</div>
+        <div class="city-card-count">50 salons disponibles</div>
+      </div>
+      <div class="city-card-arrow">&#8594;</div>
+    </a>
+
+    <a href="#" class="city-card large">
+      <img class="city-card-img" src="https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=800&q=85" alt="Casablanca">
+      <div class="city-card-overlay">
+        <div class="city-card-name">Casablanca</div>
+        <div class="city-card-count">88 salons disponibles</div>
+      </div>
+      <div class="city-card-arrow">&#8594;</div>
+    </a>
+
+    <a href="#" class="city-card">
+      <img class="city-card-img" src="https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=600&q=85" alt="Marrakech">
+      <div class="city-card-overlay">
+        <div class="city-card-name">Marrakech</div>
+        <div class="city-card-count">62 salons</div>
+      </div>
+      <div class="city-card-arrow">&#8594;</div>
+    </a>
+
+    <a href="#" class="city-card">
+      <img class="city-card-img" src="https://images.unsplash.com/photo-1563889362200-a20ef69c4cce?w=600&q=85" alt="Fès">
+      <div class="city-card-overlay">
+        <div class="city-card-name">Fes</div>
+        <div class="city-card-count">38 salons</div>
+      </div>
+      <div class="city-card-arrow">&#8594;</div>
+    </a>
+
+    <a href="#" class="city-card">
+      <img class="city-card-img" src="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=600&q=85" alt="Tanger">
+      <div class="city-card-overlay">
+        <div class="city-card-name">Tanger</div>
+        <div class="city-card-count">29 salons</div>
+      </div>
+      <div class="city-card-arrow">&#8594;</div>
+    </a>
+
+    <a href="#" class="city-card">
+      <img class="city-card-img" src="https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=600&q=85" alt="Agadir">
+      <div class="city-card-overlay">
+        <div class="city-card-name">Agadir</div>
+        <div class="city-card-count">24 salons</div>
+      </div>
+      <div class="city-card-arrow">&#8594;</div>
+    </a>
+
+    <a href="#" class="city-card">
+      <img class="city-card-img" src="https://images.unsplash.com/photo-1540202404-a2f29016b523?w=600&q=85" alt="Meknes">
+      <div class="city-card-overlay">
+        <div class="city-card-name">Meknes</div>
+        <div class="city-card-count">18 salons</div>
+      </div>
+      <div class="city-card-arrow">&#8594;</div>
+    </a>
+
+    <a href="#" class="city-card">
+      <img class="city-card-img" src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=85" alt="Oujda">
+      <div class="city-card-overlay">
+        <div class="city-card-name">Oujda</div>
+        <div class="city-card-count">14 salons</div>
+      </div>
+      <div class="city-card-arrow">&#8594;</div>
+    </a>
+
+  </div>
+</div>
+
+<div class="nearby-section">
+  <div class="nearby-inner">
+    <div class="nearby-title">Toutes les villes</div>
+    <div class="nearby-grid">
+      <a href="liste_salons.html" class="nearby-pill">
+        <span>&#9679;</span> Rabat <span class="nearby-pill-count">50</span>
+      </a>
+      <a href="#" class="nearby-pill">
+        <span>&#9679;</span> Casablanca <span class="nearby-pill-count">88</span>
+      </a>
+      <a href="#" class="nearby-pill">
+        <span>&#9679;</span> Marrakech <span class="nearby-pill-count">62</span>
+      </a>
+      <a href="#" class="nearby-pill">
+        <span>&#9679;</span> Fes <span class="nearby-pill-count">38</span>
+      </a>
+      <a href="#" class="nearby-pill">
+        <span>&#9679;</span> Tanger <span class="nearby-pill-count">29</span>
+      </a>
+      <a href="#" class="nearby-pill">
+        <span>&#9679;</span> Agadir <span class="nearby-pill-count">24</span>
+      </a>
+      <a href="#" class="nearby-pill">
+        <span>&#9679;</span> Meknes <span class="nearby-pill-count">18</span>
+      </a>
+      <a href="#" class="nearby-pill">
+        <span>&#9679;</span> Oujda <span class="nearby-pill-count">14</span>
+      </a>
+      <a href="#" class="nearby-pill">
+        <span>&#9679;</span> Tetouan <span class="nearby-pill-count">11</span>
+      </a>
+      <a href="#" class="nearby-pill">
+        <span>&#9679;</span> Kenitra <span class="nearby-pill-count">9</span>
+      </a>
+      <a href="#" class="nearby-pill">
+        <span>&#9679;</span> Sale <span class="nearby-pill-count">8</span>
+      </a>
+      <a href="#" class="nearby-pill">
+        <span>&#9679;</span> El Jadida <span class="nearby-pill-count">6</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="foot-bar">
+    <div class="fl">hello@Salonify.ma</div>
+    <div class="fm"><div class="fm-t">Pour plus d'informations</div><div class="fm-r"></div></div>
+    <div class="fr">+(212) 7 63456-7890</div>
+  </div>
+</footer>
+
+<script>
+  var burger = document.getElementById('brg');
+  var menu = document.getElementById('mm');
+  burger.addEventListener('click', function () { menu.classList.toggle('open'); });
+</script>
+
+</body>
+</html>

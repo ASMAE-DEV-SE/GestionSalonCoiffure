@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#89986D">
+  <title>Dashboard Salon — Salonify</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-r1">
+    <a href="accueil.html" class="brand">
+      <div class="brand-box">
+        <img src="..\images\logo1.png" alt="Salonify Logo" class="logo-img">
+      </div>
+      <div>
+        <div class="brand-name">Salonify</div>
+        <div class="brand-sub">Reservation Beaute</div>
+      </div>
+    </a>
+    <button class="burger" id="brg"><span></span><span></span><span></span></button>
+    <div class="nav-acts">
+      <a href="connexion_inscription.html" class="btn-log">Connexion</a>
+      <a href="connexion_inscription.html" class="btn-ins">Inscription</a>
+    </div>
+  </div>
+  <span class="nav-line"></span>
+  <div class="nav-r2">
+    <a href="accueil.html" class="on">Accueil</a>
+    <a href="#">A propos</a>
+    <a href="liste_salons.html">Emplacements</a>
+    <a href="#">Galerie</a>
+    <a href="#">Contact</a>
+  </div>
+  <nav class="mob" id="mm">
+    <a href="accueil.html" class="on">Accueil</a>
+    <a href="#">A propos</a>
+    <a href="liste_salons.html">Emplacements</a>
+    <a href="#">Galerie</a>
+    <a href="#">Contact</a>
+    <div class="mob-cta">
+      <a href="connexion_inscription.html" class="mc">Connexion</a>
+      <a href="connexion_inscription.html" class="mi">Inscription</a>
+    </div>
+  </nav>
+</header>
+
+<div class="dashboard-topbar">
+  <div class="topbar-inner">
+    <div class="salon-identity">
+      <div class="salon-avatar">
+        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=100&h=100&fit=crop&q=80" alt="Salon">
+      </div>
+      <div>
+        <div class="salon-name">
+          Elegance Coiffure
+          <span class="verified-badge">&#10003; Verifie</span>
+        </div>
+        <div class="salon-location">Agdal, Rabat &nbsp;·&nbsp; Gere par Karim B.</div>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="notif-btn">
+        &#9993;
+        <div class="notif-dot"></div>
+      </button>
+      <button class="btn-topbar-ghost">Apercu public</button>
+      <button class="btn-topbar-green">+ Ajouter un service</button>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard-nav">
+  <div class="dashboard-nav-inner">
+    <a href="#" class="nav-tab active">Vue d'ensemble</a>
+    <a href="#" class="nav-tab">Reservations</a>
+    <div class="nav-separator"></div>
+    <a href="#" class="nav-tab">Services</a>
+    <a href="#" class="nav-tab">Equipe</a>
+    <a href="#" class="nav-tab">Avis</a>
+    <div class="nav-separator"></div>
+    <a href="#" class="nav-tab">Profil du salon</a>
+    <a href="#" class="nav-tab">Parametres</a>
+  </div>
+</div>
+
+<div class="dashboard-layout">
+  <div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card green">
+        <div class="kpi-value">23</div>
+        <div class="kpi-label">Reservations ce mois</div>
+        <div class="kpi-delta">&#8593; +12% vs mois dernier</div>
+        <div class="kpi-icon">&#128197;</div>
+      </div>
+      <div class="kpi-card yellow">
+        <div class="kpi-value">5</div>
+        <div class="kpi-label">En attente de confirmation</div>
+        <div class="kpi-delta negative">A traiter rapidement</div>
+        <div class="kpi-icon">&#9201;</div>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-value">3 450</div>
+        <div class="kpi-label">Revenus estimes (MAD)</div>
+        <div class="kpi-delta">&#8593; +8% vs mars</div>
+        <div class="kpi-icon">&#10004;</div>
+      </div>
+      <div class="kpi-card sage">
+        <div class="kpi-value">4.8</div>
+        <div class="kpi-label">Note moyenne</div>
+        <div class="kpi-delta">86 avis clients</div>
+        <div class="kpi-icon">&#9733;</div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Reservations — 7 derniers jours</div>
+      <div class="bar-chart" id="chart-bars"></div>
+    </div>
+
+    <div class="section-header">
+      <h2>Reservations d'aujourd'hui</h2>
+      <a href="#" class="section-link">Voir tout</a>
+    </div>
+
+    <div class="bookings-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Heure</th>
+            <th>Client</th>
+            <th>Service</th>
+            <th>Styliste</th>
+            <th>Statut</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="booking-time">09h00</span></td>
+            <td><strong>Amina T.</strong><br><span class="booking-phone">+212 6 11 22 33 44</span></td>
+            <td>Brushing<br><span class="booking-duration">30 min</span></td>
+            <td>Fatima Z.</td>
+            <td><span class="status-badge confirmed"><span class="status-dot"></span>Confirmee</span></td>
+            <td><button class="action-btn" title="Voir">&#128065;</button></td>
+          </tr>
+          <tr>
+            <td><span class="booking-time">10h00</span></td>
+            <td><strong>Salma B.</strong><br><span class="booking-phone">+212 6 12 34 56 78</span></td>
+            <td>Coupe femme<br><span class="booking-duration">45 min</span></td>
+            <td>Fatima Z.</td>
+            <td><span class="status-badge confirmed"><span class="status-dot"></span>Confirmee</span></td>
+            <td><button class="action-btn" title="Voir">&#128065;</button></td>
+          </tr>
+          <tr>
+            <td><span class="booking-time">11h30</span></td>
+            <td><strong>Houda M.</strong><br><span class="booking-phone">+212 6 55 66 77 88</span></td>
+            <td>Soin keratine<br><span class="booking-duration">90 min</span></td>
+            <td>Sara M.</td>
+            <td><span class="status-badge pending"><span class="status-dot"></span>En attente</span></td>
+            <td><button class="action-btn" title="Confirmer">&#10003;</button></td>
+          </tr>
+          <tr>
+            <td><span class="booking-time">14h00</span></td>
+            <td><strong>Zineb O.</strong><br><span class="booking-phone">+212 6 99 88 77 66</span></td>
+            <td>Balayage<br><span class="booking-duration">120 min</span></td>
+            <td>Yassine B.</td>
+            <td><span class="status-badge confirmed"><span class="status-dot"></span>Confirmee</span></td>
+            <td><button class="action-btn" title="Voir">&#128065;</button></td>
+          </tr>
+          <tr>
+            <td><span class="booking-time">16h30</span></td>
+            <td><strong>Nadia R.</strong><br><span class="booking-phone">+212 6 33 44 55 66</span></td>
+            <td>Coloration<br><span class="booking-duration">75 min</span></td>
+            <td>Nadia H.</td>
+            <td><span class="status-badge pending"><span class="status-dot"></span>En attente</span></td>
+            <td><button class="action-btn" title="Confirmer">&#10003;</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-header">
+      <h2>Services les plus reserves</h2>
+      <a href="#" class="section-link">Gerer les services</a>
+    </div>
+
+    <div class="services-list">
+      <div class="services-list-head">Ce mois — mars 2026</div>
+      <div class="service-item">
+        <div><div class="service-name">Coupe femme</div><div class="service-meta">45 min &nbsp;·&nbsp; 150 MAD</div></div>
+        <div class="service-count">8<div class="service-percent">35%</div><div class="service-bar-track"><div class="service-bar-fill" style="width:100%"></div></div></div>
+      </div>
+      <div class="service-item">
+        <div><div class="service-name">Balayage</div><div class="service-meta">120 min &nbsp;·&nbsp; 350 MAD</div></div>
+        <div class="service-count">6<div class="service-percent">26%</div><div class="service-bar-track"><div class="service-bar-fill" style="width:74%"></div></div></div>
+      </div>
+      <div class="service-item">
+        <div><div class="service-name">Brushing</div><div class="service-meta">30 min &nbsp;·&nbsp; 80 MAD</div></div>
+        <div class="service-count">5<div class="service-percent">22%</div><div class="service-bar-track"><div class="service-bar-fill" style="width:63%"></div></div></div>
+      </div>
+      <div class="service-item">
+        <div><div class="service-name">Soin keratine</div><div class="service-meta">90 min &nbsp;·&nbsp; 400 MAD</div></div>
+        <div class="service-count">4<div class="service-percent">17%</div><div class="service-bar-track"><div class="service-bar-fill" style="width:49%"></div></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <aside>
+
+    <div class="sidebar-alert">
+      <div class="alert-icon">&#9888;</div>
+      <div>
+        <div class="alert-title">5 reservations en attente</div>
+        <p class="alert-desc">Des clients attendent votre confirmation. Repondez dans les 2h pour eviter les annulations automatiques.</p>
+        <a href="#" class="alert-link">Traiter maintenant</a>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-card-head">
+        <div class="team-card-title">Equipe — disponibilite du jour</div>
+      </div>
+      <div class="team-member">
+        <div class="member-avatar"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&h=100&fit=crop&q=80" alt="Fatima"></div>
+        <div><div class="member-name">Fatima Z.</div><div class="member-role">Coiffure &amp; Coloration</div></div>
+        <span class="member-bookings">2 rdv</span>
+      </div>
+      <div class="team-member">
+        <div class="member-avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&q=80" alt="Sara"></div>
+        <div><div class="member-name">Sara M.</div><div class="member-role">Soins &amp; Traitement</div></div>
+        <span class="member-bookings">1 rdv</span>
+      </div>
+      <div class="team-member">
+        <div class="member-avatar"><img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100&h=100&fit=crop&q=80" alt="Yassine"></div>
+        <div><div class="member-name">Yassine B.</div><div class="member-role">Barbier &amp; Styliste</div></div>
+        <span class="member-bookings">1 rdv</span>
+      </div>
+      <div class="team-member">
+        <div class="member-avatar"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop&q=80" alt="Nadia"></div>
+        <div><div class="member-name">Nadia H.</div><div class="member-role">Maquillage &amp; Ongles</div></div>
+        <span class="member-bookings">1 rdv</span>
+      </div>
+    </div>
+
+    <div class="hours-card">
+      <div class="hours-card-title">Horaires cette semaine</div>
+      <div class="hours-row"><span class="hours-day">Lundi</span><span class="hours-time">9h00 – 19h00</span></div>
+      <div class="hours-row"><span class="hours-day">Mardi</span><span class="hours-time">9h00 – 19h00</span></div>
+      <div class="hours-row today"><span class="hours-day today-label">Mercredi &#8249;today&#8250;</span><span class="hours-time today-time">9h00 – 19h00</span></div>
+      <div class="hours-row"><span class="hours-day">Jeudi</span><span class="hours-time">9h00 – 19h00</span></div>
+      <div class="hours-row"><span class="hours-day">Vendredi</span><span class="hours-time">9h00 – 20h00</span></div>
+      <div class="hours-row"><span class="hours-day">Samedi</span><span class="hours-time">10h00 – 18h00</span></div>
+      <div class="hours-row"><span class="hours-day">Dimanche</span><span class="hours-time closed">Ferme</span></div>
+    </div>
+
+  </aside>
+</div>
+
+<footer class="foot">
+  <div class="foot-bar">
+    <div class="fl">hello@Salonify.ma</div>
+    <div class="fm"><div class="fm-t">Pour plus d'informations</div><div class="fm-r"></div></div>
+    <div class="fr">+(212) 7 63456-7890</div>
+  </div>
+</footer>
+
+<script>
+  var burger = document.getElementById('brg');
+  var menu = document.getElementById('mm');
+  burger.addEventListener('click', function () { menu.classList.toggle('open'); });
+
+  var chartData = [
+    { day: 'Mar 5',  value: 2 },
+    { day: 'Mar 6',  value: 4 },
+    { day: 'Mar 7',  value: 1 },
+    { day: 'Mar 8',  value: 5 },
+    { day: 'Mar 9',  value: 3 },
+    { day: 'Mar 10', value: 7 },
+    { day: 'Mar 11', value: 5 }
+  ];
+  var maxValue = Math.max.apply(null, chartData.map(function (x) { return x.value; }));
+  var container = document.getElementById('chart-bars');
+  chartData.forEach(function (item, index) {
+    var col = document.createElement('div');
+    col.className = 'bar-column';
+    var pct = Math.round((item.value / maxValue) * 100);
+    col.innerHTML =
+      '<div class="bar-fill' + (index === 6 ? ' highlighted' : '') + '" data-value="' + item.value + ' rdv" style="height:' + pct + '%"></div>' +
+      '<div class="bar-day-label">' + item.day + '</div>';
+    container.appendChild(col);
+  });
+</script>
+
+</body>
+</html>

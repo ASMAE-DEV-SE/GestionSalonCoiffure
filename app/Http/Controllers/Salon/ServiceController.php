@@ -1,0 +1,165 @@
+<?php
+
+namespace App\Http\Controllers\Salon;
+
+use App\Http\Controllers\Controller;
+use App\Models\Service;
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
+
+class ServiceController extends Controller
+{
+    private function salon()
+    {
+        return Auth::user()->salon()->firstOrFail();
+    }
+
+    /*
+    |------------------------------------------------------------------
+    | GET /salon/services
+    |------------------------------------------------------------------
+    */
+    public function index(): View
+    {
+        $salon    = $this->salon();
+        $services = Service::where('salon_id', $salon->id)
+            ->orderBy('categorie')
+            ->orderBy('nom_service')
+            ->get()
+            ->groupBy('categorie');
+
+        $categories = $services->keys();
+
+        return view('salon.services', compact('salon', 'services', 'categories'));
+    }
+
+    /*
+    |------------------------------------------------------------------
+    | GET /salon/services/create
+    |------------------------------------------------------------------
+    */
+    public function create(): View
+    {
+        $salon = $this->salon();
+        return view('salon.services_form', compact('salon'));
+    }
+
+    /*
+    |------------------------------------------------------------------
+    | POST /salon/services
+    |------------------------------------------------------------------
+    */
+    public function store(Request $request): RedirectResponse
+    {
+        $salon = $this->salon();
+
+        $data = $request->validate([
+            'nom_service' => ['required', 'string', 'max:120'],
+            'description' => ['nullable', 'string', 'max:500'],
+            'prix'        => ['required', 'numeric', 'min:0', 'max:99999'],
+            'duree_minu'  => ['required', 'integer', 'min:10', 'max:480'],
+            'categorie'   => ['required', 'string', 'max:60'],
+            'actif'       => ['boolean'],
+        ], [
+            'nom_service.required' => 'Le nom du service est obligatoire.',
+            'prix.required'        => 'Le prix est obligatoire.',
+            'duree_minu.required'  => 'La durée est obligatoire.',
+            'categorie.required'   => 'La catégorie est obligatoire.',
+        ]);
+
+        $data['salon_id'] = $salon->id;
+        $data['actif']    = $request->boolean('actif', true);
+
+        Service::create($data);
+
+        return redirect()->route('salon.services.index')
+            ->with('success', 'Service "' . $data['nom_service'] . '" créé avec succès.');
+    }
+
+    /*
+    |------------------------------------------------------------------
+    | GET /salon/services/{id}/edit
+    |------------------------------------------------------------------
+    */
+    public function edit(int $id): View
+    {
+        $salon   = $this->salon();
+        $service = Service::where('salon_id', $salon->id)->findOrFail($id);
+
+        return view('salon.services_form', compact('salon', 'service'));
+    }
+
+    /*
+    |------------------------------------------------------------------
+    | PUT /salon/services/{id}
+    |------------------------------------------------------------------
+    */
+    public function update(Request $request, int $id): RedirectResponse
+    {
+        $salon   = $this->salon();
+        $service = Service::where('salon_id', $salon->id)->findOrFail($id);
+
+        $data = $request->validate([
+            'nom_service' => ['required', 'string', 'max:120'],
+            'description' => ['nullable', 'string', 'max:500'],
+            'prix'        => ['required', 'numeric', 'min:0', 'max:99999'],
+            'duree_minu'  => ['required', 'integer', 'min:10', 'max:480'],
+            'categorie'   => ['required', 'string', 'max:60'],
+            'actif'       => ['boolean'],
+        ]);
+
+        $data['actif'] = $request->boolean('actif', true);
+        $service->update($data);
+
+        return redirect()->route('salon.services.index')
+            ->with('success', 'Service mis à jour avec succès.');
+    }
+
+    /*
+    |------------------------------------------------------------------
+    | DELETE /salon/services/{id}
+    |------------------------------------------------------------------
+    */
+    public function destroy(int $id): RedirectResponse
+    {
+        $salon   = $this->salon();
+        $service = Service::where('salon_id', $salon->id)->findOrFail($id);
+
+        // Vérifier qu'aucune réservation future ne dépend de ce service
+        $rdvFuturs = $service->reservations()
+            ->whereIn('statut', ['en_attente', 'confirmee'])
+            ->where('date_heure', '>=', now())
+            ->count();
+
+        if ($rdvFuturs > 0) {
+            return back()->with('error',
+                "Impossible de supprimer : {$rdvFuturs} réservation(s) future(s) utilisent ce service."
+            );
+        }
+
+        $nom = $service->nom_service;
+        $service->delete();
+
+        return redirect()->route('salon.services.index')
+            ->with('success', "Service \"{$nom}\" supprimé.");
+    }
+
+    /*
+    |------------------------------------------------------------------
+    | POST rapide — activer / désactiver (appelé en AJAX)
+    |------------------------------------------------------------------
+    */
+    public function toggleActif(int $id): \Illuminate\Http\JsonResponse
+    {
+        $salon   = $this->salon();
+        $service = Service::where('salon_id', $salon->id)->findOrFail($id);
+        $service->update(['actif' => ! $service->actif]);
+
+        return response()->json([
+            'actif'   => $service->actif,
+            'message' => $service->actif ? 'Service activé.' : 'Service désactivé.',
+        ]);
+    }
+}

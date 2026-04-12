@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#89986D">
+  <title>Accueil — Salonify</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-r1">
+    <a href="accueil.html" class="brand">
+      <div class="brand-box">
+          <img src="..\images\logo1.png" alt="Salonify Logo" class="logo-img">
+      </div>
+      <div>
+        <div class="brand-name">Salonify</div>
+        <div class="brand-sub">Reservation Beaute</div>
+      </div>
+    </a>
+    <button class="burger" id="brg"><span></span><span></span><span></span></button>
+    <div class="nav-acts">
+      <a href="connexion_inscription.html" class="btn-log">Connexion</a>
+      <a href="connexion_inscription.html" class="btn-ins">Inscription</a>
+    </div>
+  </div>
+  <span class="nav-line"></span>
+  <div class="nav-r2">
+    <a href="accueil.html" class="on">Accueil</a>
+    <a href="#">A propos</a>
+    <a href="liste_salons.html">Emplacements</a>
+    <a href="#">Galerie</a>
+    <a href="#">Contact</a>
+  </div>
+  <nav class="mob" id="mm">
+    <a href="accueil.html" class="on">Accueil</a>
+    <a href="#">A propos</a>
+    <a href="liste_salons.html">Emplacements</a>
+    <a href="#">Galerie</a>
+    <a href="#">Contact</a>
+    <div class="mob-cta">
+      <a href="connexion_inscription.html" class="mc">Connexion</a>
+      <a href="connexion_inscription.html" class="mi">Inscription</a>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-rule"></div>
+    <h1 class="hero-title">Vivez la beaute<br><em>marocaine,</em><br>autrement.</h1>
+    <p class="hero-text">Decouvrez les meilleurs salons de Rabat, reservez en ligne et profitez d'une experience beaute personnalisee dans un cadre authentique.</p>
+    <a href="liste_salons.html" class="btn-dk" style="align-self:flex-start">Trouver un salon</a>
+    <div class="divider" style="margin-top:2.8rem"></div>
+  </div>
+  <div class="hero-right">
+    <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=900&q=85" alt="Salon beaute Rabat" loading="eager">
+  </div>
+</section>
+
+<div class="search-bar">
+  <div class="search-grid">
+    <div>
+      <div class="search-label">Quartier</div>
+      <select class="field" style="padding:.82rem 1rem">
+        <option>Tous les quartiers</option>
+        <option>Agdal</option><option>Hay Riad</option>
+        <option>Hassan</option><option>Souissi</option><option>Ocean</option>
+      </select>
+    </div>
+    <div>
+      <div class="search-label">Service</div>
+      <select class="field" style="padding:.82rem 1rem">
+        <option>Tous les services</option>
+        <option>Coiffure</option><option>Soin</option>
+        <option>Coloration</option><option>Barbe</option>
+      </select>
+    </div>
+    <div>
+      <div class="search-label">Date souhaitee</div>
+      <input type="date" class="field" style="padding:.82rem 1rem">
+    </div>
+    <button class="btn-dk" style="height:52px;padding:.82rem 2rem;white-space:nowrap">Rechercher</button>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stats-grid">
+    <div><div class="stat-value">50+</div><div class="stat-label">Salons partenaires</div></div>
+    <div style="border-left:1px solid rgba(255,255,255,.22);border-right:1px solid rgba(255,255,255,.22)">
+      <div class="stat-value">10</div><div class="stat-label">Quartiers couverts</div>
+    </div>
+    <div><div class="stat-value">4.8</div><div class="stat-label">Note moyenne</div></div>
+  </div>
+</div>
+
+<section class="split">
+  <div class="split-text" style="background:var(--p1)">
+    <div class="rule" style="margin-bottom:2.4rem"></div>
+    <h2 class="split-title">Une experience<br>de beaute<br><em>taillee pour vous</em></h2>
+    <p>Notre plateforme vous offre une experience personnalisee avec des services uniques qui repondent a vos besoins.</p>
+    <a href="liste_salons.html" class="btn-gh" style="align-self:flex-start">Decouvrir les salons</a>
+    <div class="rule" style="margin-top:2.4rem"></div>
+  </div>
+  <div class="split-center" style="background:rgba(197,216,157,.18)">
+    <div class="circle" style="width:380px;height:380px">
+      <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=700&q=85" alt="Salon">
+    </div>
+  </div>
+</section>
+
+<section class="moroccan-block">
+  <div class="moroccan-image">
+    <img src="https://images.unsplash.com/photo-1512438248247-f0f2a5a8b7f0?w=800&q=80" alt="Architecture marocaine">
+  </div>
+  <div class="moroccan-text" style="background:rgba(197,216,157,.15)">
+    <div>
+      <h2 class="moroccan-title">Vivez la beaute dans un cadre marocain apaisant</h2>
+      <p class="moroccan-desc">Decouvrez des soins luxueux et une reservation en toute simplicite.</p>
+    </div>
+    <div class="moroccan-word">Serenite</div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="wrap">
+    <div class="divider" style="margin-bottom:4.5rem"></div>
+    <h2 class="features-title">Nos points forts</h2>
+    <div class="features-grid">
+      <div>
+        <div class="feature-icon">&#10022;</div>
+        <div class="feature-name">Reservation facile</div>
+        <p class="feature-desc">Prenez vos rendez-vous en ligne en quelques clics depuis n'importe quel appareil, a toute heure.</p>
+      </div>
+      <div>
+        <div class="feature-icon">&#10022;</div>
+        <div class="feature-name">Services personnalises</div>
+        <p class="feature-desc">Vivez une experience de services sur mesure adaptes a vos besoins de beaute uniques.</p>
+      </div>
+      <div>
+        <div class="feature-icon">&#10022;</div>
+        <div class="feature-name">Offres exclusives</div>
+        <p class="feature-desc">Profitez d'offres exclusives qui enrichissent votre experience salon.</p>
+      </div>
+    </div>
+    <div class="divider" style="margin-top:5rem"></div>
+  </div>
+</section>
+
+<section class="split" style="min-height:440px">
+  <div class="split-text" style="background:#fff">
+    <h2 class="split-title">Soins<br>Personnalises</h2>
+    <p>Nos soins personnalises repondent a vos besoins de beaute uniques. Chaque service est concu pour procurer detente et rajeunissement.</p>
+    <a href="liste_salons.html" class="btn-dk" style="align-self:flex-start">Reserver maintenant</a>
+  </div>
+  <div class="split-center" style="background:var(--p1)">
+    <div class="circle" style="width:380px;height:380px">
+      <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=700&q=85" alt="Soin spa">
+    </div>
+  </div>
+</section>
+
+<section class="testimonials">
+  <div class="wrap">
+    <div class="testimonials-grid">
+      <div><h2 class="testimonials-title">Ce que disent nos clientes</h2></div>
+      <div class="testimonials-list">
+        <div class="testi-row">
+          <div class="testi-photo"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=220&h=220&fit=crop&q=80" alt="Salma"></div>
+          <div>
+            <div class="testi-name">Salma B. — Responsable Marketing</div>
+            <p class="testi-quote">Le salon a transforme mon look et renforce ma confiance. Services exceptionnels dans une atmosphere apaisante.</p>
+          </div>
+        </div>
+        <div class="testi-row">
+          <div class="testi-photo"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=220&h=220&fit=crop&q=80" alt="Karim"></div>
+          <div>
+            <div class="testi-name">Karim M. — Designer Graphique</div>
+            <p class="testi-quote">Je me suis senti choye et valorise. Le personnel est competent et attentionne, chaque visite est un reel plaisir.</p>
+          </div>
+        </div>
+        <div class="testi-row">
+          <div class="testi-photo"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=220&h=220&fit=crop&q=80" alt="Nadia"></div>
+          <div>
+            <div class="testi-name">Nadia H. — Enseignante</div>
+            <p class="testi-quote">Chaque soin est un veritable voyage. L'ambiance et le professionnalisme sont remarquables.</p>
+          </div>
+        </div>
+        <div class="divider" style="margin-top:.5rem"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="offers">
+  <div class="wrap">
+    <div class="divider" style="margin-bottom:5rem"></div>
+    <div class="offers-grid">
+      <div class="circle" style="width:380px;height:380px">
+        <img src="https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=700&q=85" alt="Offres">
+      </div>
+      <div>
+        <h2 class="offers-title">Offres Exclusives</h2>
+        <p class="offers-text">Decouvrez nos forfaits luxueux concus pour elever votre experience beaute. Profitez de soins sur mesure qui repondent a vos besoins uniques.</p>
+        <a href="liste_salons.html" class="btn-dk">Reserver maintenant</a>
+      </div>
+    </div>
+    <div class="divider" style="margin-top:5rem"></div>
+  </div>
+</section>
+
+<section class="districts">
+  <div class="wrap">
+    <h2 class="districts-title">Explorez par quartier</h2>
+  </div>
+  <div class="districts-grid">
+    <div class="district-cell"><div class="district-name">Agdal</div><div class="district-count">8 salons</div></div>
+    <div class="district-cell"><div class="district-name">Hay Riad</div><div class="district-count">6 salons</div></div>
+    <div class="district-cell"><div class="district-name">Hassan</div><div class="district-count">5 salons</div></div>
+    <div class="district-cell"><div class="district-name">Souissi</div><div class="district-count">7 salons</div></div>
+    <div class="district-cell"><div class="district-name">Ocean</div><div class="district-count">4 salons</div></div>
+    <div class="district-cell"><div class="district-name">Diour Jamaa</div><div class="district-count">3 salons</div></div>
+    <div class="district-cell"><div class="district-name">Centre Ville</div><div class="district-count">9 salons</div></div>
+    <div class="district-cell"><div class="district-name">Akkari</div><div class="district-count">4 salons</div></div>
+    <div class="district-cell"><div class="district-name">Takkadoum</div><div class="district-count">3 salons</div></div>
+    <div class="district-cell"><div class="district-name">Aviation</div><div class="district-count">2 salons</div></div>
+  </div>
+</section>
+
+<section class="cta-block">
+  <div class="cta-image">
+    <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=800&q=80" alt="Rejoindre Salonify">
+  </div>
+  <div class="cta-text">
+    <h2 class="cta-title">Vous avez un salon a Rabat ?</h2>
+    <p class="cta-desc">Rejoignez Salonify et touchez des milliers de clients. Inscription gratuite, gestion simplifiee, visibilite maximale.</p>
+    <a href="connexion_inscription.html" class="btn-wh" style="align-self:flex-start">Inscrire mon salon</a>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot-bar">
+    <div class="fl">hello@Salonify.ma</div>
+    <div class="fm">
+      <div class="fm-t">Pour plus d'informations</div>
+      <div class="fm-r"></div>
+    </div>
+    <div class="fr">+(212) 7 63456-7890</div>
+  </div>
+</footer>
+
+<script>
+  var burger = document.getElementById('brg');
+  var menu = document.getElementById('mm');
+  burger.addEventListener('click', function () {
+    menu.classList.toggle('open');
+  });
+</script>
+
+</body>
+</html>

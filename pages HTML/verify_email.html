@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#89986D">
+<title>Verifier votre email — Salonify</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-r1">
+    <a href="accueil.html" class="brand">
+      <div class="brand-box">
+        <img src="..\images\logo1.png" alt="Salonify Logo" class="logo-img">
+      </div>
+      <div>
+        <div class="brand-name">Salonify</div>
+        <div class="brand-sub">Reservation Beaute</div>
+      </div>
+    </a>
+    <div class="nav-acts">
+      <a href="connexion_inscription.html" class="btn-log">Connexion</a>
+      <a href="connexion_inscription.html" class="btn-ins">Inscription</a>
+    </div>
+  </div>
+  <span class="nav-line"></span>
+  <div class="nav-r2">
+    <a href="accueil.html">Accueil</a>
+    <a href="villes.html">Emplacements</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <button class="burger" id="brg"><span></span><span></span><span></span></button>
+  <nav class="mob" id="mm">
+    <a href="accueil.html">Accueil</a>
+    <a href="villes.html">Emplacements</a>
+    <a href="contact.html">Contact</a>
+    <div class="mob-cta">
+      <a href="connexion_inscription.html" class="mc">Connexion</a>
+      <a href="connexion_inscription.html" class="mi">Inscription</a>
+    </div>
+  </nav>
+</header>
+
+<div class="auth-page" style="min-height:calc(100vh - 90px)">
+
+  <div class="auth-left">
+    <img class="auth-left-bg" src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=900&q=80" alt="">
+    <div class="auth-left-content">
+      <div class="auth-left-tag">Bienvenue sur Salonify</div>
+      <h1 class="auth-left-title">
+        Une etape de<br><em>plus</em> encore
+      </h1>
+      <p class="auth-left-desc">
+        La verification de votre email garantit la securite de votre compte et vous permet de recevoir les confirmations de reservation.
+      </p>
+      <div class="auth-points">
+        <div class="auth-point">
+          <div class="auth-point-icon">&#9993;</div>
+          <div class="auth-point-text">Email de verification envoye</div>
+        </div>
+        <div class="auth-point">
+          <div class="auth-point-icon">&#128197;</div>
+          <div class="auth-point-text">Reservez vos rendez-vous beaute</div>
+        </div>
+        <div class="auth-point">
+          <div class="auth-point-icon">&#9733;</div>
+          <div class="auth-point-text">Acces a votre espace client complet</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-right">
+    <div class="auth-box">
+
+      <div id="step-pending" class="auth-panel visible">
+
+        <div style="text-align:center;margin-bottom:2.2rem">
+          <div style="position:relative;width:88px;height:88px;margin:0 auto 1.4rem">
+            <div style="width:88px;height:88px;border-radius:50%;background:rgba(197,216,157,.25);border:2px solid var(--p3);display:flex;align-items:center;justify-content:center;font-size:2.4rem;animation:pulseGreen 2s ease-in-out infinite">&#9993;</div>
+          </div>
+          <div class="auth-form-title" style="font-size:1.75rem;margin-bottom:.4rem">Verifiez votre email</div>
+          <p style="font-size:.84rem;color:var(--ink-m);line-height:1.75">
+            Un email de verification a ete envoye a<br>
+            <strong style="color:var(--ink-h)">salma.benali@email.com</strong>
+          </p>
+        </div>
+
+        <div style="background:var(--p1);border:1.5px solid var(--p2);padding:1.3rem 1.4rem;margin-bottom:1.6rem">
+          <div style="display:flex;gap:.8rem;align-items:flex-start">
+            <div style="font-size:1.1rem;color:var(--p4);flex-shrink:0;margin-top:.1rem">&#128161;</div>
+            <div style="font-size:.8rem;color:var(--ink-s);line-height:1.75">
+              Cliquez sur le lien dans l'email pour activer votre compte. Si vous ne le trouvez pas, verifiez votre dossier <strong>spams / courrier indesirable</strong>.
+            </div>
+          </div>
+        </div>
+
+        <div style="border:1.5px solid var(--border2);padding:1.2rem 1.4rem;margin-bottom:1.6rem">
+          <div style="font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink-m);margin-bottom:.9rem">Entrer le code de verification</div>
+          <div style="display:flex;gap:.6rem;justify-content:center;margin-bottom:.9rem" id="codeInputs">
+            <input type="text" maxlength="1" class="form-input" style="width:48px;text-align:center;font-size:1.4rem;font-weight:700;padding:.6rem .4rem" oninput="nextCode(this,1)">
+            <input type="text" maxlength="1" class="form-input" style="width:48px;text-align:center;font-size:1.4rem;font-weight:700;padding:.6rem .4rem" oninput="nextCode(this,2)">
+            <input type="text" maxlength="1" class="form-input" style="width:48px;text-align:center;font-size:1.4rem;font-weight:700;padding:.6rem .4rem" oninput="nextCode(this,3)">
+            <div style="display:flex;align-items:center;color:var(--border);font-size:1.2rem">—</div>
+            <input type="text" maxlength="1" class="form-input" style="width:48px;text-align:center;font-size:1.4rem;font-weight:700;padding:.6rem .4rem" oninput="nextCode(this,4)">
+            <input type="text" maxlength="1" class="form-input" style="width:48px;text-align:center;font-size:1.4rem;font-weight:700;padding:.6rem .4rem" oninput="nextCode(this,5)">
+            <input type="text" maxlength="1" class="form-input" style="width:48px;text-align:center;font-size:1.4rem;font-weight:700;padding:.6rem .4rem" oninput="nextCode(this,6)">
+          </div>
+          <div style="font-size:.72rem;color:var(--ink-m);text-align:center" id="code-hint">Entrez le code a 6 chiffres</div>
+        </div>
+
+        <button class="btn-auth" onclick="verifyCode()">Verifier mon email</button>
+
+        <div style="margin-top:1.3rem;display:flex;justify-content:space-between;align-items:center;padding-top:1.1rem;border-top:1.5px solid var(--border2)">
+          <button onclick="resendEmail()" style="background:none;border:none;font-size:.78rem;color:var(--p4d);font-weight:600;text-decoration:underline;cursor:pointer" id="resendBtn">Renvoyer l'email</button>
+          <span style="font-size:.72rem;color:var(--ink-d)" id="countdown">Valide 60:00</span>
+        </div>
+
+        <div style="text-align:center;margin-top:1.2rem">
+          <button onclick="changeEmail()" style="background:none;border:none;font-size:.76rem;color:var(--ink-m);cursor:pointer;text-decoration:underline">Changer d'adresse email</button>
+        </div>
+      </div>
+
+      <div id="step-change-email" class="auth-panel">
+        <div class="auth-form-title">Changer d'email</div>
+        <p class="auth-form-desc">Entrez la nouvelle adresse email a associer a votre compte.</p>
+        <div class="form-group">
+          <label>Nouvelle adresse email</label>
+          <input type="email" class="form-input" placeholder="nouveau.email@exemple.com">
+        </div>
+        <div class="form-group">
+          <label>Confirmer l'email</label>
+          <input type="email" class="form-input" placeholder="nouveau.email@exemple.com">
+        </div>
+        <button class="btn-auth" onclick="showStep('step-pending')" style="margin-bottom:.7rem">Envoyer le nouveau lien</button>
+        <button onclick="showStep('step-pending')" style="display:block;width:100%;text-align:center;background:transparent;border:2px solid var(--ink-h);color:var(--ink-h);padding:.78rem;font-size:.78rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:var(--fb);transition:var(--tr)" onmouseover="this.style.background='var(--ink-h)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='var(--ink-h)'">Annuler</button>
+      </div>
+
+      <div id="step-verified" class="auth-panel">
+        <div style="text-align:center;padding:1rem 0 1.5rem">
+          <div style="width:88px;height:88px;border-radius:50%;background:rgba(197,216,157,.3);border:2px solid var(--p3);display:flex;align-items:center;justify-content:center;margin:0 auto 1.4rem;font-size:2.5rem">&#10003;</div>
+          <div class="auth-form-title" style="font-size:1.8rem;margin-bottom:.5rem">Email verifie !</div>
+          <p style="font-size:.84rem;color:var(--ink-m);line-height:1.75;margin-bottom:2rem">
+            Votre compte <strong style="color:var(--ink-h)">salma.benali@email.com</strong> est maintenant actif. Bienvenue sur Salonify !
+          </p>
+
+          <div style="background:var(--p1);border:1.5px solid var(--p2);padding:1.2rem;margin-bottom:2rem;text-align:left">
+            <div style="font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink-m);margin-bottom:.9rem">Votre compte est pret</div>
+            <div style="display:flex;align-items:center;gap:.7rem;padding:.45rem 0;border-bottom:1px solid var(--p2)">
+              <div style="width:26px;height:26px;border-radius:50%;background:var(--p4);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff;flex-shrink:0">&#10003;</div>
+              <div style="font-size:.8rem;color:var(--ink-b)">Compte client active</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:.7rem;padding:.45rem 0;border-bottom:1px solid var(--p2)">
+              <div style="width:26px;height:26px;border-radius:50%;background:var(--p4);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff;flex-shrink:0">&#10003;</div>
+              <div style="font-size:.8rem;color:var(--ink-b)">Reservations disponibles</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:.7rem;padding:.45rem 0">
+              <div style="width:26px;height:26px;border-radius:50%;background:var(--p4);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff;flex-shrink:0">&#10003;</div>
+              <div style="font-size:.8rem;color:var(--ink-b)">Programme de fidelite active</div>
+            </div>
+          </div>
+
+          <a href="dashboard_client_perso.html" class="btn-auth" style="display:block;text-decoration:none;margin-bottom:.85rem">Acceder a mon espace</a>
+          <a href="villes.html" style="font-size:.78rem;color:var(--p4d);font-weight:600;text-decoration:underline">Rechercher un salon</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer class="foot">
+  <div class="foot-bar">
+    <div class="fl">hello@Salonify.ma</div>
+    <div class="fm"><div class="fm-t">Pour plus d'informations</div><div class="fm-r"></div></div>
+    <div class="fr">+(212) 7 63456-7890</div>
+  </div>
+</footer>
+
+<script>
+var burger = document.getElementById('brg');
+var menu = document.getElementById('mm');
+if(burger) burger.addEventListener('click', function(){menu.classList.toggle('open');});
+
+function showStep(id) {
+  document.querySelectorAll('.auth-panel').forEach(function(p){p.classList.remove('visible');});
+  document.getElementById(id).classList.add('visible');
+}
+
+function changeEmail() { showStep('step-change-email'); }
+
+var inputs = document.querySelectorAll('#codeInputs input');
+function nextCode(el, idx) {
+  el.value = el.value.replace(/[^0-9]/g,'');
+  if(el.value && idx < 6) inputs[idx].focus();
+  var hint = document.getElementById('code-hint');
+  var filled = Array.from(inputs).filter(function(i){return i.value;}).length;
+  if(filled === 6) { hint.textContent = 'Code complet — cliquez sur Verifier'; hint.style.color = 'var(--p4d)'; }
+  else { hint.textContent = 'Entrez le code a 6 chiffres'; hint.style.color = 'var(--ink-m)'; }
+}
+
+inputs.forEach(function(inp, i) {
+  inp.addEventListener('keydown', function(e) {
+    if(e.key === 'Backspace' && !this.value && i > 0) inputs[i-1].focus();
+  });
+  inp.addEventListener('paste', function(e) {
+    e.preventDefault();
+    var data = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+    data.split('').forEach(function(ch, idx){ if(inputs[idx]) inputs[idx].value = ch; });
+    if(data.length === 6) { showStep('step-verified'); }
+  });
+});
+
+function verifyCode() {
+  var code = Array.from(inputs).map(function(i){return i.value;}).join('');
+  if(code.length === 6) { showStep('step-verified'); }
+  else {
+    inputs.forEach(function(i){ i.style.borderColor='#C04A3D'; });
+    document.getElementById('code-hint').textContent = 'Code incomplet — 6 chiffres requis';
+    document.getElementById('code-hint').style.color = '#C04A3D';
+    setTimeout(function(){ inputs.forEach(function(i){ i.style.borderColor=''; }); }, 1800);
+  }
+}
+
+function resendEmail() {
+  var btn = document.getElementById('resendBtn');
+  btn.disabled = true; btn.style.opacity = '.5';
+  btn.textContent = 'Email renvoye !';
+  setTimeout(function(){ btn.disabled=false; btn.style.opacity='1'; btn.textContent='Renvoyer l\'email'; }, 30000);
+}
+
+var secs = 3600;
+var countdown = document.getElementById('countdown');
+var timer = setInterval(function(){
+  secs--;
+  if(secs <= 0){ clearInterval(timer); countdown.textContent = 'Lien expire'; countdown.style.color = '#C04A3D'; return; }
+  var m = Math.floor(secs/60), s = secs%60;
+  countdown.textContent = 'Valide ' + m + ':' + (s<10?'0':'') + s;
+}, 1000);
+</script>
+</body>
+</html>

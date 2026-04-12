@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#89986D">
+<title>Reservation — Choix du service — Salonify</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-r1">
+    <a href="accueil.html" class="brand">
+      <div class="brand-box"><img src="..\images\logo1.png" alt="Salonify Logo" class="logo-img"></div>
+      <div><div class="brand-name">Salonify</div><div class="brand-sub">Reservation Beaute</div></div>
+    </a>
+    <button class="burger" id="brg"><span></span><span></span><span></span></button>
+    <div class="nav-acts">
+      <a href="mes_reservations.html" class="btn-log">Mes reservations</a>
+      <a href="connexion_inscription.html" class="btn-ins">Deconnexion</a>
+    </div>
+  </div>
+  <span class="nav-line"></span>
+  <div class="nav-r2">
+    <a href="accueil.html">Accueil</a>
+    <a href="villes.html">Emplacements</a>
+    <a href="mes_reservations.html">Mes reservations</a>
+  </div>
+  <nav class="mob" id="mm">
+    <a href="accueil.html">Accueil</a>
+    <a href="villes.html">Emplacements</a>
+    <div class="mob-cta">
+      <a href="accueil.html" class="mc">Accueil</a>
+      <a href="connexion_inscription.html" class="mi">Deconnexion</a>
+    </div>
+  </nav>
+</header>
+
+<div class="booking-page-header">
+  <div class="wrap">
+    <h1>Nouvelle reservation</h1>
+    <div class="booking-page-subtitle">Elegance Coiffure &nbsp;·&nbsp; Agdal, Rabat &nbsp;·&nbsp; &#9733; 4.8</div>
+  </div>
+</div>
+
+<div class="stepper-bar-wrap">
+  <div class="stepper-bar">
+    <div class="step current">
+      <div class="step-dot">1</div>
+      <div class="step-label">Service</div>
+    </div>
+    <div class="step">
+      <div class="step-dot">2</div>
+      <div class="step-label">Creneau</div>
+    </div>
+    <div class="step">
+      <div class="step-dot">3</div>
+      <div class="step-label">Vos infos</div>
+    </div>
+    <div class="step">
+      <div class="step-dot">4</div>
+      <div class="step-label">Confirmation</div>
+    </div>
+  </div>
+</div>
+
+<div class="svc-cat-bar">
+  <div class="svc-cat-bar-inner">
+    <button class="svc-cat-tab on" onclick="filterCat(this,'all')">Tous<span class="svc-cat-count">12</span></button>
+    <button class="svc-cat-tab" onclick="filterCat(this,'coiffure')">Coiffure<span class="svc-cat-count">5</span></button>
+    <button class="svc-cat-tab" onclick="filterCat(this,'couleur')">Couleur<span class="svc-cat-count">3</span></button>
+    <button class="svc-cat-tab" onclick="filterCat(this,'soin')">Soins<span class="svc-cat-count">2</span></button>
+    <button class="svc-cat-tab" onclick="filterCat(this,'ongles')">Ongles<span class="svc-cat-count">2</span></button>
+  </div>
+</div>
+
+<div class="wizard-layout">
+  <div>
+
+    <div class="form-card" style="padding:1.8rem">
+      <div class="form-card-title">Choisissez votre service</div>
+      <div class="form-card-subtitle">Selectionnez un service parmi les prestations proposees par Elegance Coiffure.</div>
+
+      <div class="svc-select-grid" id="svcGrid">
+
+        <div class="svc-select-card" data-cat="coiffure" onclick="selectSvc(this,'Coupe femme','45 min','120 MAD')">
+          <div class="svc-select-left">
+            <div class="svc-select-cat">Coiffure</div>
+            <div class="svc-select-name">Coupe femme</div>
+            <div class="svc-select-desc">Coupe, brushing inclus. Adapte a tous types de cheveux.</div>
+            <div class="svc-select-meta">
+              <span class="svc-select-duration">&#128337; 45 min</span>
+              <span class="svc-select-pop">Populaire</span>
+            </div>
+          </div>
+          <div class="svc-select-right">
+            <div class="svc-select-price">120</div>
+            <div class="svc-select-price-lbl">MAD</div>
+          </div>
+        </div>
+
+        <div class="svc-select-card selected" data-cat="coiffure" onclick="selectSvc(this,'Coupe + Brushing','60 min','160 MAD')">
+          <div class="svc-select-left">
+            <div class="svc-select-cat">Coiffure</div>
+            <div class="svc-select-name">Coupe + Brushing</div>
+            <div class="svc-select-desc">Coupe sur mesure avec brushing professionnel longue duree.</div>
+            <div class="svc-select-meta">
+              <span class="svc-select-duration">&#128337; 60 min</span>
+              <span class="svc-select-pop">Top vente</span>
+            </div>
+          </div>
+          <div class="svc-select-right">
+            <div class="svc-select-price">160</div>
+            <div class="svc-select-price-lbl">MAD</div>
+          </div>
+        </div>
+
+        <div class="svc-select-card" data-cat="coiffure" onclick="selectSvc(this,'Brushing seul','30 min','80 MAD')">
+          <div class="svc-select-left">
+            <div class="svc-select-cat">Coiffure</div>
+            <div class="svc-select-name">Brushing seul</div>
+            <div class="svc-select-desc">Brushing volume et brillance, sans coupe.</div>
+            <div class="svc-select-meta">
+              <span class="svc-select-duration">&#128337; 30 min</span>
+            </div>
+          </div>
+          <div class="svc-select-right">
+            <div class="svc-select-price">80</div>
+            <div class="svc-select-price-lbl">MAD</div>
+          </div>
+        </div>
+
+        <div class="svc-select-card" data-cat="coiffure" onclick="selectSvc(this,'Chignon ceremonie','75 min','220 MAD')">
+          <div class="svc-select-left">
+            <div class="svc-select-cat">Coiffure</div>
+            <div class="svc-select-name">Chignon ceremonie</div>
+            <div class="svc-select-desc">Coiffure elaboree pour evenement. Sur rendez-vous uniquement.</div>
+            <div class="svc-select-meta">
+              <span class="svc-select-duration">&#128337; 75 min</span>
+            </div>
+          </div>
+          <div class="svc-select-right">
+            <div class="svc-select-price">220</div>
+            <div class="svc-select-price-lbl">MAD</div>
+          </div>
+        </div>
+
+        <div class="svc-select-card" data-cat="coiffure" onclick="selectSvc(this,'Coupe enfant','30 min','70 MAD')">
+          <div class="svc-select-left">
+            <div class="svc-select-cat">Coiffure</div>
+            <div class="svc-select-name">Coupe enfant</div>
+            <div class="svc-select-desc">Pour enfants jusqu'a 12 ans. Includes shampooing et coupe.</div>
+            <div class="svc-select-meta">
+              <span class="svc-select-duration">&#128337; 30 min</span>
+            </div>
+          </div>
+          <div class="svc-select-right">
+            <div class="svc-select-price">70</div>
+            <div class="svc-select-price-lbl">MAD</div>
+          </div>
+        </div>
+
+        <div class="svc-select-card" data-cat="couleur" onclick="selectSvc(this,'Coloration globale','90 min','280 MAD')">
+          <div class="svc-select-left">
+            <div class="svc-select-cat">Couleur</div>
+            <div class="svc-select-name">Coloration globale</div>
+            <div class="svc-select-desc">Coloration uniforme sur toute la chevelure. Produits professionnels inclus.</div>
+            <div class="svc-select-meta">
+              <span class="svc-select-duration">&#128337; 90 min</span>
+              <span class="svc-select-pop">Populaire</span>
+            </div>
+          </div>
+          <div class="svc-select-right">
+            <div class="svc-select-price">280</div>
+            <div class="svc-select-price-lbl">MAD</div>
+          </div>
+        </div>
+
+        <div class="svc-select-card" data-cat="couleur" onclick="selectSvc(this,'Meches / Balayage','120 min','380 MAD')">
+          <div class="svc-select-left">
+            <div class="svc-select-cat">Couleur</div>
+            <div class="svc-select-name">Meches / Balayage</div>
+            <div class="svc-select-desc">Balayage naturel ou meches classiques. Brushing inclus apres la prestation.</div>
+            <div class="svc-select-meta">
+              <span class="svc-select-duration">&#128337; 120 min</span>
+            </div>
+          </div>
+          <div class="svc-select-right">
+            <div class="svc-select-price">380</div>
+            <div class="svc-select-price-lbl">MAD</div>
+          </div>
+        </div>
+
+        <div class="svc-select-card" data-cat="couleur" onclick="selectSvc(this,'Lissage bresilien','180 min','550 MAD')">
+          <div class="svc-select-left">
+            <div class="svc-select-cat">Couleur</div>
+            <div class="svc-select-name">Lissage bresilien</div>
+            <div class="svc-select-desc">Traitement lissant keratine longue duree. Efficacite 4 a 6 mois.</div>
+            <div class="svc-select-meta">
+              <span class="svc-select-duration">&#128337; 180 min</span>
+            </div>
+          </div>
+          <div class="svc-select-right">
+            <div class="svc-select-price">550</div>
+            <div class="svc-select-price-lbl">MAD</div>
+          </div>
+        </div>
+
+        <div class="svc-select-card" data-cat="soin" onclick="selectSvc(this,'Soin visage hydratant','60 min','190 MAD')">
+          <div class="svc-select-left">
+            <div class="svc-select-cat">Soins</div>
+            <div class="svc-select-name">Soin visage hydratant</div>
+            <div class="svc-select-desc">Nettoyage, gommage et masque hydratant. Teint eclat garanti.</div>
+            <div class="svc-select-meta">
+              <span class="svc-select-duration">&#128337; 60 min</span>
+              <span class="svc-select-pop">Populaire</span>
+            </div>
+          </div>
+          <div class="svc-select-right">
+            <div class="svc-select-price">190</div>
+            <div class="svc-select-price-lbl">MAD</div>
+          </div>
+        </div>
+
+        <div class="svc-select-card" data-cat="soin" onclick="selectSvc(this,'Soin cheveux profond','45 min','140 MAD')">
+          <div class="svc-select-left">
+            <div class="svc-select-cat">Soins</div>
+            <div class="svc-select-name">Soin cheveux profond</div>
+            <div class="svc-select-desc">Masque nourrissant + soin repare. Pour cheveux secs ou abimes.</div>
+            <div class="svc-select-meta">
+              <span class="svc-select-duration">&#128337; 45 min</span>
+            </div>
+          </div>
+          <div class="svc-select-right">
+            <div class="svc-select-price">140</div>
+            <div class="svc-select-price-lbl">MAD</div>
+          </div>
+        </div>
+
+        <div class="svc-select-card" data-cat="ongles" onclick="selectSvc(this,'Manucure classique','45 min','110 MAD')">
+          <div class="svc-select-left">
+            <div class="svc-select-cat">Ongles</div>
+            <div class="svc-select-name">Manucure classique</div>
+            <div class="svc-select-desc">Soin mains complet, pose vernis couleur ou french.</div>
+            <div class="svc-select-meta">
+              <span class="svc-select-duration">&#128337; 45 min</span>
+            </div>
+          </div>
+          <div class="svc-select-right">
+            <div class="svc-select-price">110</div>
+            <div class="svc-select-price-lbl">MAD</div>
+          </div>
+        </div>
+
+        <div class="svc-select-card" data-cat="ongles" onclick="selectSvc(this,'Pose gel complete','75 min','180 MAD')">
+          <div class="svc-select-left">
+            <div class="svc-select-cat">Ongles</div>
+            <div class="svc-select-name">Pose gel complète</div>
+            <div class="svc-select-desc">Extension gel + nail art au choix. Tenue garantie 3 semaines.</div>
+            <div class="svc-select-meta">
+              <span class="svc-select-duration">&#128337; 75 min</span>
+            </div>
+          </div>
+          <div class="svc-select-right">
+            <div class="svc-select-price">180</div>
+            <div class="svc-select-price-lbl">MAD</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="wizard-navigation">
+        <a href="profil_salon.html" class="btn-wizard-back">&#8592; Retour au salon</a>
+        <a href="reservation_wizard_step2.html" class="btn-wizard-confirm" id="btnNext" style="opacity:.4;pointer-events:none">Choisir un creneau &#8594;</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="recap-sidebar">
+    <div class="recap-header">
+      <div class="recap-header-title">Votre reservation</div>
+    </div>
+    <div class="recap-body">
+      <div class="recap-salon" style="margin-bottom:1.2rem;padding-bottom:1.2rem;border-bottom:1.5px solid var(--p2)">
+        <div class="recap-salon-photo">
+          <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=120&h=120&fit=crop&q=80" alt="Elegance Coiffure">
+        </div>
+        <div>
+          <div class="recap-salon-name">Elegance Coiffure</div>
+          <div class="recap-salon-location">Agdal, Rabat &nbsp;·&nbsp; &#9733; 4.8</div>
+        </div>
+      </div>
+
+      <div id="recapService" style="padding:.8rem 0;border-bottom:1.5px solid var(--p2);margin-bottom:.8rem">
+        <div style="font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ink-m);margin-bottom:.3rem">Service selectionne</div>
+        <div id="recapSvcName" style="font-size:.96rem;font-weight:700;color:var(--p4d)">Coupe + Brushing</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:.3rem">
+          <span id="recapSvcDuration" style="font-size:.76rem;color:var(--ink-m)">60 min</span>
+          <span id="recapSvcPrice" style="font-family:var(--fh);font-size:1.3rem;font-weight:700;color:var(--ink-h)">160 MAD</span>
+        </div>
+      </div>
+
+      <div class="recap-row"><span class="recap-key">Creneau</span><span class="recap-value" style="color:var(--ink-d)">A choisir</span></div>
+      <div class="recap-row"><span class="recap-key">Employe</span><span class="recap-value" style="color:var(--ink-d)">A choisir</span></div>
+
+      <div class="recap-total-row">
+        <span class="recap-total-label">Total</span>
+        <span id="recapTotal" class="recap-total-amount">160 MAD</span>
+      </div>
+
+      <div style="margin-top:1.2rem;padding:1rem;background:rgba(197,216,157,.15);border:1px solid var(--p2)">
+        <div style="font-size:.72rem;color:var(--ink-s);line-height:1.7">
+          &#128197; Reservation gratuite — paiement au salon<br>
+          &#10003; Annulation libre jusqu'a 24h avant
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="foot">
+  <div class="foot-bar">
+    <div class="fl">hello@Salonify.ma</div>
+    <div class="fm"><div class="fm-t">Pour plus d'informations</div><div class="fm-r"></div></div>
+    <div class="fr">+(212) 7 63456-7890</div>
+  </div>
+</footer>
+
+<script>
+var burger=document.getElementById('brg'),menu=document.getElementById('mm');
+if(burger)burger.addEventListener('click',function(){menu.classList.toggle('open');});
+
+function filterCat(btn, cat) {
+  document.querySelectorAll('.svc-cat-tab').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  document.querySelectorAll('.svc-select-card').forEach(function(c){
+    c.style.display = (cat==='all' || c.dataset.cat===cat) ? '' : 'none';
+  });
+}
+
+function selectSvc(card, name, duration, price) {
+  document.querySelectorAll('.svc-select-card').forEach(function(c){c.classList.remove('selected');});
+  card.classList.add('selected');
+  document.getElementById('recapSvcName').textContent = name;
+  document.getElementById('recapSvcDuration').textContent = duration;
+  document.getElementById('recapSvcPrice').textContent = price;
+  document.getElementById('recapTotal').textContent = price;
+  var btn = document.getElementById('btnNext');
+  btn.style.opacity = '1';
+  btn.style.pointerEvents = 'auto';
+}
+</script>
+</body>
+</html>

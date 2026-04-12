@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Gestion Villes — Salonify Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="admin-topbar">
+  <div class="admin-topbar-inner">
+    <a href="accueil.html" class="admin-brand">
+      <div class="admin-brand-icon">S</div>
+      <div><div class="admin-brand-name">Salonify</div><div class="admin-brand-sub">Administration</div></div>
+    </a>
+    <nav class="admin-topnav">
+      <a href="dashboard_admin.html" class="admin-topnav-tab">Vue generale</a>
+      <a href="#" class="admin-topnav-tab">Salons</a>
+      <a href="#" class="admin-topnav-tab">Utilisateurs</a>
+      <a href="#" class="admin-topnav-tab">Reservations</a>
+      <a href="admin_avis.html" class="admin-topnav-tab">Avis</a>
+      <a href="admin_villes.html" class="admin-topnav-tab active">Villes</a>
+    </nav>
+    <div class="admin-topbar-right">
+      <div class="admin-notif-btn">&#9993;<div class="admin-notif-dot"></div></div>
+      <div class="admin-user-chip">
+        <div class="admin-user-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&q=80" alt="Admin"></div>
+        <div class="admin-user-name">Admin Salonify</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="admin-layout">
+
+  <aside class="admin-sidebar">
+    <span class="admin-sidebar-section-label">Vue d'ensemble</span>
+    <a href="dashboard_admin.html" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#9962;</div>Tableau de bord</a>
+    <a href="admin_statistiques.html" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#9830;</div>Statistiques</a>
+    <div class="admin-sidebar-divider"></div>
+    <span class="admin-sidebar-section-label">Gestion</span>
+    <a href="#" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#9986;</div>Salons</a>
+    <a href="#" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#9786;</div>Utilisateurs</a>
+    <a href="#" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#128197;</div>Reservations</a>
+    <a href="admin_avis.html" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#9733;</div>Avis</a>
+    <a href="admin_villes.html" class="admin-sidebar-link active"><div class="admin-sidebar-icon">&#127968;</div>Villes</a>
+    <div class="admin-sidebar-divider"></div>
+    <span class="admin-sidebar-section-label">Plateforme</span>
+    <a href="#" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#128269;</div>Signalements</a>
+    <a href="#" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#9881;</div>Configuration</a>
+    <a href="admin_statistiques.html" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#128196;</div>Rapports</a>
+  </aside>
+
+  <main class="admin-main">
+
+    <div class="admin-page-header">
+      <div>
+        <div class="admin-page-title">Gestion des villes</div>
+        <div class="admin-page-subtitle">12 villes actives sur la plateforme Salonify Maroc</div>
+      </div>
+      <div class="admin-header-actions">
+        <button class="btn-admin-ghost">Exporter CSV</button>
+        <button class="btn-admin-dark" onclick="openVilleModal()">+ Ajouter une ville</button>
+      </div>
+    </div>
+
+    <div class="admin-kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="admin-kpi-card green">
+        <div class="admin-kpi-top"><div class="admin-kpi-label">Villes actives</div><div class="admin-kpi-icon kpi-icon-green">&#127968;</div></div>
+        <div class="admin-kpi-value">12</div>
+        <div class="admin-kpi-trend trend-up">&#9650; +2 ce trimestre</div>
+      </div>
+      <div class="admin-kpi-card blue">
+        <div class="admin-kpi-top"><div class="admin-kpi-label">Salons references</div><div class="admin-kpi-icon kpi-icon-blue">&#9986;</div></div>
+        <div class="admin-kpi-value">50</div>
+        <div class="admin-kpi-trend trend-up">&#9650; +3 ce mois</div>
+      </div>
+      <div class="admin-kpi-card gold">
+        <div class="admin-kpi-top"><div class="admin-kpi-label">Ville la plus active</div><div class="admin-kpi-icon kpi-icon-gold">&#9733;</div></div>
+        <div class="admin-kpi-value" style="font-size:1.3rem">Rabat</div>
+        <div class="admin-kpi-trend trend-neutral">18 salons · 1 284 clients</div>
+      </div>
+      <div class="admin-kpi-card red">
+        <div class="admin-kpi-top"><div class="admin-kpi-label">Villes sans salon</div><div class="admin-kpi-icon kpi-icon-red">&#9888;</div></div>
+        <div class="admin-kpi-value">2</div>
+        <div class="admin-kpi-trend trend-neutral">A developper</div>
+      </div>
+    </div>
+
+    <div class="toolbar" style="margin-bottom:1.6rem">
+      <div class="tb-l">
+        <input class="tb-search" type="text" placeholder="&#128269;  Rechercher une ville...">
+        <button class="tb-filter on">Toutes</button>
+        <button class="tb-filter">Actives</button>
+        <button class="tb-filter">Inactives</button>
+        <button class="tb-filter">Sans salon</button>
+      </div>
+    </div>
+
+    <div class="ville-grid">
+
+      <div class="ville-card">
+        <div class="ville-card-photo">
+          <img src="https://images.unsplash.com/photo-1555448248-2571daf6344b?w=400&h=200&fit=crop&q=80" alt="Rabat">
+          <div class="ville-card-overlay">
+            <div class="ville-card-name">Rabat</div>
+            <div class="ville-card-region">Rabat-Sale-Kenitra</div>
+          </div>
+          <span class="ville-badge-active">Actif</span>
+        </div>
+        <div class="ville-card-body">
+          <div class="ville-stat-row"><span class="ville-stat-k">Salons</span><span class="ville-stat-v">18</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Code postal</span><span class="ville-stat-v">10000</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Clients inscrits</span><span class="ville-stat-v">1 284</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Reservations</span><span class="ville-stat-v">3 870</span></div>
+        </div>
+        <div class="ville-card-foot">
+          <button class="tbl-btn tbl-btn-e" onclick="openEditVille('Rabat')">Modifier</button>
+          <button class="tbl-btn tbl-btn-h" onclick="window.location='liste_salons.html'">Salons</button>
+        </div>
+      </div>
+
+      <div class="ville-card">
+        <div class="ville-card-photo">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=200&fit=crop&q=80" alt="Casablanca">
+          <div class="ville-card-overlay">
+            <div class="ville-card-name">Casablanca</div>
+            <div class="ville-card-region">Grand Casablanca-Settat</div>
+          </div>
+          <span class="ville-badge-active">Actif</span>
+        </div>
+        <div class="ville-card-body">
+          <div class="ville-stat-row"><span class="ville-stat-k">Salons</span><span class="ville-stat-v">14</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Code postal</span><span class="ville-stat-v">20000</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Clients inscrits</span><span class="ville-stat-v">876</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Reservations</span><span class="ville-stat-v">2 140</span></div>
+        </div>
+        <div class="ville-card-foot">
+          <button class="tbl-btn tbl-btn-e" onclick="openEditVille('Casablanca')">Modifier</button>
+          <button class="tbl-btn tbl-btn-h">Salons</button>
+        </div>
+      </div>
+
+      <div class="ville-card">
+        <div class="ville-card-photo">
+          <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?w=400&h=200&fit=crop&q=80" alt="Marrakech">
+          <div class="ville-card-overlay">
+            <div class="ville-card-name">Marrakech</div>
+            <div class="ville-card-region">Marrakech-Safi</div>
+          </div>
+          <span class="ville-badge-active">Actif</span>
+        </div>
+        <div class="ville-card-body">
+          <div class="ville-stat-row"><span class="ville-stat-k">Salons</span><span class="ville-stat-v">8</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Code postal</span><span class="ville-stat-v">40000</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Clients inscrits</span><span class="ville-stat-v">412</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Reservations</span><span class="ville-stat-v">980</span></div>
+        </div>
+        <div class="ville-card-foot">
+          <button class="tbl-btn tbl-btn-e" onclick="openEditVille('Marrakech')">Modifier</button>
+          <button class="tbl-btn tbl-btn-h">Salons</button>
+        </div>
+      </div>
+
+      <div class="ville-card">
+        <div class="ville-card-photo">
+          <img src="https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=400&h=200&fit=crop&q=80" alt="Fes">
+          <div class="ville-card-overlay">
+            <div class="ville-card-name">Fes</div>
+            <div class="ville-card-region">Fes-Meknes</div>
+          </div>
+          <span class="ville-badge-active">Actif</span>
+        </div>
+        <div class="ville-card-body">
+          <div class="ville-stat-row"><span class="ville-stat-k">Salons</span><span class="ville-stat-v">5</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Code postal</span><span class="ville-stat-v">30000</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Clients inscrits</span><span class="ville-stat-v">234</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Reservations</span><span class="ville-stat-v">520</span></div>
+        </div>
+        <div class="ville-card-foot">
+          <button class="tbl-btn tbl-btn-e" onclick="openEditVille('Fes')">Modifier</button>
+          <button class="tbl-btn tbl-btn-h">Salons</button>
+        </div>
+      </div>
+
+      <div class="ville-card">
+        <div class="ville-card-photo">
+          <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=200&fit=crop&q=80" alt="Sale">
+          <div class="ville-card-overlay">
+            <div class="ville-card-name">Sale</div>
+            <div class="ville-card-region">Rabat-Sale-Kenitra</div>
+          </div>
+          <span class="ville-badge-active">Actif</span>
+        </div>
+        <div class="ville-card-body">
+          <div class="ville-stat-row"><span class="ville-stat-k">Salons</span><span class="ville-stat-v">3</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Code postal</span><span class="ville-stat-v">11000</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Clients inscrits</span><span class="ville-stat-v">98</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Reservations</span><span class="ville-stat-v">186</span></div>
+        </div>
+        <div class="ville-card-foot">
+          <button class="tbl-btn tbl-btn-e" onclick="openEditVille('Sale')">Modifier</button>
+          <button class="tbl-btn tbl-btn-h">Salons</button>
+        </div>
+      </div>
+
+      <div class="ville-card">
+        <div class="ville-card-photo" style="background:#e0d8c4;display:flex;align-items:center;justify-content:center">
+          <div style="font-size:3rem;opacity:.3">&#127968;</div>
+          <div class="ville-card-overlay">
+            <div class="ville-card-name">Temara</div>
+            <div class="ville-card-region">Rabat-Sale-Kenitra</div>
+          </div>
+          <span class="ville-badge-active ville-badge-off">Inactif</span>
+        </div>
+        <div class="ville-card-body" style="opacity:.7">
+          <div class="ville-stat-row"><span class="ville-stat-k">Salons</span><span class="ville-stat-v">0</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Code postal</span><span class="ville-stat-v">12000</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Clients inscrits</span><span class="ville-stat-v">0</span></div>
+          <div class="ville-stat-row"><span class="ville-stat-k">Reservations</span><span class="ville-stat-v">0</span></div>
+        </div>
+        <div class="ville-card-foot">
+          <button class="tbl-btn tbl-btn-e" onclick="openEditVille('Temara')">Modifier</button>
+          <button class="tbl-btn tbl-btn-e">Activer</button>
+        </div>
+      </div>
+
+      <div class="ville-card" style="border:2px dashed var(--p3);cursor:pointer;display:flex;align-items:center;justify-content:center;min-height:260px;background:var(--p1)" onclick="openVilleModal()">
+        <div style="text-align:center;padding:2rem">
+          <div style="font-size:2.5rem;color:var(--p3);margin-bottom:.7rem">+</div>
+          <div style="font-size:.84rem;font-weight:700;color:var(--p4d);text-transform:uppercase;letter-spacing:1px">Ajouter une ville</div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<footer class="foot">
+  <div class="foot-bar">
+    <div class="fl">hello@Salonify.ma</div>
+    <div class="fm"><div class="fm-t">Pour plus d'informations</div><div class="fm-r"></div></div>
+    <div class="fr">+(212) 7 63456-7890</div>
+  </div>
+</footer>
+
+<div class="modal-bg" id="villeModal" style="display:none">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-t" id="villeModalTitle">Ajouter une ville</div>
+      <button class="modal-close" onclick="closeVilleModal()">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <div class="ville-modal-photo">
+        <img src="https://images.unsplash.com/photo-1555448248-2571daf6344b?w=600&q=80" alt="" id="villePhotoPreview" style="display:none">
+        <div class="ville-modal-overlay"><span>&#128247; Changer la photo</span></div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;background:var(--border2)" id="villePhotoPlaceholder">
+          <div style="font-size:2rem;opacity:.35">&#127968;</div>
+          <div style="font-size:.74rem;font-weight:700;color:var(--ink-m);text-transform:uppercase;letter-spacing:1px">Cliquer pour ajouter une photo</div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="row2m">
+          <div class="fg"><label>Nom de la ville</label><input class="fi" type="text" placeholder="ex: Kenitra"></div>
+          <div class="fg"><label>Code postal</label><input class="fi" type="text" placeholder="14000"></div>
+        </div>
+        <div class="row2m">
+          <div class="fg"><label>Region</label>
+            <select class="fi">
+              <option>Rabat-Sale-Kenitra</option>
+              <option>Grand Casablanca-Settat</option>
+              <option>Marrakech-Safi</option>
+              <option>Fes-Meknes</option>
+              <option>Tanger-Tetouan-Al Hoceima</option>
+              <option>Oriental</option>
+            </select>
+          </div>
+          <div class="fg"><label>Pays</label><input class="fi" type="text" value="Maroc" readonly></div>
+        </div>
+        <div class="fg" style="display:flex;align-items:center;justify-content:space-between">
+          <label style="font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink-b);margin:0">Ville active sur la plateforme</label>
+          <label class="toggle"><input type="checkbox" checked><span class="tgl-sl"></span></label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-xs btn-xs-r" onclick="closeVilleModal()">Annuler</button>
+      <button class="btn-add" style="padding:.54rem 1.6rem;font-size:.76rem">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function openVilleModal(){document.getElementById('villeModal').style.display='flex';document.getElementById('villeModalTitle').textContent='Ajouter une ville';}
+function openEditVille(n){document.getElementById('villeModal').style.display='flex';document.getElementById('villeModalTitle').textContent='Modifier — '+n;}
+function closeVilleModal(){document.getElementById('villeModal').style.display='none';}
+document.getElementById('villeModal').addEventListener('click',function(e){if(e.target===this)closeVilleModal();});
+document.querySelectorAll('.tb-filter').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.tb-filter').forEach(function(x){x.classList.remove('on');});this.classList.add('on');});});
+document.querySelectorAll('.admin-topnav-tab').forEach(function(t){t.addEventListener('click',function(){document.querySelectorAll('.admin-topnav-tab').forEach(function(x){x.classList.remove('active');});this.classList.add('active');});});
+</script>
+</body>
+</html>

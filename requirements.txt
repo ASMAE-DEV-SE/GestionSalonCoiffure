@@ -1,0 +1,186 @@
+================================================================
+  SALONIFY — REQUIREMENTS & GUIDE D'INSTALLATION
+  Projet Laravel 11 — Plateforme de réservation beauté au Maroc
+================================================================
+
+================================================================
+  1. LOGICIELS OBLIGATOIRES (à installer dans cet ordre)
+================================================================
+
+[1] XAMPP v8.2+
+    Lien     : https://www.apachefriends.org/fr/download.html
+    Version  : 8.2.x (PHP 8.2 inclus)
+    Inclut   : PHP 8.2 + Apache + MySQL 8 + phpMyAdmin
+    Config   : Lancer Apache + MySQL dans XAMPP Control Panel
+
+[2] Composer v2.x
+    Lien     : https://getcomposer.org/Composer-Setup.exe
+    Version  : 2.x
+    Note     : Cocher "Add to PATH" pendant l'installation
+    Vérif    : composer -V  (dans terminal)
+
+[3] Visual Studio Code
+    Lien     : https://code.visualstudio.com/
+    Version  : dernière version stable
+
+[4] Git (recommandé)
+    Lien     : https://git-scm.com/download/win
+    Version  : dernière version stable
+
+================================================================
+  2. VERSIONS REQUISES
+================================================================
+
+PHP         >= 8.2
+Laravel     11.48
+MySQL       >= 8.0
+Composer    >= 2.0
+
+================================================================
+  3. DÉPENDANCES PHP (installées automatiquement par Composer)
+================================================================
+
+laravel/framework      ^11.0    — Framework principal
+laravel/sanctum        ^4.0     — Authentification API
+laravel/socialite      ^5.25    — Connexion Google OAuth
+laravel/tinker         ^2.9     — Console interactive
+fakerphp/faker         ^1.23    — Données de test
+phpunit/phpunit        ^11.0    — Tests unitaires
+
+================================================================
+  4. COMPTE À CRÉER : MAILTRAP (tests d'emails)
+================================================================
+
+Lien         : https://mailtrap.io
+Plan         : Gratuit (500 emails/mois)
+Utilisation  : Réception des emails de test (inscription,
+               réservation, rappels...)
+
+Après inscription :
+  → Sandboxes → My Sandbox → Integration → SMTP
+  → Copier Host, Port, Username, Password dans le .env
+
+================================================================
+  5. ÉTAPES D'INSTALLATION DU PROJET
+================================================================
+
+ÉTAPE 1 — Copier le projet
+  Copier le dossier "salonify" depuis la clé USB vers :
+  Ex : D:\salonify\  ou  E:\projets\salonify\
+
+ÉTAPE 2 — Ouvrir le terminal dans le dossier du projet
+  VS Code → Terminal → Nouveau terminal
+  (ou CMD → cd D:\salonify)
+
+ÉTAPE 3 — Installer les dépendances PHP
+  > composer install
+
+ÉTAPE 4 — Créer le fichier de configuration
+  > copy .env.example .env
+
+ÉTAPE 5 — Générer la clé de l'application
+  > php artisan key:generate
+
+ÉTAPE 6 — Créer la base de données MySQL
+  → Ouvrir http://localhost/phpmyadmin
+  → Nouvelle base de données
+  → Nom : salonify
+  → Interclassement : utf8mb4_unicode_ci
+  → Créer
+
+ÉTAPE 7 — Lancer les migrations et seeders
+  > php artisan migrate --seed
+
+ÉTAPE 8 — Créer le lien storage
+  > php artisan storage:link
+
+ÉTAPE 9 — Lancer le serveur
+  > php artisan serve --port=8000
+
+ÉTAPE 10 — Ouvrir dans le navigateur
+  http://localhost:8000
+
+================================================================
+  6. CONFIGURATION DU FICHIER .ENV
+================================================================
+
+Modifier ces lignes dans le fichier .env créé à l'étape 4 :
+
+--- BASE DE DONNÉES ---
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=salonify
+DB_USERNAME=root
+DB_PASSWORD=              ← laisser vide si XAMPP sans mdp
+
+--- EMAIL (Mailtrap) ---
+MAIL_MAILER=smtp
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=VOTRE_USERNAME_MAILTRAP
+MAIL_PASSWORD=VOTRE_PASSWORD_MAILTRAP
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS="noreply@salonify.ma"
+MAIL_FROM_NAME="Salonify"
+
+--- URL DU PROJET ---
+APP_URL=http://localhost:8000
+
+================================================================
+  7. AJOUTER PHP AU PATH WINDOWS (si commande php introuvable)
+================================================================
+
+1. Rechercher "Variables d'environnement" dans Windows
+2. Variables système → Path → Modifier → Nouveau
+3. Ajouter : C:\xampp\php
+4. OK → redémarrer le terminal
+5. Vérifier : php -v
+
+================================================================
+  8. COMPTES ADMIN / TEST DISPONIBLES APRÈS MIGRATE --SEED
+================================================================
+
+Admin    : admin@salonify.ma       / password
+Salon    : salon@salonify.ma       / password
+Client   : client@salonify.ma      / password
+
+================================================================
+  9. PROBLÈMES FRÉQUENTS
+================================================================
+
+ERREUR : "php n'est pas reconnu"
+  → PHP non ajouté au PATH (voir section 7)
+
+ERREUR : "SQLSTATE Connection refused"
+  → MySQL non démarré → ouvrir XAMPP → démarrer MySQL
+
+ERREUR : "Class not found"
+  → Relancer : composer install  puis  php artisan config:clear
+
+ERREUR : "The stream or file storage/logs could not be opened"
+  → Dossier storage non accessible
+  → Windows : clic droit dossier storage → Propriétés →
+    Sécurité → Modifier → Tout le monde → Contrôle total
+
+================================================================
+  10. STRUCTURE DU PROJET
+================================================================
+
+salonify/
+├── app/
+│   ├── Http/Controllers/    — Contrôleurs (Admin/Client/Salon)
+│   ├── Models/              — Modèles Eloquent
+│   ├── Mail/                — Classes d'emails
+│   └── Services/            — Services métier
+├── database/
+│   ├── migrations/          — Structure de la base de données
+│   └── seeders/             — Données de test
+├── resources/views/         — Templates Blade (HTML)
+├── routes/web.php           — Toutes les routes
+├── public/                  — Fichiers accessibles (CSS, images)
+├── storage/                 — Fichiers uploadés, logs, sessions
+├── .env.example             — Modèle de configuration
+└── composer.json            — Dépendances PHP
+
+================================================================

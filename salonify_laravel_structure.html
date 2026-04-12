@@ -1,0 +1,338 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);font-size:13px;color:var(--color-text-primary);background:transparent;line-height:1.5}
+.root{padding:12px 0 20px}
+.tabs{display:flex;gap:2px;margin-bottom:16px;border-bottom:1px solid var(--color-border-tertiary);padding:0 12px}
+.tab{padding:6px 14px;font-size:12px;font-weight:500;color:var(--color-text-secondary);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.tab.on{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary)}
+.panel{display:none;padding:0 12px}
+.panel.on{display:block}
+.tree{font-family:var(--font-mono);font-size:12px;line-height:1.8}
+.row{display:flex;align-items:flex-start;gap:4px;padding:1px 0}
+.row:hover{background:var(--color-background-secondary);border-radius:4px}
+.indent{color:var(--color-border-secondary);white-space:pre;flex-shrink:0}
+.icon{flex-shrink:0;font-size:11px;width:16px;text-align:center}
+.label{color:var(--color-text-primary)}
+.sub{color:var(--color-text-secondary);font-size:11px;margin-left:4px}
+.d{color:#638cbe}.f{color:var(--color-text-primary)}.m{color:#8b7ae5}.v{color:#3da06e}.r{color:#c0563a}.s{color:#c08000}.c{color:#2090d0}.t{color:#888}
+.badge{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:500;vertical-align:middle;margin-left:6px}
+.bdone{background:rgba(61,160,110,.15);color:#3da06e}
+.btodo{background:rgba(192,86,58,.12);color:#c0563a}
+.bwip{background:rgba(192,128,0,.12);color:#c08000}
+.section{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.8px;margin:16px 0 6px;padding:0 2px;border-bottom:1px solid var(--color-border-tertiary)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;padding:8px 10px;background:var(--color-background-secondary);border-radius:6px;font-size:11px}
+.leg{display:flex;align-items:center;gap:4px}
+.status-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.scard{background:var(--color-background-secondary);border:1px solid var(--color-border-tertiary);border-radius:6px;padding:10px 12px}
+.scard h4{font-size:12px;font-weight:500;margin-bottom:6px;color:var(--color-text-primary)}
+.scard li{font-size:11px;color:var(--color-text-secondary);list-style:none;padding:2px 0;display:flex;justify-content:space-between}
+.scard li span{color:var(--color-text-primary)}
+</style>
+
+<div class="root">
+<div class="tabs">
+  <div class="tab on" onclick="show('vs')">VS Code (dossiers)</div>
+  <div class="tab" onclick="show('laravel')">Laravel (backend)</div>
+  <div class="tab" onclick="show('pages')">Pages HTML</div>
+  <div class="tab" onclick="show('bdd')">Base de données</div>
+  <div class="tab" onclick="show('status')">Avancement</div>
+</div>
+
+<div class="panel on" id="vs">
+<div class="legend">
+  <div class="leg"><span class="badge bdone">✓ fait</span> Terminé</div>
+  <div class="leg"><span class="badge bwip">≈ wip</span> En cours</div>
+  <div class="leg"><span class="badge btodo">○ todo</span> À faire</div>
+</div>
+<div class="tree">
+
+<div class="section">Racine du projet</div>
+
+<div class="row"><span class="indent"></span><span class="icon d">📁</span><span class="label d">salonify/</span></div>
+
+<div class="row"><span class="indent">  </span><span class="icon d">📁</span><span class="label d">app/</span></div>
+<div class="row"><span class="indent">  │ </span><span class="icon d">📁</span><span class="label d">Http/</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon d">📁</span><span class="label d">Controllers/</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon d">📁</span><span class="label d">Auth/</span></div>
+<div class="row"><span class="indent">  │   │   </span><span class="icon c">◆</span><span class="label">LoginController.php</span><span class="sub">Connexion utilisateur</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │   </span><span class="icon c">◆</span><span class="label">RegisterController.php</span><span class="sub">Inscription client/salon</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │   </span><span class="icon c">◆</span><span class="label">ForgotPasswordController.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │   </span><span class="icon c">◆</span><span class="label">ResetPasswordController.php</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   │   </span><span class="icon c">◆</span><span class="label">VerifyEmailController.php</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon d">📁</span><span class="label d">Client/</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">HomeController.php</span><span class="sub">Accueil + recherche</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">VilleController.php</span><span class="sub">Liste villes</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">SalonController.php</span><span class="sub">Liste + profil salon</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">ReservationController.php</span><span class="sub">Wizard 4 étapes</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">AvisController.php</span><span class="sub">Publication avis</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">ProfileController.php</span><span class="sub">Profil client</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">DashboardController.php</span><span class="sub">Espace client perso</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">ContactController.php</span><span class="sub">Formulaire contact</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">NotificationController.php</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon d">📁</span><span class="label d">Salon/</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">DashboardController.php</span><span class="sub">Vue ensemble salon</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">ServiceController.php</span><span class="sub">Gestion services</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">EmployeController.php</span><span class="sub">Gestion équipe</span><span class="badge bwip">≈</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">ReservationController.php</span><span class="sub">Résa côté salon</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">AvisController.php</span><span class="sub">Modération + réponse</span><span class="badge bwip">≈</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">ProfilSalonController.php</span><span class="sub">Modifier profil</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">DisponibiliteController.php</span><span class="sub">GestionnaireDisponibilite</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon d">📁</span><span class="label d">Admin/</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">DashboardController.php</span><span class="sub">Vue générale admin</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">SalonController.php</span><span class="sub">Valider / suspendre</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">UserController.php</span><span class="sub">Gestion utilisateurs</span><span class="badge bwip">≈</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">AvisController.php</span><span class="sub">Modération globale</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">VilleController.php</span><span class="sub">Gestion villes</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon c">◆</span><span class="label">StatistiqueController.php</span><span class="sub">Rapports / export CSV</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon d">📁</span><span class="label d">Middleware/</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon m">⬟</span><span class="label">RoleMiddleware.php</span><span class="sub">admin|salon|client</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon m">⬟</span><span class="label">SalonValideMiddleware.php</span><span class="sub">Salon approuvé requis</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon m">⬟</span><span class="label">EnsureEmailVerified.php</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │ </span><span class="icon d">📁</span><span class="label d">Models/</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon m">⬟</span><span class="label">Ville.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon m">⬟</span><span class="label">User.php</span><span class="sub">role: enum(admin,salon,client)</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon m">⬟</span><span class="label">Salon.php</span><span class="sub">+ relations employes/services</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon m">⬟</span><span class="label">Service.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon m">⬟</span><span class="label">Employe.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon m">⬟</span><span class="label">Reservation.php</span><span class="sub">statut: 4 états</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon m">⬟</span><span class="label">Avis.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon m">⬟</span><span class="label">Notification.php</span><span class="sub">uuid + donnees json</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │ </span><span class="icon d">📁</span><span class="label d">Services/</span><span class="sub">Classes métier (diagramme)</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon s">◉</span><span class="label">GestionnaireDisponibilite.php</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon s">◉</span><span class="label">DisponibiliteEmploye.php</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon s">◉</span><span class="label">NotificationService.php</span><span class="sub">SMS rappel 24h/2h</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon s">◉</span><span class="label">ReservationService.php</span><span class="sub">Chevauchement + créneau</span><span class="badge btodo">○</span></div>
+
+<div class="row"><span class="indent">  </span><span class="icon d">📁</span><span class="label d">database/</span></div>
+<div class="row"><span class="indent">  │ </span><span class="icon d">📁</span><span class="label d">migrations/</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon f">─</span><span class="label">create_villes_table.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon f">─</span><span class="label">create_users_table.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon f">─</span><span class="label">create_salons_table.php</span><span class="sub">horaires JSON</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon f">─</span><span class="label">create_employes_table.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon f">─</span><span class="label">create_services_table.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon f">─</span><span class="label">create_reservations_table.php</span><span class="sub">statut enum</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon f">─</span><span class="label">create_avis_table.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon f">─</span><span class="label">create_notifications_table.php</span><span class="sub">UUID + json</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon f">─</span><span class="label">create_sessions_password_resets.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │ </span><span class="icon d">📁</span><span class="label d">seeders/</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon f">─</span><span class="label">VilleSeeder.php</span><span class="sub">Rabat + 11 villes</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon f">─</span><span class="label">AdminSeeder.php</span><span class="sub">admin@salonsrabat.ma</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon f">─</span><span class="label">SalonDemoSeeder.php</span><span class="sub">3 salons + 2 emp. + 6 svcs</span><span class="badge bdone">✓</span></div>
+
+<div class="row"><span class="indent">  </span><span class="icon d">📁</span><span class="label d">resources/</span></div>
+<div class="row"><span class="indent">  │ </span><span class="icon d">📁</span><span class="label d">views/</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon d">📁</span><span class="label d">layouts/</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">app.blade.php</span><span class="sub">nav + footer</span><span class="badge bwip">≈</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">admin.blade.php</span><span class="sub">topbar admin sombre</span><span class="badge bwip">≈</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">dashboard.blade.php</span><span class="sub">sidebar client</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon d">📁</span><span class="label d">public/</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">accueil.blade.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">villes.blade.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">contact.blade.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon d">📁</span><span class="label d">salons/</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">index.blade.php</span><span class="sub">liste_salons</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">show.blade.php</span><span class="sub">profil_salon</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon d">📁</span><span class="label d">reservations/</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">create.blade.php</span><span class="sub">wizard step 3</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">confirmation.blade.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">index.blade.php</span><span class="sub">mes_reservations</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon d">📁</span><span class="label d">client/</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">dashboard.blade.php</span><span class="sub">espace client perso</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">profil.blade.php</span><span class="sub">mon_profil</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">avis.blade.php</span><span class="sub">publication_avis</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon d">📁</span><span class="label d">salon/</span><span class="sub">dashboard gérant</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">dashboard.blade.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">services.blade.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">employes.blade.php</span><span class="badge bwip">≈</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">reservations.blade.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">avis.blade.php</span><span class="badge bwip">≈</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">profil.blade.php</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">disponibilites.blade.php</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon d">📁</span><span class="label d">admin/</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">dashboard.blade.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">salons.blade.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">users.blade.php</span><span class="badge bwip">≈</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">avis.blade.php</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">villes.blade.php</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">statistiques.blade.php</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon d">📁</span><span class="label d">auth/</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">connexion.blade.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">inscription.blade.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">forgot-password.blade.php</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">reset-password.blade.php</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   │ </span><span class="icon v">◈</span><span class="label">verify-email.blade.php</span><span class="badge btodo">○</span></div>
+
+<div class="row"><span class="indent">  │ </span><span class="icon d">📁</span><span class="label d">css/</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon f">─</span><span class="label">style.css</span><span class="sub">6 127 lignes — CSS universel</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  </span><span class="icon d">📁</span><span class="label d">public/</span></div>
+<div class="row"><span class="indent">  │ </span><span class="icon d">📁</span><span class="label d">images/</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon f">─</span><span class="label">logo1.png</span><span class="sub">Logo SVG → PNG</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  │   </span><span class="icon f">─</span><span class="label">salonify_logo.svg</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent">  </span><span class="icon d">📁</span><span class="label d">routes/</span></div>
+<div class="row"><span class="indent">  │ </span><span class="icon r">⇒</span><span class="label">web.php</span><span class="sub">routes publiques + auth + client + salon + admin</span><span class="badge bwip">≈</span></div>
+<div class="row"><span class="indent">  │ </span><span class="icon r">⇒</span><span class="label">api.php</span><span class="sub">disponibilités JSON (GestionnaireDisponibilite)</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent">  </span><span class="icon f">─</span><span class="label">.env</span><span class="sub">DB_DATABASE=salonify</span><span class="badge bwip">≈</span></div>
+</div>
+</div>
+
+<div class="panel" id="laravel">
+<div class="section">Routes web.php — groupes</div>
+<div class="tree">
+<div class="row"><span class="indent"></span><span class="icon r">⇒</span><span class="label">GET /</span><span class="sub">HomeController@index</span></div>
+<div class="row"><span class="indent"></span><span class="icon r">⇒</span><span class="label">GET /villes</span><span class="sub">VilleController@index</span></div>
+<div class="row"><span class="indent"></span><span class="icon r">⇒</span><span class="label">GET /salons/{ville}</span><span class="sub">SalonController@index</span></div>
+<div class="row"><span class="indent"></span><span class="icon r">⇒</span><span class="label">GET /salons/{ville}/{slug}</span><span class="sub">SalonController@show</span></div>
+<div class="row"><span class="indent"></span><span class="icon r">⇒</span><span class="label">GET /contact</span><span class="sub">ContactController@show</span></div>
+<div class="row"><span class="indent"></span><span class="icon r">⇒</span><span class="label">POST /contact</span><span class="sub">ContactController@send</span></div>
+<br>
+<div class="row"><span class="indent"></span><span class="icon d">📁</span><span class="label d">Route::middleware(['auth'])</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">GET /client/dashboard</span><span class="sub">Client\DashboardController</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">GET /client/reservations</span><span class="sub">Client\ReservationController@index</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">POST /reservations/{salon}</span><span class="sub">@store wizard</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">POST /reservations/{id}/annuler</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">POST /avis</span><span class="sub">AvisController@store</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">GET|PUT /client/profil</span><span class="sub">ProfileController</span></div>
+<br>
+<div class="row"><span class="indent"></span><span class="icon d">📁</span><span class="label d">Route::middleware(['auth','role:salon','salon.valide'])</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">GET /salon/dashboard</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">resource /salon/services</span><span class="sub">CRUD ServiceController</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">resource /salon/employes</span><span class="sub">CRUD EmployeController</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">GET /salon/reservations</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">POST /salon/reservations/{id}/confirmer</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">GET /api/disponibilites</span><span class="sub">JSON — GestionnaireDisponibilite</span></div>
+<br>
+<div class="row"><span class="indent"></span><span class="icon d">📁</span><span class="label d">Route::middleware(['auth','role:admin'])</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">GET /admin/dashboard</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">POST /admin/salons/{id}/valider</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">POST /admin/salons/{id}/suspendre</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">resource /admin/users</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">resource /admin/villes</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">DELETE /admin/avis/{id}</span></div>
+<div class="row"><span class="indent">  </span><span class="icon r">⇒</span><span class="label">GET /admin/statistiques</span></div>
+</div>
+</div>
+
+<div class="panel" id="pages">
+<div class="section">Pages HTML mockups — état actuel</div>
+<div class="tree">
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">accueil.html</span><span class="sub">Hero + recherche + stats + districts</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">villes.html</span><span class="sub">Grille villes + search + stats</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">liste_salons.html</span><span class="sub">Grille cards + filtre quartier sticky</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">profil_salon.html</span><span class="sub">Hero + tabs + services + équipe + avis</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">reservation.html</span><span class="sub">Wizard step 3 — formulaire infos</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">confirmation.html</span><span class="sub">Step 4 — récap + carte + partage</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">connexion_inscription.html</span><span class="sub">Split layout — tabs login/register</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">mes_reservations.html</span><span class="sub">Cards statut + sidebar profil</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">mon_profil.html</span><span class="sub">Tabs infos / sécurité / prefs / notifs</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">dashboard_client_perso.html</span><span class="sub">Sidebar + stats + RDV + fidélité</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">publication_avis.html</span><span class="sub">Formulaire étoiles + commentaire</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">dashboard_salon.html</span><span class="sub">KPI + tableau RDV + chart + équipe</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">gestion_services.html</span><span class="sub">CRUD services + catégories</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">dashboard_admin.html</span><span class="sub">KPI plateforme + salons + actions</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">contact.html</span><span class="sub">Arch marocaine SVG + formulaire</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">profil_client.html</span><span class="sub">Vue côté admin d'un client</span><span class="badge bdone">✓</span></div>
+<br>
+<div class="section">Pages restantes à créer</div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">gestion_employes.html</span><span class="sub">CRUD employés + horaires + spécialités</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">disponibilites.html</span><span class="sub">Calendrier DisponibiliteEmploye</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">profil_salon_edit.html</span><span class="sub">Modifier salon (adresse, horaires, photo)</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">admin_villes.html</span><span class="sub">Gestion villes CRUD</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">admin_avis.html</span><span class="sub">Modération avis signalés</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">admin_statistiques.html</span><span class="sub">Graphiques + export CSV</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">reset_password.html</span><span class="sub">Réinitialisation mot de passe</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">verify_email.html</span><span class="sub">Page vérification email</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">reservation_wizard_step1.html</span><span class="sub">Choix service (step 1)</span><span class="badge btodo">○</span></div>
+<div class="row"><span class="indent"></span><span class="icon v">◈</span><span class="label">reservation_wizard_step2.html</span><span class="sub">Choix créneau (step 2)</span><span class="badge btodo">○</span></div>
+</div>
+</div>
+
+<div class="panel" id="bdd">
+<div class="section">Tables MySQL (phpMyAdmin) — salonify</div>
+<div class="tree">
+<div class="row"><span class="indent"></span><span class="icon d">📦</span><span class="label d">villes</span><span class="sub">id, nom_ville, code_postal, region, pays, actif, cree_le</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon d">📦</span><span class="label d">users</span><span class="sub">id, nom, prenom, email(unique), mot_de_passe, telephone, role enum(admin|salon|client), email_verifie_le, timestamps</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon d">📦</span><span class="label d">salons</span><span class="sub">id, user_id FK, ville_id FK, nom_salon, adresse, quartier, code_postal, telephone, email, horaires JSON, photo, description, rib, note_moy, nb_avis, valide, nb_employes, latitude, longitude, date_valid, timestamps</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon d">📦</span><span class="label d">employes</span><span class="sub">id, salon_id FK, nom, prenom, tel, email, specialites JSON, photo, horaires JSON, actif, cree_le</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon d">📦</span><span class="label d">services</span><span class="sub">id, salon_id FK, nom_service, description, prix, duree_minu, categorie, actif, cree_le, modifie_le</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon d">📦</span><span class="label d">reservations</span><span class="sub">id, client_id FK, salon_id FK, service_id FK, employe_id FK, date_heure, duree_minutes, statut enum(en_attente|confirmee|annulee|terminee), notes_client, notes_salon, motif_annul, annulee_par, date_annul, rappel_24h, rappel_2h, cree_le</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon d">📦</span><span class="label d">avis</span><span class="sub">id, reservation_id FK(unique), note 1-5, commentaire, reponse_salon, timestamps</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon d">📦</span><span class="label d">notifications</span><span class="sub">id UUID, user_id FK, type, donnees JSON, lu_le, cree_le</span><span class="badge bdone">✓</span></div>
+<div class="row"><span class="indent"></span><span class="icon d">📦</span><span class="label d">password_reset_tokens</span><span class="sub">email, token, created_at</span><span class="badge bdone">✓</span></div>
+</div>
+<div class="section" style="margin-top:14px">Commandes artisan à exécuter</div>
+<div class="tree">
+<div class="row"><span class="indent"></span><span class="icon f">$</span><span class="label" style="color:#3da06e">php artisan migrate --seed</span></div>
+<div class="row"><span class="indent"></span><span class="icon f">$</span><span class="label" style="color:#3da06e">php artisan storage:link</span><span class="sub">photos salons/employes</span></div>
+<div class="row"><span class="indent"></span><span class="icon f">$</span><span class="label" style="color:#8b7ae5">php artisan make:model Employe -mcr</span><span class="sub">model + migration + controller</span></div>
+<div class="row"><span class="indent"></span><span class="icon f">$</span><span class="label" style="color:#8b7ae5">php artisan make:service GestionnaireDisponibilite</span></div>
+<div class="row"><span class="indent"></span><span class="icon f">$</span><span class="label" style="color:#c08000">php artisan queue:work</span><span class="sub">rappels SMS 24h / 2h</span></div>
+</div>
+</div>
+
+<div class="panel" id="status">
+<div class="section">Bilan global</div>
+<div class="status-grid">
+<div class="scard">
+  <h4>Pages HTML terminées (16/26)</h4>
+  <ul>
+    <li>accueil, villes, liste_salons <span>✓</span></li>
+    <li>profil_salon, contact <span>✓</span></li>
+    <li>reservation, confirmation <span>✓</span></li>
+    <li>connexion_inscription <span>✓</span></li>
+    <li>mes_reservations, mon_profil <span>✓</span></li>
+    <li>dashboard client perso <span>✓</span></li>
+    <li>publication_avis <span>✓</span></li>
+    <li>dashboard salon, gestion services <span>✓</span></li>
+    <li>dashboard admin <span>✓</span></li>
+    <li>profil_client <span>✓</span></li>
+  </ul>
+</div>
+<div class="scard">
+  <h4>Pages HTML restantes (10)</h4>
+  <ul>
+    <li>gestion_employes <span class="badge btodo">○</span></li>
+    <li>disponibilites (calendrier) <span class="badge btodo">○</span></li>
+    <li>profil_salon_edit <span class="badge btodo">○</span></li>
+    <li>admin_villes, admin_avis <span class="badge btodo">○</span></li>
+    <li>admin_statistiques <span class="badge btodo">○</span></li>
+    <li>reset_password, verify_email <span class="badge btodo">○</span></li>
+    <li>reservation step 1 (service) <span class="badge btodo">○</span></li>
+    <li>reservation step 2 (créneau) <span class="badge btodo">○</span></li>
+  </ul>
+</div>
+<div class="scard">
+  <h4>Backend Laravel restant</h4>
+  <ul>
+    <li>layouts Blade (app / admin / dashboard) <span class="badge bwip">≈</span></li>
+    <li>routes web.php complet <span class="badge bwip">≈</span></li>
+    <li>GestionnaireDisponibilite.php <span class="badge btodo">○</span></li>
+    <li>DisponibiliteEmploye.php <span class="badge btodo">○</span></li>
+    <li>NotificationService (rappels) <span class="badge btodo">○</span></li>
+    <li>ReservationService (créneau) <span class="badge btodo">○</span></li>
+    <li>api.php routes JSON <span class="badge btodo">○</span></li>
+    <li>VerifyEmail + ResetPassword <span class="badge btodo">○</span></li>
+  </ul>
+</div>
+<div class="scard">
+  <h4>MySQL / phpMyAdmin</h4>
+  <ul>
+    <li>9 tables migrées <span>✓</span></li>
+    <li>Seeders (villes, admin, demo) <span>✓</span></li>
+    <li>Indexe sur reservations.statut <span class="badge btodo">○</span></li>
+    <li>Indexe sur salons.ville_id <span class="badge btodo">○</span></li>
+    <li>storage:link pour photos <span class="badge btodo">○</span></li>
+  </ul>
+</div>
+</div>
+</div>
+
+</div>
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  event.target.classList.add('on');
+}
+</script>

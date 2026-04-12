@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Http\Controllers\Client;
+
+use App\Http\Controllers\Controller;
+use App\Models\Ville;
+use App\Models\Salon;
+use App\Models\Reservation;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class HomeController extends Controller
+{
+    public function index(Request $request): View
+    {
+        // Villes actives avec au moins un salon validé + compteur
+        $villes = Ville::actives()
+            ->withCount(['salonsValides'])
+            ->having('salons_valides_count', '>', 0)
+            ->orderByDesc('salons_valides_count')
+            ->get();
+
+        // Salons en vedette : les 6 mieux notés toutes villes confondues
+        $salonsFeatured = Salon::valides()
+            ->with('ville')
+            ->mieuxNotes()
+            ->limit(6)
+            ->get();
+
+        // Statistiques globales affichées sur la hero section
+        $stats = [
+            'salons'       => Salon::valides()->count(),
+            'villes'       => $villes->count(),
+            'reservations' => Reservation::count(),
+        ];
+
+        // Recherche rapide depuis la barre hero
+        $recherche = null;
+        if ($request->filled('q') || $request->filled('ville')) {
+            $recherche = Salon::valides()
+                ->with('ville')
+                ->when($request->q, fn($q, $term) =>
+                    $q->where('nom_salon', 'like', "%$term%")
+                      ->orWhere('quartier',  'like', "%$term%")
+                )
+                ->when($request->ville, fn($q, $villeId) =>
+                    $q->where('ville_id', $villeId)
+                )
+                ->mieuxNotes()
+                ->limit(12)
+                ->get();
+        }
+
+        return view('public.accueil', compact(
+            'villes', 'salonsFeatured', 'stats', 'recherche'
+        ));
+    }
+}

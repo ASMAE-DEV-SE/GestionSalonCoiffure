@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Moderation Avis — Salonify Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="admin-topbar">
+  <div class="admin-topbar-inner">
+    <a href="accueil.html" class="admin-brand">
+      <div class="admin-brand-icon">S</div>
+      <div><div class="admin-brand-name">Salonify</div><div class="admin-brand-sub">Administration</div></div>
+    </a>
+    <nav class="admin-topnav">
+      <a href="dashboard_admin.html" class="admin-topnav-tab">Vue generale</a>
+      <a href="#" class="admin-topnav-tab">Salons</a>
+      <a href="#" class="admin-topnav-tab">Utilisateurs</a>
+      <a href="#" class="admin-topnav-tab">Reservations</a>
+      <a href="admin_avis.html" class="admin-topnav-tab active">Avis</a>
+      <a href="admin_villes.html" class="admin-topnav-tab">Villes</a>
+    </nav>
+    <div class="admin-topbar-right">
+      <div class="admin-notif-btn">&#9993;<div class="admin-notif-dot"></div></div>
+      <div class="admin-user-chip">
+        <div class="admin-user-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&q=80" alt="Admin"></div>
+        <div class="admin-user-name">Admin Salonify</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="admin-layout">
+
+  <aside class="admin-sidebar">
+    <span class="admin-sidebar-section-label">Vue d'ensemble</span>
+    <a href="dashboard_admin.html" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#9962;</div>Tableau de bord</a>
+    <a href="admin_statistiques.html" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#9830;</div>Statistiques</a>
+    <div class="admin-sidebar-divider"></div>
+    <span class="admin-sidebar-section-label">Gestion</span>
+    <a href="#" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#9986;</div>Salons</a>
+    <a href="#" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#9786;</div>Utilisateurs</a>
+    <a href="#" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#128197;</div>Reservations</a>
+    <a href="admin_avis.html" class="admin-sidebar-link active"><div class="admin-sidebar-icon">&#9733;</div>Avis<span class="admin-sidebar-badge danger">5</span></a>
+    <a href="admin_villes.html" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#127968;</div>Villes</a>
+    <div class="admin-sidebar-divider"></div>
+    <span class="admin-sidebar-section-label">Plateforme</span>
+    <a href="#" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#128269;</div>Signalements</a>
+    <a href="#" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#9881;</div>Configuration</a>
+    <a href="admin_statistiques.html" class="admin-sidebar-link"><div class="admin-sidebar-icon">&#128196;</div>Rapports</a>
+  </aside>
+
+  <main class="admin-main">
+
+    <div class="admin-page-header">
+      <div>
+        <div class="admin-page-title">Moderation des avis</div>
+        <div class="admin-page-subtitle">Verification et traitement des avis signales par les salons ou les clients</div>
+      </div>
+      <div class="admin-header-actions">
+        <button class="btn-admin-ghost">Exporter CSV</button>
+        <button class="btn-admin-dark" onclick="approuverTout()">&#10003; Approuver la selection</button>
+      </div>
+    </div>
+
+    <div class="admin-kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:1.8rem">
+      <div class="admin-kpi-card red">
+        <div class="admin-kpi-top"><div class="admin-kpi-label">Signales a traiter</div><div class="admin-kpi-icon kpi-icon-red">&#9888;</div></div>
+        <div class="admin-kpi-value">5</div>
+        <div class="admin-kpi-trend trend-neutral">Priorite haute</div>
+      </div>
+      <div class="admin-kpi-card gold">
+        <div class="admin-kpi-top"><div class="admin-kpi-label">En attente</div><div class="admin-kpi-icon kpi-icon-gold">&#8987;</div></div>
+        <div class="admin-kpi-value">12</div>
+        <div class="admin-kpi-trend trend-neutral">A moderer</div>
+      </div>
+      <div class="admin-kpi-card green">
+        <div class="admin-kpi-top"><div class="admin-kpi-label">Approuves ce mois</div><div class="admin-kpi-icon kpi-icon-green">&#10003;</div></div>
+        <div class="admin-kpi-value">284</div>
+        <div class="admin-kpi-trend trend-up">&#9650; +18% vs mois precedent</div>
+      </div>
+      <div class="admin-kpi-card blue">
+        <div class="admin-kpi-top"><div class="admin-kpi-label">Note moyenne plateforme</div><div class="admin-kpi-icon kpi-icon-blue">&#9733;</div></div>
+        <div class="admin-kpi-value">4.6</div>
+        <div class="admin-kpi-trend trend-up">&#9650; +0.1 ce mois</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 280px;gap:1.8rem;align-items:start">
+
+      <div>
+        <div class="avis-filter-bar">
+          <button class="avis-filter-tab on">Tous<span class="avis-filter-count yellow" style="background:rgba(255,255,255,.2);color:#fff">17</span></button>
+          <button class="avis-filter-tab">Signales<span class="avis-filter-count red">5</span></button>
+          <button class="avis-filter-tab">En attente<span class="avis-filter-count yellow">12</span></button>
+          <button class="avis-filter-tab">Approuves<span class="avis-filter-count green">284</span></button>
+          <button class="avis-filter-tab">Supprimes</button>
+        </div>
+
+        <div class="avis-mod-card signale">
+          <div class="avis-mod-top">
+            <div class="avis-mod-author">
+              <div class="avis-mod-av"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&q=80" alt="Karim"></div>
+              <div>
+                <div class="avis-mod-name">Karim Mansouri</div>
+                <div class="avis-mod-date">Publie le 13 mars 2026</div>
+                <div class="avis-mod-stars">&#9733;&#9733;&#9734;&#9734;&#9734;</div>
+              </div>
+            </div>
+            <div class="avis-mod-meta">
+              <span class="signal-badge rouge">&#9888; Signale · Contenu inapproprie</span>
+              <input type="checkbox" style="width:16px;height:16px;accent-color:var(--p4)">
+            </div>
+          </div>
+          <div class="avis-mod-body">
+            <div class="avis-mod-salon">
+              <div class="avis-mod-salon-ph"><img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=100&h=100&fit=crop&q=80" alt=""></div>
+              <div class="avis-mod-salon-name">&#128279; Elegance Coiffure — Agdal, Rabat</div>
+            </div>
+            <div class="avis-mod-text">"Service completement nul. La coiffeuse m'a parle en termes irrespectueux et a completement rate ma coupe. Je ne recommande absolument pas cet etablissement. [contenu censure par la moderation automatique]"</div>
+            <div class="signal-reason">
+              <div class="signal-reason-ic">&#9888;</div>
+              <div>
+                <div class="signal-reason-t">Motif du signalement</div>
+                <div class="signal-reason-s">Signale par le salon "Elegance Coiffure" le 14 mars 2026 — Motif : Langage offensant et diffamatoire envers le personnel. Le salon conteste les faits decrits.</div>
+              </div>
+            </div>
+          </div>
+          <div class="avis-mod-foot">
+            <div class="avis-mod-signal-by">Signale par : Elegance Coiffure · Il y a 2 jours</div>
+            <div class="avis-mod-actions">
+              <button class="btn-mod-ignore">Ignorer le signalement</button>
+              <button class="btn-mod-approve">&#10003; Maintenir l'avis</button>
+              <button class="btn-mod-delete">&#128465; Supprimer l'avis</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="avis-mod-card signale">
+          <div class="avis-mod-top">
+            <div class="avis-mod-author">
+              <div class="avis-mod-av"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&q=80" alt="Nadia"></div>
+              <div>
+                <div class="avis-mod-name">Nadia Hakimi</div>
+                <div class="avis-mod-date">Publie le 10 mars 2026</div>
+                <div class="avis-mod-stars">&#9733;&#9734;&#9734;&#9734;&#9734;</div>
+              </div>
+            </div>
+            <div class="avis-mod-meta">
+              <span class="signal-badge rouge">&#9888; Signale · Faux avis</span>
+              <input type="checkbox" style="width:16px;height:16px;accent-color:var(--p4)">
+            </div>
+          </div>
+          <div class="avis-mod-body">
+            <div class="avis-mod-salon">
+              <div class="avis-mod-salon-ph"><img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=100&h=100&fit=crop&q=80" alt=""></div>
+              <div class="avis-mod-salon-name">&#128279; L'Atelier Beaute — Souissi, Rabat</div>
+            </div>
+            <div class="avis-mod-text">"Salon ferme a mon arrivee sans prevenir. J'avais une reservation confirmee. Personne pour repondre au telephone. Tres mauvaise experience. Je demande un remboursement immediat."</div>
+            <div class="signal-reason">
+              <div class="signal-reason-ic">&#9888;</div>
+              <div>
+                <div class="signal-reason-t">Motif du signalement</div>
+                <div class="signal-reason-s">Signale par L'Atelier Beaute le 11 mars — Le salon affirme que la reservation avait ete annulee 48h avant et que la cliente en a ete informee par SMS.</div>
+              </div>
+            </div>
+          </div>
+          <div class="avis-mod-foot">
+            <div class="avis-mod-signal-by">Signale par : L'Atelier Beaute · Il y a 5 jours</div>
+            <div class="avis-mod-actions">
+              <button class="btn-mod-ignore">Ignorer le signalement</button>
+              <button class="btn-mod-approve">&#10003; Maintenir l'avis</button>
+              <button class="btn-mod-delete">&#128465; Supprimer l'avis</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="avis-mod-card en-attente">
+          <div class="avis-mod-top">
+            <div class="avis-mod-author">
+              <div class="avis-mod-av"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=80&h=80&fit=crop&q=80" alt="Sara"></div>
+              <div>
+                <div class="avis-mod-name">Sara Moukrim</div>
+                <div class="avis-mod-date">Publie le 12 mars 2026</div>
+                <div class="avis-mod-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+              </div>
+            </div>
+            <div class="avis-mod-meta">
+              <span class="signal-badge orange">&#8987; En attente de validation</span>
+              <input type="checkbox" style="width:16px;height:16px;accent-color:var(--p4)">
+            </div>
+          </div>
+          <div class="avis-mod-body">
+            <div class="avis-mod-salon">
+              <div class="avis-mod-salon-ph"><img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=100&h=100&fit=crop&q=80" alt=""></div>
+              <div class="avis-mod-salon-name">&#128279; Prestige Hair Studio — Hay Riad, Rabat</div>
+            </div>
+            <div class="avis-mod-text">"Tres bonne experience dans l'ensemble. La coiffeuse Fatima est vraiment professionnelle et a bien compris ma demande. Le cadre est agreable et propre. Je reviendrai sans hesitation pour mon prochain rendez-vous."</div>
+          </div>
+          <div class="avis-mod-foot">
+            <div class="avis-mod-signal-by">Premier avis de ce client · Compte cree il y a 3 jours</div>
+            <div class="avis-mod-actions">
+              <button class="btn-mod-ignore">Reporter</button>
+              <button class="btn-mod-approve">&#10003; Approuver</button>
+              <button class="btn-mod-delete">&#128465; Refuser</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="avis-mod-card approuve" style="opacity:.75">
+          <div class="avis-mod-top">
+            <div class="avis-mod-author">
+              <div class="avis-mod-av"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=80&h=80&fit=crop&q=80" alt="Imane"></div>
+              <div>
+                <div class="avis-mod-name">Imane Tazi</div>
+                <div class="avis-mod-date">Publie le 8 mars 2026</div>
+                <div class="avis-mod-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+              </div>
+            </div>
+            <div class="avis-mod-meta">
+              <span class="signal-badge vert">&#10003; Approuve</span>
+              <input type="checkbox" style="width:16px;height:16px;accent-color:var(--p4)">
+            </div>
+          </div>
+          <div class="avis-mod-body">
+            <div class="avis-mod-salon">
+              <div class="avis-mod-salon-ph"><img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=100&h=100&fit=crop&q=80" alt=""></div>
+              <div class="avis-mod-salon-name">&#128279; Elegance Coiffure — Agdal, Rabat</div>
+            </div>
+            <div class="avis-mod-text">"Excellente prestation comme toujours ! Fatima sait exactement ce que je veux sans que j'aie besoin de tout expliquer. Le salon est toujours impeccable et l'ambiance est tres agreable."</div>
+          </div>
+          <div class="avis-mod-foot">
+            <div class="avis-mod-signal-by">Approuve automatiquement le 9 mars 2026</div>
+            <div class="avis-mod-actions">
+              <button class="btn-mod-delete">&#128465; Supprimer</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div>
+        <div class="avis-sidebar-card">
+          <div class="avis-sidebar-head">Statistiques — Avis</div>
+          <div class="avis-sidebar-body">
+            <div class="pse-stat-row"><span class="pse-stat-k">Total avis</span><span class="pse-stat-v">1 892</span></div>
+            <div class="pse-stat-row"><span class="pse-stat-k">Note moy. plateforme</span><span class="pse-stat-v">&#9733; 4.6</span></div>
+            <div class="pse-stat-row"><span class="pse-stat-k">Avis 5 etoiles</span><span class="pse-stat-v green">68%</span></div>
+            <div class="pse-stat-row"><span class="pse-stat-k">Avis 1–2 etoiles</span><span class="pse-stat-v" style="color:#C04A3D">4%</span></div>
+            <div class="pse-stat-row"><span class="pse-stat-k">Taux de reponse salons</span><span class="pse-stat-v">72%</span></div>
+          </div>
+        </div>
+
+        <div class="avis-sidebar-card">
+          <div class="avis-sidebar-head">Regles de moderation</div>
+          <div class="avis-sidebar-body" style="font-size:.8rem;color:var(--ink-s);line-height:1.7">
+            <div class="tip"><div class="tip-ic">1</div><div class="tip-t">Les avis 1–2 etoiles sont soumis a validation manuelle avant publication.</div></div>
+            <div class="tip"><div class="tip-ic">2</div><div class="tip-t">Un avis signale par 2 salons differents est suspendu automatiquement.</div></div>
+            <div class="tip"><div class="tip-ic">3</div><div class="tip-t">Tout avis publie depuis un compte cree il y a moins de 7 jours est mis en attente.</div></div>
+            <div class="tip"><div class="tip-ic">4</div><div class="tip-t">La suppression d'un avis est irreversible et le client est notifie par email.</div></div>
+          </div>
+        </div>
+
+        <div class="avis-sidebar-card">
+          <div class="avis-sidebar-head">Salons les plus signales</div>
+          <div class="avis-sidebar-body">
+            <div class="pse-stat-row"><span class="pse-stat-k">Coiffure Diour Jamaa</span><span class="pse-stat-v" style="color:#C04A3D">3 signalements</span></div>
+            <div class="pse-stat-row"><span class="pse-stat-k">Elegance Coiffure</span><span class="pse-stat-v" style="color:#D4A844">2 signalements</span></div>
+            <div class="pse-stat-row"><span class="pse-stat-k">L'Atelier Beaute</span><span class="pse-stat-v" style="color:#D4A844">1 signalement</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<footer class="foot">
+  <div class="foot-bar">
+    <div class="fl">hello@Salonify.ma</div>
+    <div class="fm"><div class="fm-t">Pour plus d'informations</div><div class="fm-r"></div></div>
+    <div class="fr">+(212) 7 63456-7890</div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.avis-filter-tab').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.avis-filter-tab').forEach(function(x){x.classList.remove('on');});
+    this.classList.add('on');
+  });
+});
+document.querySelectorAll('.admin-topnav-tab').forEach(function(t){t.addEventListener('click',function(){document.querySelectorAll('.admin-topnav-tab').forEach(function(x){x.classList.remove('active');});this.classList.add('active');});});
+function approuverTout(){alert('Avis selectionnes approuves.');}
+</script>
+</body>
+</html>

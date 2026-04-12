@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#89986D">
+  <title>Mon Espace — Salonify</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-r1">
+    <a href="accueil.html" class="brand">
+      <div class="brand-box">
+         <img src="..\images\logo1.png" alt="Salonify Logo" class="logo-img">
+      </div>
+      <div>
+        <div class="brand-name">Salonify</div>
+        <div class="brand-sub">Reservation Beaute</div>
+      </div>
+    </a>
+    <button class="burger" id="brg"><span></span><span></span><span></span></button>
+    <div class="nav-acts">
+      <a href="mes_reservations.html" class="btn-log">Mes reservations</a>
+      <a href="connexion_inscription.html" class="btn-ins">Deconnexion</a>
+    </div>
+  </div>
+  <span class="nav-line"></span>
+  <div class="nav-r2">
+    <a href="accueil.html">Accueil</a>
+    <a href="villes.html">Emplacements</a>
+    <a href="mes_reservations.html">Mes reservations</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <nav class="mob" id="mm">
+    <a href="accueil.html">Accueil</a>
+    <a href="villes.html">Emplacements</a>
+    <a href="mes_reservations.html">Mes reservations</a>
+    <div class="mob-cta">
+      <a href="accueil.html" class="mc">Accueil</a>
+      <a href="connexion_inscription.html" class="mi">Deconnexion</a>
+    </div>
+  </nav>
+</header>
+
+<div class="client-dash-wrap">
+
+  <aside class="client-sidebar">
+    <div class="client-sidebar-profile">
+      <div class="sidebar-avatar-wrap">
+        <img class="sidebar-avatar-img" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&q=80" alt="Salma">
+        <div class="sidebar-avatar-edit">&#9998;</div>
+      </div>
+      <div>
+        <div class="sidebar-profile-name">Salma Benali</div>
+        <div class="sidebar-profile-email">salma.benali@email.com</div>
+        <div class="sidebar-level-badge">&#9733; Membre Gold</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="sidebar-nav-section">Principal</div>
+      <a href="#" class="sidebar-nav-link active">
+        <div class="sidebar-nav-icon">&#9632;</div>
+        Vue d'ensemble
+      </a>
+      <a href="mes_reservations.html" class="sidebar-nav-link">
+        <div class="sidebar-nav-icon">&#128197;</div>
+        Reservations
+        <span class="sidebar-nav-badge">2</span>
+      </a>
+      <a href="#" class="sidebar-nav-link">
+        <div class="sidebar-nav-icon">&#9733;</div>
+        Mes favoris
+      </a>
+      <a href="publication_avis.html" class="sidebar-nav-link">
+        <div class="sidebar-nav-icon">&#9733;</div>
+        Mes avis
+      </a>
+
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-nav-section">Compte</div>
+      <a href="mon_profil.html" class="sidebar-nav-link">
+        <div class="sidebar-nav-icon">&#9786;</div>
+        Mon profil
+      </a>
+      <a href="#" class="sidebar-nav-link">
+        <div class="sidebar-nav-icon">&#9993;</div>
+        Notifications
+        <span class="sidebar-nav-badge">3</span>
+      </a>
+      <a href="#" class="sidebar-nav-link">
+        <div class="sidebar-nav-icon">&#9881;</div>
+        Parametres
+      </a>
+
+      <div class="sidebar-divider"></div>
+      <a href="connexion_inscription.html" class="sidebar-nav-link" style="color:#8B2222">
+        <div class="sidebar-nav-icon" style="background:#FAD6D6;color:#8B2222">&#8594;</div>
+        Deconnexion
+      </a>
+    </nav>
+  </aside>
+
+  <main class="client-main">
+
+    <div class="dash-page-header">
+      <div>
+        <div class="dash-greeting">Bonjour, Salma &#128075;</div>
+        <div class="dash-date">Vendredi 13 mars 2026 &nbsp;·&nbsp; Membre depuis janvier 2025</div>
+      </div>
+      <a href="villes.html" class="btn-ol" style="padding:.62rem 1.5rem;font-size:.75rem">+ Nouvelle reservation</a>
+    </div>
+
+    <div class="dash-stats-row">
+      <div class="dash-stat-card green">
+        <div class="dash-stat-val">4</div>
+        <div class="dash-stat-lbl">Reservations</div>
+        <div class="dash-stat-sub">+1 ce mois</div>
+      </div>
+      <div class="dash-stat-card sage">
+        <div class="dash-stat-val">3</div>
+        <div class="dash-stat-lbl">Salons visites</div>
+        <div class="dash-stat-sub">Agdal, Souissi, Hay Riad</div>
+      </div>
+      <div class="dash-stat-card cream">
+        <div class="dash-stat-val">2</div>
+        <div class="dash-stat-lbl">Avis publies</div>
+        <div class="dash-stat-sub">Note moyenne donnee : 4.8</div>
+      </div>
+      <div class="dash-stat-card dark">
+        <div class="dash-stat-val">980</div>
+        <div class="dash-stat-lbl">Points fidelite</div>
+        <div class="dash-stat-sub">20 pts de Gold !</div>
+      </div>
+    </div>
+
+    <div class="dash-two-col">
+
+      <div>
+        <div class="dash-section-title">
+          Prochains rendez-vous
+          <a href="mes_reservations.html" class="dash-section-link">Voir tout</a>
+        </div>
+
+        <div class="upcoming-card">
+          <div class="upcoming-date-block">
+            <div class="upcoming-day">19</div>
+            <div class="upcoming-month">Mars</div>
+          </div>
+          <div>
+            <div class="upcoming-salon-name">Elegance Coiffure</div>
+            <div class="upcoming-service">Coupe femme &nbsp;·&nbsp; Fatima Z. &nbsp;·&nbsp; 45 min</div>
+            <div style="margin-top:.3rem"><span class="upcoming-status confirmed">&#10003; Confirmee</span></div>
+          </div>
+          <div class="upcoming-time">10h00</div>
+        </div>
+
+        <div class="upcoming-card">
+          <div class="upcoming-date-block">
+            <div class="upcoming-day">22</div>
+            <div class="upcoming-month">Mars</div>
+          </div>
+          <div>
+            <div class="upcoming-salon-name">L'Atelier Beaute</div>
+            <div class="upcoming-service">Soin visage &nbsp;·&nbsp; Sara M. &nbsp;·&nbsp; 60 min</div>
+            <div style="margin-top:.3rem"><span class="upcoming-status pending">&#9679; En attente</span></div>
+          </div>
+          <div class="upcoming-time">14h30</div>
+        </div>
+
+        <div style="background:var(--p1);border:1.5px dashed var(--p3);padding:1.4rem;text-align:center;margin-top:.8rem">
+          <div style="font-size:.84rem;color:var(--ink-m);margin-bottom:.7rem">Aucun autre rendez-vous planifie</div>
+          <a href="villes.html" class="btn-ol" style="padding:.56rem 1.4rem;font-size:.74rem">Reserver un salon</a>
+        </div>
+
+        <div class="loyalty-card" style="margin-top:1.8rem">
+          <div class="loyalty-title">Programme Fidelite &#9733;</div>
+          <div class="loyalty-subtitle">Il vous manque 20 points pour atteindre le statut Platinum</div>
+          <div class="loyalty-progress-track">
+            <div class="loyalty-progress-fill" style="width:98%"></div>
+          </div>
+          <div class="loyalty-progress-labels">
+            <span class="loyalty-progress-current">980 pts</span>
+            <span>Gold</span>
+            <span>1000 pts = Platinum</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="dash-section-title" style="margin-top:0">
+          Mes favoris
+          <a href="#" class="dash-section-link">Voir tout</a>
+        </div>
+        <div class="favorites-list">
+          <a href="profil_salon.html" class="fav-item">
+            <div class="fav-photo"><img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=100&h=100&fit=crop&q=80" alt="Elegance Coiffure"></div>
+            <div>
+              <div class="fav-name">Elegance Coiffure</div>
+              <div class="fav-location">Agdal, Rabat</div>
+            </div>
+            <div class="fav-stars">&#9733; 4.8</div>
+          </a>
+          <a href="profil_salon.html" class="fav-item">
+            <div class="fav-photo"><img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=100&h=100&fit=crop&q=80" alt="L'Atelier Beaute"></div>
+            <div>
+              <div class="fav-name">L'Atelier Beaute</div>
+              <div class="fav-location">Souissi, Rabat</div>
+            </div>
+            <div class="fav-stars">&#9733; 4.9</div>
+          </a>
+          <a href="profil_salon.html" class="fav-item">
+            <div class="fav-photo"><img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=100&h=100&fit=crop&q=80" alt="Prestige Hair Studio"></div>
+            <div>
+              <div class="fav-name">Prestige Hair Studio</div>
+              <div class="fav-location">Hay Riad, Rabat</div>
+            </div>
+            <div class="fav-stars">&#9733; 4.7</div>
+          </a>
+        </div>
+
+        <div class="dash-section-title" style="margin-top:1.8rem">
+          Activite recente
+        </div>
+        <div class="activity-list">
+          <div class="activity-item">
+            <div class="activity-dot green"></div>
+            <div>
+              <div class="activity-text">Reservation confirmee chez Elegance Coiffure pour le 19 mars</div>
+              <div class="activity-time">Aujourd'hui, 09:14</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot yellow"></div>
+            <div>
+              <div class="activity-text">Avis publie sur Prestige Hair Studio — 5 etoiles</div>
+              <div class="activity-time">Il y a 3 jours</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot green"></div>
+            <div>
+              <div class="activity-text">Reservation effectuee a L'Atelier Beaute — Soin visage</div>
+              <div class="activity-time">Il y a 5 jours</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot grey"></div>
+            <div>
+              <div class="activity-text">Reservation annulee chez Studio Lumiere</div>
+              <div class="activity-time">Il y a 16 jours</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<footer class="foot">
+  <div class="foot-bar">
+    <div class="fl">hello@Salonify.ma</div>
+    <div class="fm"><div class="fm-t">Pour plus d'informations</div><div class="fm-r"></div></div>
+    <div class="fr">+(212) 7 63456-7890</div>
+  </div>
+</footer>
+
+<script>
+  var burger = document.getElementById('brg');
+  var menu = document.getElementById('mm');
+  burger.addEventListener('click', function () { menu.classList.toggle('open'); });
+</script>
+
+</body>
+</html>

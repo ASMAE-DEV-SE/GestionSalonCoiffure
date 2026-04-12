@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#89986D">
+  <title>Reservation — Salonify</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-r1">
+    <a href="accueil.html" class="brand">
+      <div class="brand-box">
+        <img src="..\images\logo1.png" alt="Salonify Logo" class="logo-img">
+      </div>
+      <div>
+        <div class="brand-name">Salonify</div>
+        <div class="brand-sub">Reservation Beaute</div>
+      </div>
+    </a>
+    <button class="burger" id="brg"><span></span><span></span><span></span></button>
+    <div class="nav-acts">
+      <a href="connexion_inscription.html" class="btn-log">Connexion</a>
+      <a href="connexion_inscription.html" class="btn-ins">Inscription</a>
+    </div>
+  </div>
+  <span class="nav-line"></span>
+  <div class="nav-r2">
+    <a href="accueil.html" class="on">Accueil</a>
+    <a href="#">A propos</a>
+    <a href="liste_salons.html">Emplacements</a>
+    <a href="#">Galerie</a>
+    <a href="#">Contact</a>
+  </div>
+  <nav class="mob" id="mm">
+    <a href="accueil.html" class="on">Accueil</a>
+    <a href="#">A propos</a>
+    <a href="liste_salons.html">Emplacements</a>
+    <a href="#">Galerie</a>
+    <a href="#">Contact</a>
+    <div class="mob-cta">
+      <a href="connexion_inscription.html" class="mc">Connexion</a>
+      <a href="connexion_inscription.html" class="mi">Inscription</a>
+    </div>
+  </nav>
+</header>
+
+<div class="booking-page-header">
+  <div class="wrap">
+    <h1>Reserver un rendez-vous</h1>
+    <div class="booking-page-subtitle">Elegance Coiffure &nbsp;—&nbsp; Agdal, Rabat</div>
+  </div>
+</div>
+
+<div class="stepper-bar-wrap">
+  <div class="stepper-bar">
+    <div class="step done">
+      <div class="step-dot">&#10003;</div>
+      <div class="step-label">Service</div>
+    </div>
+    <div class="step done">
+      <div class="step-dot">&#10003;</div>
+      <div class="step-label">Creneau</div>
+    </div>
+    <div class="step current">
+      <div class="step-dot">3</div>
+      <div class="step-label">Vos infos</div>
+    </div>
+    <div class="step">
+      <div class="step-dot">4</div>
+      <div class="step-label">Confirmation</div>
+    </div>
+  </div>
+</div>
+
+<div class="wizard-layout">
+
+  <div>
+    <div class="completed-step">
+      <div>
+        <div class="completed-step-label">Etape 1 — Service</div>
+        <div class="completed-step-value">Coupe femme</div>
+        <div class="completed-step-meta">45 min &nbsp;·&nbsp; Fatima Z.</div>
+      </div>
+      <div class="completed-step-right">
+        <div class="completed-step-price">150 MAD</div>
+        <button class="btn-edit-step">Modifier</button>
+      </div>
+    </div>
+
+    <div class="completed-step">
+      <div>
+        <div class="completed-step-label">Etape 2 — Creneau</div>
+        <div class="completed-step-value">Mercredi 19 mars 2026</div>
+        <div class="completed-step-meta">10h00 — 10h45</div>
+      </div>
+      <div class="completed-step-right">
+        <button class="btn-edit-step">Modifier</button>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-title">Vos informations</div>
+      <div class="form-card-subtitle">Ces informations seront utilisees pour confirmer votre reservation par SMS et email.</div>
+
+      <div class="row-two-col">
+        <div class="form-group">
+          <label>Prenom *</label>
+          <input type="text" class="form-input" placeholder="Prenom" value="Salma">
+        </div>
+        <div class="form-group">
+          <label>Nom *</label>
+          <input type="text" class="form-input" placeholder="Nom" value="Benali">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Telephone *</label>
+        <input type="tel" class="form-input" placeholder="+212 6 XX XX XX XX" value="+212 6 12 34 56 78">
+      </div>
+
+      <div class="form-group">
+        <label>Email *</label>
+        <input type="email" class="form-input" placeholder="votre@email.com" value="salma.benali@email.com">
+      </div>
+
+      <div class="form-group">
+        <label>Note pour le styliste <span class="optional">(optionnel)</span></label>
+        <textarea class="form-input" placeholder="Ex: cheveux tres fins, allergie certains produits, coupe precise..."></textarea>
+      </div>
+
+      <div class="total-box">
+        <div class="total-row">
+          <span class="total-key">Coupe femme</span>
+          <span class="total-value">150 MAD</span>
+        </div>
+        <div class="total-row">
+          <span class="total-key">Frais de reservation</span>
+          <span class="total-value free">Gratuit</span>
+        </div>
+        <div class="total-final">
+          <span class="total-final-label">Total a regler au salon</span>
+          <span class="total-final-amount">150 MAD</span>
+        </div>
+      </div>
+
+      <div class="wizard-navigation">
+        <a href="profil_salon.html" class="btn-wizard-back">&#8592; Retour</a>
+        <a href="confirmation.html" class="btn-wizard-confirm">Confirmer la reservation &#8594;</a>
+      </div>
+    </div>
+  </div>
+
+  <aside>
+    <div class="recap-sidebar">
+      <div class="recap-header">
+        <div class="recap-header-title">Recapitulatif de la reservation</div>
+      </div>
+      <div class="recap-body">
+        <div class="recap-salon">
+          <div class="recap-salon-photo">
+            <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=120&h=120&fit=crop&q=80" alt="Salon">
+          </div>
+          <div>
+            <div class="recap-salon-name">Elegance Coiffure</div>
+            <div class="recap-salon-location">Agdal, Rabat &nbsp;·&nbsp; 4.8 &#9733;</div>
+          </div>
+        </div>
+        <div class="recap-row"><span class="recap-key">Service</span><span class="recap-value">Coupe femme</span></div>
+        <div class="recap-row"><span class="recap-key">Styliste</span><span class="recap-value">Fatima Z.</span></div>
+        <div class="recap-row"><span class="recap-key">Duree</span><span class="recap-value">45 min</span></div>
+        <div class="recap-row"><span class="recap-key">Date</span><span class="recap-value">Mer. 19 mars 2026</span></div>
+        <div class="recap-row"><span class="recap-key">Heure</span><span class="recap-value">10h00 — 10h45</span></div>
+        <div class="recap-total-row">
+          <span class="recap-total-label">Total</span>
+          <span class="recap-total-amount">150 MAD</span>
+        </div>
+        <a href="confirmation.html" class="btn-recap-confirm">Confirmer</a>
+      </div>
+    </div>
+
+    <div class="cancellation-box">
+      <div class="cancellation-title">Politique d'annulation</div>
+      <p class="cancellation-text">Annulation gratuite jusqu'a <strong>24h avant</strong> le rendez-vous. Apres ce delai, des frais peuvent s'appliquer.</p>
+    </div>
+  </aside>
+
+</div>
+
+<footer class="foot">
+  <div class="foot-bar">
+    <div class="fl">hello@Salonify.ma</div>
+    <div class="fm"><div class="fm-t">Pour plus d'informations</div><div class="fm-r"></div></div>
+    <div class="fr">+(212) 7 63456-7890</div>
+  </div>
+</footer>
+
+<script>
+  var burger = document.getElementById('brg');
+  var menu = document.getElementById('mm');
+  burger.addEventListener('click', function () { menu.classList.toggle('open'); });
+</script>
+
+</body>
+</html>

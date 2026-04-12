@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#89986D">
+  <title>Confirmation de reservation — Salonify</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-r1">
+    <a href="accueil.html" class="brand">
+      <div class="brand-box">
+        <img src="..\images\logo1.png" alt="Salonify Logo" class="logo-img">
+      </div>
+      <div>
+        <div class="brand-name">Salonify</div>
+        <div class="brand-sub">Reservation Beaute</div>
+      </div>
+    </a>
+    <button class="burger" id="brg"><span></span><span></span><span></span></button>
+    <div class="nav-acts">
+      <a href="connexion_inscription.html" class="btn-log">Connexion</a>
+      <a href="connexion_inscription.html" class="btn-ins">Inscription</a>
+    </div>
+  </div>
+  <span class="nav-line"></span>
+  <div class="nav-r2">
+    <a href="accueil.html" class="on">Accueil</a>
+    <a href="#">A propos</a>
+    <a href="liste_salons.html">Emplacements</a>
+    <a href="#">Galerie</a>
+    <a href="#">Contact</a>
+  </div>
+  <nav class="mob" id="mm">
+    <a href="accueil.html" class="on">Accueil</a>
+    <a href="#">A propos</a>
+    <a href="liste_salons.html">Emplacements</a>
+    <a href="#">Galerie</a>
+    <a href="#">Contact</a>
+    <div class="mob-cta">
+      <a href="connexion_inscription.html" class="mc">Connexion</a>
+      <a href="connexion_inscription.html" class="mi">Inscription</a>
+    </div>
+  </nav>
+</header>
+
+<div class="page-header">
+  <div class="wrap">
+    <h1>Reservation confirmee</h1>
+    <div class="page-header-sub">Elegance Coiffure &nbsp;—&nbsp; Agdal, Rabat</div>
+  </div>
+</div>
+
+<div class="stepper-wrap">
+  <div class="stepper-bar">
+    <div class="step"><div class="step-dot">&#10003;</div><div class="step-label">Service</div></div>
+    <div class="step"><div class="step-dot">&#10003;</div><div class="step-label">Creneau</div></div>
+    <div class="step"><div class="step-dot">&#10003;</div><div class="step-label">Vos infos</div></div>
+    <div class="step"><div class="step-dot">&#10003;</div><div class="step-label">Confirmation</div></div>
+  </div>
+</div>
+
+<div class="confirm-hero">
+  <div class="confirm-pulse">
+    <div class="confirm-check">&#10003;</div>
+  </div>
+  <div class="confirm-title">Votre rendez-vous<br>est <em>confirme</em> !</div>
+  <p class="confirm-desc">Un SMS de confirmation a ete envoye au +212 6 12 34 56 78. Vous recevrez un rappel 24h avant votre rendez-vous.</p>
+  <div class="confirm-ref">
+    <span class="confirm-ref-label">Reference de reservation</span>
+    #SLF-2026-04821
+  </div>
+</div>
+
+<div class="confirm-layout">
+  <div>
+
+    <div class="notif-banner">
+      <div class="notif-icon">&#9993;</div>
+      <div>
+        <div class="notif-title">Confirmation envoyee</div>
+        <p class="notif-text">Un email recapitulatif a ete envoye a <strong>salma.benali@email.com</strong>. Conservez votre reference <strong>#SLF-2026-04821</strong> pour toute modification.</p>
+      </div>
+    </div>
+
+    <div class="recap-card">
+      <div class="recap-head">
+        <div class="recap-head-title">Recapitulatif complet</div>
+      </div>
+      <div class="recap-salon">
+        <div class="recap-salon-photo">
+          <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=160&h=160&fit=crop&q=80" alt="Salon">
+        </div>
+        <div>
+          <div class="salon-name">Elegance Coiffure</div>
+          <div class="salon-address">12, Rue Ibn Khaldoun, Agdal, Rabat</div>
+          <div class="salon-rating">&#9733; 4.8 &nbsp;·&nbsp; 86 avis</div>
+        </div>
+      </div>
+      <div class="recap-details-grid">
+        <div class="recap-detail-cell">
+          <div class="detail-label">Service</div>
+          <div class="detail-value">Coupe femme</div>
+          <div class="detail-sub">45 minutes</div>
+        </div>
+        <div class="recap-detail-cell">
+          <div class="detail-label">Styliste</div>
+          <div class="detail-value">Fatima Z.</div>
+          <div class="detail-sub">Specialiste coupe</div>
+        </div>
+        <div class="recap-detail-cell">
+          <div class="detail-label">Date &amp; Heure</div>
+          <div class="detail-value">Mer. 19 mars</div>
+          <div class="detail-sub">10h00 — 10h45</div>
+        </div>
+      </div>
+      <div class="recap-client">
+        <div>
+          <div class="client-label">Client</div>
+          <div class="client-value">Salma Benali</div>
+        </div>
+        <div>
+          <div class="client-label">Telephone</div>
+          <div class="client-value">+212 6 12 34 56 78</div>
+        </div>
+      </div>
+      <div class="recap-total">
+        <div>
+          <div class="total-label">Total a regler au salon</div>
+          <div class="total-note">Paiement sur place uniquement — aucun debit en ligne</div>
+        </div>
+        <div class="total-amount">150 MAD</div>
+      </div>
+    </div>
+
+    <div class="confirm-actions">
+      <a href="mes_reservations.html" class="btn-dark">Mes reservations</a>
+      <a href="#" class="btn-outline-green">Telecharger PDF</a>
+      <a href="liste_salons.html" class="btn-outline-light">Reserver un autre soin</a>
+    </div>
+
+    <div class="next-steps-card">
+      <div class="next-steps-head">
+        <div class="next-steps-title">Que se passe-t-il maintenant ?</div>
+      </div>
+      <div class="next-step-item">
+        <div class="step-number">1</div>
+        <div>
+          <div class="step-item-title">Confirmation par SMS</div>
+          <div class="step-item-desc">Vous venez de recevoir un SMS au +212 6 12 34 56 78 avec tous les details de votre rendez-vous.</div>
+        </div>
+      </div>
+      <div class="next-step-item">
+        <div class="step-number">2</div>
+        <div>
+          <div class="step-item-title">Rappel automatique 24h avant</div>
+          <div class="step-item-desc">Un rappel vous sera envoye le mardi 18 mars 2026 a 10h00 pour vous prevenir de votre rendez-vous.</div>
+        </div>
+      </div>
+      <div class="next-step-item">
+        <div class="step-number">3</div>
+        <div>
+          <div class="step-item-title">Presentez-vous au salon</div>
+          <div class="step-item-desc">Arrivez 5 minutes avant votre heure de rendez-vous. Indiquez votre reference <strong>#SLF-2026-04821</strong> a la reception.</div>
+        </div>
+      </div>
+      <div class="next-step-item">
+        <div class="step-number">4</div>
+        <div>
+          <div class="step-item-title">Partagez votre avis</div>
+          <div class="step-item-desc">Apres votre visite, pensez a laisser un avis pour aider les autres clients et la communaute Salonify.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <aside>
+    <div class="sidebar-map">
+      <div class="map-image">
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=320&fit=crop&q=80" alt="Agdal Rabat">
+        <div class="map-overlay">
+          <div class="map-location-label">&#9679; Agdal, Rabat</div>
+        </div>
+      </div>
+      <div class="map-body">
+        <div class="map-salon-name">Elegance Coiffure</div>
+        <div class="map-info-row">
+          <div class="map-icon">&#9679;</div>
+          <div class="map-info-text">12, Rue Ibn Khaldoun<br>Agdal, Rabat 10080</div>
+        </div>
+        <div class="map-info-row">
+          <div class="map-icon">&#9743;</div>
+          <div class="map-info-text">+212 5 37 XX XX XX</div>
+        </div>
+        <div class="map-info-row">
+          <div class="map-icon">&#9200;</div>
+          <div class="map-info-text">
+            Mer. 9h00 — 19h00<br>
+            <span style="color:#89986D;font-weight:700">Ouvert aujourd'hui</span>
+          </div>
+        </div>
+        <div class="map-cta">
+          <a href="profil_salon.html">Voir la fiche du salon</a>
+        </div>
+      </div>
+    </div>
+    <div class="share-card">
+      <div class="share-title">Partager ce rendez-vous</div>
+      <div class="share-buttons">
+        <button class="share-btn">WhatsApp</button>
+        <button class="share-btn">Email</button>
+        <button class="share-btn">Copier le lien</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<footer class="foot">
+  <div class="foot-bar">
+    <div class="fl">hello@Salonify.ma</div>
+    <div class="fm">
+      <div class="fm-t">Pour plus d'informations</div>
+      <div class="fm-r"></div>
+    </div>
+    <div class="fr">+(212) 7 63456-7890</div>
+  </div>
+</footer>
+
+<script>
+  var burger = document.getElementById('brg');
+  var menu = document.getElementById('mm');
+  burger.addEventListener('click', function () {
+    menu.classList.toggle('open');
+  });
+</script>
+
+</body>
+</html>

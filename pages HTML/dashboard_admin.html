@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration — Salonify</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="admin-topbar">
+  <div class="admin-topbar-inner">
+    <a href="accueil.html" class="admin-brand">
+      <div class="admin-brand-icon">S</div>
+      <div><div class="admin-brand-name">Salonify</div><div class="admin-brand-sub">Administration</div></div>
+    </a>
+    <nav class="admin-topnav">
+      <a href="#" class="admin-topnav-tab active">Vue generale</a>
+      <a href="#" class="admin-topnav-tab">Salons</a>
+      <a href="#" class="admin-topnav-tab">Utilisateurs</a>
+      <a href="#" class="admin-topnav-tab">Reservations</a>
+      <a href="#" class="admin-topnav-tab">Avis</a>
+      <a href="#" class="admin-topnav-tab">Parametres</a>
+    </nav>
+    <div class="admin-topbar-right">
+      <div class="admin-notif-btn">&#9993;<div class="admin-notif-dot"></div></div>
+      <div class="admin-user-chip">
+        <div class="admin-user-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&q=80" alt="Admin"></div>
+        <div class="admin-user-name">Admin Salonify</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="admin-layout">
+
+  <aside class="admin-sidebar">
+    <span class="admin-sidebar-section-label">Vue d'ensemble</span>
+    <a href="#" class="admin-sidebar-link active">
+      <div class="admin-sidebar-icon">&#9962;</div>Tableau de bord
+    </a>
+    <a href="#" class="admin-sidebar-link">
+      <div class="admin-sidebar-icon">&#9830;</div>Statistiques
+    </a>
+
+    <div class="admin-sidebar-divider"></div>
+    <span class="admin-sidebar-section-label">Gestion</span>
+
+    <a href="#" class="admin-sidebar-link">
+      <div class="admin-sidebar-icon">&#9986;</div>Salons
+      <span class="admin-sidebar-badge">2</span>
+    </a>
+    <a href="#" class="admin-sidebar-link">
+      <div class="admin-sidebar-icon">&#9786;</div>Utilisateurs
+    </a>
+    <a href="#" class="admin-sidebar-link">
+      <div class="admin-sidebar-icon">&#128197;</div>Reservations
+    </a>
+    <a href="#" class="admin-sidebar-link">
+      <div class="admin-sidebar-icon">&#9733;</div>Avis
+      <span class="admin-sidebar-badge danger">5</span>
+    </a>
+
+    <div class="admin-sidebar-divider"></div>
+    <span class="admin-sidebar-section-label">Plateforme</span>
+
+    <a href="#" class="admin-sidebar-link">
+      <div class="admin-sidebar-icon">&#128269;</div>Signalements
+    </a>
+    <a href="#" class="admin-sidebar-link">
+      <div class="admin-sidebar-icon">&#9881;</div>Configuration
+    </a>
+    <a href="#" class="admin-sidebar-link">
+      <div class="admin-sidebar-icon">&#128196;</div>Rapports
+    </a>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-page-header">
+      <div>
+        <div class="admin-page-title">Vue generale</div>
+        <div class="admin-page-subtitle">Plateforme Salonify Rabat &nbsp;·&nbsp; Vendredi 13 mars 2026</div>
+      </div>
+      <div class="admin-header-actions">
+        <a href="#" class="btn-admin-ghost">Exporter CSV</a>
+        <a href="#" class="btn-admin-dark">+ Ajouter un salon</a>
+      </div>
+    </div>
+
+    <div class="admin-kpi-grid">
+      <div class="admin-kpi-card green">
+        <div class="admin-kpi-top">
+          <div class="admin-kpi-label">Salons actifs</div>
+          <div class="admin-kpi-icon kpi-icon-green">&#9830;</div>
+        </div>
+        <div class="admin-kpi-value">50</div>
+        <div class="admin-kpi-trend trend-up">&#9650; +3 ce mois</div>
+      </div>
+      <div class="admin-kpi-card blue">
+        <div class="admin-kpi-top">
+          <div class="admin-kpi-label">Utilisateurs inscrits</div>
+          <div class="admin-kpi-icon kpi-icon-blue">&#9786;</div>
+        </div>
+        <div class="admin-kpi-value">1 284</div>
+        <div class="admin-kpi-trend trend-up">&#9650; +142 ce mois</div>
+      </div>
+      <div class="admin-kpi-card gold">
+        <div class="admin-kpi-top">
+          <div class="admin-kpi-label">Reservations totales</div>
+          <div class="admin-kpi-icon kpi-icon-gold">&#128197;</div>
+        </div>
+        <div class="admin-kpi-value">3 870</div>
+        <div class="admin-kpi-trend trend-up">&#9650; +18% ce mois</div>
+      </div>
+      <div class="admin-kpi-card red">
+        <div class="admin-kpi-top">
+          <div class="admin-kpi-label">Avis a moderer</div>
+          <div class="admin-kpi-icon kpi-icon-red">&#9733;</div>
+        </div>
+        <div class="admin-kpi-value">5</div>
+        <div class="admin-kpi-trend trend-neutral">A traiter</div>
+      </div>
+    </div>
+
+    <div class="admin-two-col">
+      <div class="admin-table-card">
+        <div class="admin-table-header">
+          <div class="admin-table-title">Salons — apercu</div>
+          <a href="#" class="admin-table-link">Tous les salons</a>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr><th>Salon</th><th>Quartier</th><th>Note</th><th>Reserv.</th><th>Statut</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Elegance Coiffure</strong></td><td>Agdal</td><td>&#9733; 4.8</td><td>186</td><td><span class="admin-status-badge asb-ok">Actif</span></td><td><button class="admin-table-action">Editer</button></td></tr>
+            <tr><td><strong>Prestige Hair Studio</strong></td><td>Hay Riad</td><td>&#9733; 4.7</td><td>142</td><td><span class="admin-status-badge asb-ok">Actif</span></td><td><button class="admin-table-action">Editer</button></td></tr>
+            <tr><td><strong>L'Atelier Beaute</strong></td><td>Souissi</td><td>&#9733; 4.9</td><td>208</td><td><span class="admin-status-badge asb-ok">Actif</span></td><td><button class="admin-table-action">Editer</button></td></tr>
+            <tr><td><strong>Studio Beaute Medina</strong></td><td>Hassan</td><td>—</td><td>0</td><td><span class="admin-status-badge asb-pending">En attente</span></td><td><button class="admin-table-action">Valider</button></td></tr>
+            <tr><td><strong>Coiffure Diour Jamaa</strong></td><td>Diour</td><td>&#9733; 3.8</td><td>54</td><td><span class="admin-status-badge asb-sus">Suspendu</span></td><td><button class="admin-table-action">Revoir</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <div class="admin-action-panel">
+          <div class="admin-action-header">Actions a traiter</div>
+          <div class="admin-action-item">
+            <div class="admin-action-dot dot-warn"></div>
+            <div class="admin-action-text"><div class="admin-action-title">Studio Beaute Medina</div><div class="admin-action-sub">Demande d'inscription salon</div></div>
+            <button class="admin-action-btn aab-green">Valider</button>
+          </div>
+          <div class="admin-action-item">
+            <div class="admin-action-dot dot-alert"></div>
+            <div class="admin-action-text"><div class="admin-action-title">Avis de Karim M.</div><div class="admin-action-sub">Signale comme inapproprie</div></div>
+            <button class="admin-action-btn aab-red">Moderer</button>
+          </div>
+          <div class="admin-action-item">
+            <div class="admin-action-dot dot-info"></div>
+            <div class="admin-action-text"><div class="admin-action-title">Coiffure Diour Jamaa</div><div class="admin-action-sub">Profil incomplet depuis 30j</div></div>
+            <button class="admin-action-btn aab-green">Relancer</button>
+          </div>
+          <div class="admin-action-item">
+            <div class="admin-action-dot dot-alert"></div>
+            <div class="admin-action-text"><div class="admin-action-title">4 avis en attente</div><div class="admin-action-sub">Moderation requise</div></div>
+            <button class="admin-action-btn aab-green">Voir</button>
+          </div>
+          <div class="admin-action-item">
+            <div class="admin-action-dot dot-alert"></div>
+            <div class="admin-action-text"><div class="admin-action-title">Nadia H. — compte bloque</div><div class="admin-action-sub">3 tentatives echouees</div></div>
+            <button class="admin-action-btn aab-red">Debloquer</button>
+          </div>
+        </div>
+
+        <div class="coverage-card">
+          <div class="coverage-title">Rabat — Couverture par quartier</div>
+          <div class="coverage-row"><span class="coverage-label">Agdal</span><div class="coverage-track"><div class="coverage-fill" style="width:72%"></div></div><span class="coverage-count">8</span></div>
+          <div class="coverage-row"><span class="coverage-label">Centre Ville</span><div class="coverage-track"><div class="coverage-fill" style="width:81%"></div></div><span class="coverage-count">9</span></div>
+          <div class="coverage-row"><span class="coverage-label">Souissi</span><div class="coverage-track"><div class="coverage-fill" style="width:63%"></div></div><span class="coverage-count">7</span></div>
+          <div class="coverage-row"><span class="coverage-label">Hay Riad</span><div class="coverage-track"><div class="coverage-fill" style="width:54%"></div></div><span class="coverage-count">6</span></div>
+          <div class="coverage-row"><span class="coverage-label">Hassan</span><div class="coverage-track"><div class="coverage-fill" style="width:45%"></div></div><span class="coverage-count">5</span></div>
+          <div class="coverage-row"><span class="coverage-label">Ocean</span><div class="coverage-track"><div class="coverage-fill" style="width:36%"></div></div><span class="coverage-count">4</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-two-col-equal">
+      <div class="admin-table-card">
+        <div class="admin-table-header">
+          <div class="admin-table-title">Derniers inscrits</div>
+          <a href="#" class="admin-table-link">Tous</a>
+        </div>
+        <table class="admin-table">
+          <thead><tr><th>Utilisateur</th><th>Role</th><th>Date</th><th>Statut</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Salma Benali</strong></td><td>Client</td><td>Aujourd'hui</td><td><span class="admin-status-badge asb-ok">Actif</span></td></tr>
+            <tr><td><strong>Studio Beaute</strong></td><td>Salon</td><td>Hier</td><td><span class="admin-status-badge asb-pending">En attente</span></td></tr>
+            <tr><td><strong>Yassine Brahim</strong></td><td>Client</td><td>12 mars</td><td><span class="admin-status-badge asb-ok">Actif</span></td></tr>
+            <tr><td><strong>Nadia Hakimi</strong></td><td>Client</td><td>11 mars</td><td><span class="admin-status-badge asb-sus">Bloque</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="admin-table-card">
+        <div class="admin-table-header">
+          <div class="admin-table-title">Reservations recentes</div>
+          <a href="#" class="admin-table-link">Toutes</a>
+        </div>
+        <table class="admin-table">
+          <thead><tr><th>Client</th><th>Salon</th><th>Date</th><th>Statut</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Salma B.</strong></td><td>Elegance</td><td>Auj. 10h</td><td><span class="admin-status-badge asb-ok">Confirmee</span></td></tr>
+            <tr><td><strong>Karim M.</strong></td><td>Elegance</td><td>Auj. 11h30</td><td><span class="admin-status-badge asb-ok">Confirmee</span></td></tr>
+            <tr><td><strong>Nadia H.</strong></td><td>L'Atelier</td><td>22 mars</td><td><span class="admin-status-badge asb-pending">En attente</span></td></tr>
+            <tr><td><strong>Imane T.</strong></td><td>Prestige</td><td>20 mars</td><td><span class="admin-status-badge asb-ok">Confirmee</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer class="foot">
+  <div class="foot-bar">
+    <div class="fl">hello@Salonify.ma</div>
+    <div class="fm"><div class="fm-t">Pour plus d'informations</div><div class="fm-r"></div></div>
+    <div class="fr">+(212) 7 63456-7890</div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.admin-topnav-tab').forEach(function(t){
+    t.addEventListener('click',function(){
+      document.querySelectorAll('.admin-topnav-tab').forEach(function(x){x.classList.remove('active');});
+      this.classList.add('active');
+    });
+  });
+  document.querySelectorAll('.admin-sidebar-link').forEach(function(l){
+    l.addEventListener('click',function(e){
+      document.querySelectorAll('.admin-sidebar-link').forEach(function(x){x.classList.remove('active');});
+      this.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
