@@ -53,10 +53,13 @@ class DashboardController extends Controller
                            )->count(),
         ];
 
-        // Avis en attente de publication (réservations terminées sans avis)
+        // Avis en attente — terminées OU confirmées avec date passée (cron non exécuté)
         $rdvSansAvis = Reservation::with(['salon', 'service'])
             ->where('client_id', $user->id)
-            ->where('statut', 'terminee')
+            ->where(fn($q) => $q
+                ->where('statut', 'terminee')
+                ->orWhere(fn($q2) => $q2->where('statut', 'confirmee')->where('date_heure', '<', now()))
+            )
             ->doesntHave('avis')
             ->orderByDesc('date_heure')
             ->limit(3)

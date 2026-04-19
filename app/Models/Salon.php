@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Str;
 
 class Salon extends Model
@@ -156,10 +157,32 @@ class Salon extends Model
 
     public function getPhotoUrlAttribute(): string
     {
-        if ($this->photo && file_exists(storage_path('app/public/' . $this->photo))) {
-            return asset('storage/' . $this->photo);
+        return $this->resolvePhotoUrl($this->photo, 'images/salon-placeholder.jpg');
+    }
+
+    private function resolvePhotoUrl(?string $photo, string $defaultAsset): string
+    {
+        if ($photo) {
+            $storagePath = storage_path('app/public/' . $photo);
+            if (file_exists($storagePath)) {
+                return asset('storage/' . $photo);
+            }
+
+            $publicPath = public_path('images/' . $photo);
+            if (file_exists($publicPath)) {
+                return asset('images/' . $photo);
+            }
+
+            $rootPath = base_path('images/' . $photo);
+            if (file_exists($rootPath)) {
+                if (! file_exists($publicPath)) {
+                    @copy($rootPath, $publicPath);
+                }
+                return asset('images/' . $photo);
+            }
         }
-        return asset('images/salon-placeholder.jpg');
+
+        return asset($defaultAsset);
     }
 
     /*
@@ -253,9 +276,16 @@ class Salon extends Model
                     ->orderBy('date_heure');
     }
 
-    /** Avis du salon (via réservations) */
-    public function avis(): HasMany
+    /** Avis du salon — passent par la table reservations (pas de salon_id direct sur avis) */
+    public function avis(): HasManyThrough
     {
-        return $this->hasMany(Avis::class, 'salon_id');
+        return $this->hasManyThrough(
+            Avis::class,
+            Reservation::class,
+            'salon_id',        // FK sur reservations → salons.id
+            'reservation_id',  // FK sur avis → reservations.id
+            'id',              // PK salons
+            'id'               // PK reservations
+        );
     }
 }

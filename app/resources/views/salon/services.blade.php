@@ -45,7 +45,7 @@
               <span class="svc-stat">RDV : <span>{{ $svc->reservations()->count() }}</span></span>
             </div>
             <div class="svc-actions">
-              <button class="btn-xs btn-xs-e" onclick="openEdit({{ $svc->id }}, '{{ addslashes($svc->nom_service) }}', '{{ addslashes($svc->description) }}', {{ $svc->prix }}, {{ $svc->duree_minu }}, '{{ $svc->categorie }}', {{ $svc->actif ? 'true' : 'false' }})">
+              <button class="btn-xs btn-xs-e" onclick="openEdit({{ $svc->id }}, @json($svc->nom_service), @json($svc->description ?? ''), {{ (float)$svc->prix }}, {{ (int)$svc->duree_minu }}, @json($svc->categorie), {{ $svc->actif ? 'true' : 'false' }})">
                 Modifier
               </button>
               <form method="POST" action="{{ route('salon.services.destroy', $svc->id) }}"

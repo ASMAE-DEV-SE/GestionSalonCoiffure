@@ -39,7 +39,7 @@ class ReservationService
             'service_id'    => $service->id,
             'employe_id'    => $employe?->id,
             'date_heure'    => $dateHeure,
-            'duree_minutes' => $data['duree_minutes'] ?? $service->duree_minutes ?? 30,
+            'duree_minutes' => $data['duree_minutes'] ?? $service->duree_minu ?? 30,
             'notes_client'  => $data['notes_client'] ?? null,
             'statut'        => 'en_attente',
         ]);

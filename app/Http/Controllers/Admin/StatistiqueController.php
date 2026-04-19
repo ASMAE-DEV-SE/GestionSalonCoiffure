@@ -40,7 +40,7 @@ class StatistiqueController extends Controller
         $tauxAnnul = $totalResa > 0 ? round($annulees / $totalResa * 100, 1) : 0;
 
         $noteMoyRaw = Avis::whereBetween('created_at', [$debut, $fin])->avg('note');
-        $noteMoy    = $noteMoyRaw ? number_format($noteMoyRaw, 1) : '—';
+        $noteMoy    = $noteMoyRaw ? number_format((float) $noteMoyRaw, 1) : '—';
 
         $kpi = [
             'total_resa'   => $totalResa,
@@ -48,6 +48,7 @@ class StatistiqueController extends Controller
             'inscriptions' => $inscriptions,
             'taux_annul'   => $tauxAnnul,
             'note_moy'     => $noteMoy,
+            'note_moy_raw' => $noteMoyRaw ? (float) $noteMoyRaw : 0.0,
         ];
 
         // Réservations par mois sur la période
@@ -125,27 +126,51 @@ class StatistiqueController extends Controller
         $debut = $request->filled('debut') ? Carbon::parse($request->debut)->startOfDay() : now()->subDays(30)->startOfDay();
         $fin   = $request->filled('fin')   ? Carbon::parse($request->fin)->endOfDay()     : now()->endOfDay();
 
-        $reservations = Reservation::with(['client', 'salon', 'service'])
+        $reservations = Reservation::with(['client', 'salon.ville', 'service'])
             ->whereBetween('date_heure', [$debut, $fin])
             ->orderByDesc('date_heure')
             ->get();
 
-        $csv = "ID,Client,Salon,Service,Date,Statut,Prix\n";
+        // BOM UTF-8 obligatoire pour qu'Excel reconnaisse l'encodage
+        $bom = "\xEF\xBB\xBF";
+
+        $rows   = [];
+        $rows[] = ['ID', 'Client', 'Email', 'Salon', 'Ville', 'Service', 'Catégorie', 'Date', 'Heure', 'Durée (min)', 'Prix (MAD)', 'Statut'];
+
         foreach ($reservations as $r) {
-            $csv .= implode(',', [
+            $rows[] = [
                 $r->id,
-                '"' . ($r->client?->nomComplet() ?? '') . '"',
-                '"' . ($r->salon?->nom_salon ?? '') . '"',
-                '"' . ($r->service?->nom_service ?? '') . '"',
-                $r->date_heure->format('Y-m-d H:i'),
-                $r->statut,
+                $r->client?->nomComplet() ?? '',
+                $r->client?->email ?? '',
+                $r->salon?->nom_salon ?? '',
+                $r->salon?->ville?->nom_ville ?? '',
+                $r->service?->nom_service ?? '',
+                $r->service?->categorie ?? '',
+                $r->date_heure->format('d/m/Y'),
+                $r->date_heure->format('H:i'),
+                $r->service?->duree_minu ?? '',
                 $r->service?->prix ?? 0,
-            ]) . "\n";
+                $r->statut,
+            ];
         }
 
+        // Encoder chaque cellule : guillemets doubles, \r\n pour Windows/Excel
+        $csv = $bom;
+        foreach ($rows as $row) {
+            $csv .= implode(';', array_map(
+                fn($cell) => '"' . str_replace('"', '""', (string) $cell) . '"',
+                $row
+            )) . "\r\n";
+        }
+
+        $filename = 'salonify-reservations-' . $debut->format('Y-m-d') . '-au-' . $fin->format('Y-m-d') . '.csv';
+
         return response($csv, 200, [
-            'Content-Type'        => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="reservations-' . now()->format('Y-m-d') . '.csv"',
+            'Content-Type'        => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Pragma'              => 'no-cache',
+            'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires'             => '0',
         ]);
     }
 }

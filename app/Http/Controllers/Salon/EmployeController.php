@@ -51,7 +51,6 @@ class EmployeController extends Controller
             'specialites.*'=> ['string', 'max:60'],
             'horaires'    => ['nullable', 'array'],
             'photo'       => ['nullable', 'image', 'mimes:jpeg,png,webp', 'max:2048'],
-            'actif'       => ['boolean'],
         ], [
             'prenom.required' => 'Le prénom est obligatoire.',
             'nom.required'    => 'Le nom est obligatoire.',
@@ -60,7 +59,7 @@ class EmployeController extends Controller
         ]);
 
         $data['salon_id']    = $salon->id;
-        $data['actif']       = $request->boolean('actif', true);
+        $data['actif']       = $request->boolean('actif');
         $data['specialites'] = $request->specialites ?? [];
         $data['horaires']    = $this->buildHoraires($request);
 
@@ -98,10 +97,9 @@ class EmployeController extends Controller
             'specialites.*'=> ['string', 'max:60'],
             'horaires'     => ['nullable', 'array'],
             'photo'        => ['nullable', 'image', 'mimes:jpeg,png,webp', 'max:2048'],
-            'actif'        => ['boolean'],
         ]);
 
-        $data['actif']       = $request->boolean('actif', $employe->actif);
+        $data['actif']       = $request->boolean('actif');
         $data['specialites'] = $request->specialites ?? [];
         $data['horaires']    = $this->buildHoraires($request);
 

@@ -74,6 +74,39 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'Utilisateur créé.');
     }
 
+    public function show(int $id): View
+    {
+        $user = User::with([
+            'salon.ville',
+            'salon.services',
+            'salon.employes',
+            'reservations.salon.ville',
+            'reservations.service',
+            'notifications',
+        ])->findOrFail($id);
+
+        $stats = [];
+
+        if ($user->isClient()) {
+            $stats = [
+                'reservations'  => $user->reservations->count(),
+                'confirmees'    => $user->reservations->where('statut', 'confirmee')->count(),
+                'terminees'     => $user->reservations->where('statut', 'terminee')->count(),
+                'annulees'      => $user->reservations->where('statut', 'annulee')->count(),
+                'notifications' => $user->notifications->count(),
+            ];
+        } elseif ($user->isSalon() && $user->salon) {
+            $stats = [
+                'reservations' => $user->salon->reservations()->count(),
+                'services'     => $user->salon->services->count(),
+                'employes'     => $user->salon->employes->count(),
+                'avis'         => $user->salon->nb_avis,
+            ];
+        }
+
+        return view('admin.user_detail', compact('user', 'stats'));
+    }
+
     public function edit(int $id): View
     {
         $user = User::findOrFail($id);

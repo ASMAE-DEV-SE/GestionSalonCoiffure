@@ -56,7 +56,6 @@ class SalonController extends Controller
         $salon = Salon::with([
             'user', 'ville', 'services', 'employes',
             'reservations.client', 'reservations.service',
-            'avis.reservation.client',
         ])->findOrFail($id);
 
         $stats = [

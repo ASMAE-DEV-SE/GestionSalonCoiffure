@@ -76,6 +76,8 @@
            class="{{ request()->routeIs('client.reservations.*') ? 'on' : '' }}">Mes réservations</a>
       @endif
     @endauth
+    <a href="{{ route('about') }}"
+       class="{{ request()->routeIs('about') ? 'on' : '' }}">À propos</a>
     <a href="{{ route('contact.show') }}"
        class="{{ request()->routeIs('contact.*') ? 'on' : '' }}">Contact</a>
   </div>
@@ -84,6 +86,7 @@
   <nav class="mob" id="mm">
     <a href="{{ route('home') }}">Accueil</a>
     <a href="{{ route('villes.index') }}">Emplacements</a>
+    <a href="{{ route('about') }}">À propos</a>
     <a href="{{ route('contact.show') }}">Contact</a>
     @auth
       <a href="{{ route('client.reservations.index') }}">Mes réservations</a>

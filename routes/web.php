@@ -34,6 +34,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/salons/{ville}', [SalonController::class, 'index'])->name('salons.index');
 Route::get('/salons/{ville}/{slug}', [SalonController::class, 'show'])->name('salons.show');
 Route::get('/villes', [VilleController::class, 'index'])->name('villes.index');
+Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
@@ -70,6 +71,7 @@ Route::middleware(['auth', 'verified'])->prefix('client')->name('client.')->grou
     Route::put('/profil', [ProfileController::class, 'update'])->name('profil.update');
     Route::put('/profil/mot-de-passe', [ProfileController::class, 'updatePassword'])->name('profil.password');
     Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
+    Route::get('/avis', [AvisController::class, 'index'])->name('avis.index');
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{id}/lu', [NotificationController::class, 'marquerLu'])->name('notifications.lu');
     Route::get('/notifications/count', [NotificationController::class, 'count'])->name('notifications.count');
@@ -130,12 +132,14 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::delete('/salons/{id}', [AdminSalonController::class, 'destroy'])->name('salons.destroy');
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
+    Route::get('/users/{id}', [AdminUserController::class, 'show'])->name('users.show');
     Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
     Route::get('/users/{id}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{id}', [AdminUserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [AdminUserController::class, 'destroy'])->name('users.destroy');
     Route::get('/villes', [AdminVilleController::class, 'index'])->name('villes.index');
     Route::post('/villes', [AdminVilleController::class, 'store'])->name('villes.store');
+    Route::put('/villes/{id}', [AdminVilleController::class, 'update'])->name('villes.update');
     Route::delete('/villes/{id}', [AdminVilleController::class, 'destroy'])->name('villes.destroy');
     Route::get('/avis', [AdminAvisController::class, 'index'])->name('avis.index');
     Route::post('/avis/{id}/approuver', [AdminAvisController::class, 'approuver'])->name('avis.approuver');

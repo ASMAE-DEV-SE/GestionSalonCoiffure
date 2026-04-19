@@ -53,12 +53,22 @@ class Reservation extends Model
     public function peutEtreAnnulee(): bool
     {
         return in_array($this->statut, ['en_attente', 'confirmee'])
-            && $this->date_heure->diffInHours(now(), false) < -24;
+            && $this->date_heure->greaterThanOrEqualTo(now()->addHours(24));
     }
 
     public function estConfirmee(): bool  { return $this->statut === 'confirmee'; }
     public function estAnnulee(): bool    { return $this->statut === 'annulee'; }
     public function estEnAttente(): bool  { return $this->statut === 'en_attente'; }
+
+    /**
+     * Évaluable = terminée OU confirmée avec date passée (cron pas encore passé)
+     * Le client ne doit pas être bloqué parce que le cron n'a pas tourné.
+     */
+    public function peutEtreEvaluee(): bool
+    {
+        return ($this->statut === 'terminee'
+            || ($this->statut === 'confirmee' && $this->date_heure->isPast()));
+    }
 
     /*
     |------------------------------------------------------------------
@@ -75,6 +85,26 @@ class Reservation extends Model
     public function scopePassees($query)
     {
         return $query->where('date_heure', '<', now());
+    }
+
+    public function scopeRappel24h($query)
+    {
+        return $query->where('statut', 'confirmee')
+                     ->where('rappel_24h', false)
+                     ->whereBetween('date_heure', [
+                         now()->addHours(23),
+                         now()->addHours(25),
+                     ]);
+    }
+
+    public function scopeRappel2h($query)
+    {
+        return $query->where('statut', 'confirmee')
+                     ->where('rappel_2h', false)
+                     ->whereBetween('date_heure', [
+                         now()->addHours(1)->addMinutes(50),
+                         now()->addHours(2)->addMinutes(10),
+                     ]);
     }
 
     /*

@@ -74,8 +74,8 @@
                              : ($r->statut === 'en_attente' ? 'ev-pending' : 'ev-blocked');
                   @endphp
                   <div class="cal-event {{ $evClass }}">
-                    <div class="cal-event-title">{{ $r->client->prenom }} {{ substr($r->client->nom,0,1) }}.</div>
-                    <div class="cal-event-sub">{{ $r->service->nom_service }}</div>
+                    <div class="cal-event-title">{{ $r->client?->prenom ?? 'Client' }} {{ substr($r->client?->nom ?? '', 0, 1) }}.</div>
+                    <div class="cal-event-sub">{{ $r->service?->nom_service ?? 'Service' }}</div>
                   </div>
                 @endif
               @endforeach

@@ -110,13 +110,20 @@ class ReservationController extends Controller
     }
 
     /** Liste réservations client */
-    public function index()
+    public function index(Request $request)
     {
-        $reservations = Auth::user()
+        $query = Auth::user()
             ->reservations()
-            ->with(['salon','service','employe','avis'])
+            ->with(['salon','service','employe','avis']);
+
+        if ($request->filled('statut')) {
+            $query->where('statut', $request->statut);
+        }
+
+        $reservations = $query
             ->orderByDesc('date_heure')
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
         return view('reservations.index', compact('reservations'));
     }
@@ -169,9 +176,22 @@ class ReservationController extends Controller
 
     private function getSalonOr404(string $slugOrId): Salon
     {
-        $salon = is_numeric($slugOrId)
-            ? Salon::valides()->findOrFail($slugOrId)
-            : Salon::valides()->get()->first(fn($s) => $s->slug === $slugOrId);
+        if (is_numeric($slugOrId)) {
+            return Salon::valides()->findOrFail($slugOrId);
+        }
+
+        // Recherche par slug (nom_salon slugifié) sans charger tous les salons
+        $salon = Salon::valides()
+            ->whereRaw('LOWER(REPLACE(REPLACE(nom_salon, " ", "-"), "\'", "")) = ?', [
+                strtolower(str_replace(["'", ' '], ['', '-'], $slugOrId))
+            ])
+            ->first();
+
+        // Fallback : recherche exacte sur nom_salon si le slug ne matche pas
+        if (! $salon) {
+            $salon = Salon::valides()->get()
+                ->first(fn($s) => $s->slug === $slugOrId);
+        }
 
         if (! $salon) abort(404);
         return $salon;

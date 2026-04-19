@@ -2,7 +2,27 @@
 /node_modules
 /.env
 /.env.backup
+/.env.testing
 /storage/*.key
 /public/hot
 /public/storage
 *.log
+
+# Cache compilé Laravel
+/bootstrap/cache/*.php
+
+# Vues Blade compilées
+/storage/framework/views/
+
+# Sessions
+/storage/framework/sessions/
+
+# Cache
+/storage/framework/cache/
+
+# Uploads utilisateurs (photos salons/employés)
+/storage/app/public/salons/
+/storage/app/public/employes/
+
+# Claude Code
+/.claude/

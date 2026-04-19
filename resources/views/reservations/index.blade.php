@@ -25,6 +25,7 @@
   <div class="client-subnav-inner wrap">
     <a href="{{ route('client.dashboard') }}" class="subnav-tab">Tableau de bord</a>
     <a href="{{ route('client.reservations.index') }}" class="subnav-tab active">Réservations</a>
+    <a href="{{ route('client.avis.index') }}" class="subnav-tab">Mes avis</a>
     <a href="{{ route('client.profil.edit') }}" class="subnav-tab">Mon profil</a>
     <a href="{{ route('client.notifications.index') }}" class="subnav-tab">Notifications</a>
   </div>
@@ -58,14 +59,17 @@
           </div>
           <div>
             @php
-              $pillClass = match($resa->statut) {
+              // Confirmée + date passée = afficher comme Terminée
+              $statutAffiche = ($resa->statut === 'confirmee' && $resa->date_heure->isPast())
+                  ? 'terminee' : $resa->statut;
+              $pillClass = match($statutAffiche) {
                 'confirmee'  => 'confirmed',
                 'en_attente' => 'pending',
                 'terminee'   => 'done',
                 'annulee'    => 'cancelled',
                 default      => 'pending',
               };
-              $pillLabel = match($resa->statut) {
+              $pillLabel = match($statutAffiche) {
                 'confirmee'  => 'Confirmée',
                 'en_attente' => 'En attente',
                 'terminee'   => 'Terminée',
@@ -104,15 +108,16 @@
             <span>· {{ $resa->service->duree_formatee }}</span>
           </div>
           <div class="card-actions">
-            {{-- Avis si terminée et pas encore d'avis --}}
-            @if($resa->statut === 'terminee' && ! $resa->avis)
+            {{-- Avis : terminée OU confirmée avec date passée --}}
+            @php $peutEvaluer = $resa->peutEtreEvaluee(); @endphp
+            @if($peutEvaluer && ! $resa->avis)
               <a href="{{ route('avis.create', $resa->id) }}" class="btn-card btn-card-green">&#9733; Laisser un avis</a>
             @endif
-            @if($resa->statut === 'terminee' && $resa->avis)
+            @if($peutEvaluer && $resa->avis)
               <span class="btn-card" style="cursor:default;opacity:.6;border-color:var(--border)">Avis publié &#10003;</span>
             @endif
             {{-- Annulation --}}
-            @if(in_array($resa->statut, ['en_attente','confirmee']))
+            @if($resa->peutEtreAnnulee())
               <form method="POST" action="{{ route('reservations.annuler', $resa->id) }}"
                     onsubmit="return confirm('Annuler cette réservation ?')">
                 @csrf

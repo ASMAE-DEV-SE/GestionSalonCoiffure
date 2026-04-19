@@ -61,7 +61,6 @@ class ServiceController extends Controller
             'prix'        => ['required', 'numeric', 'min:0', 'max:99999'],
             'duree_minu'  => ['required', 'integer', 'min:10', 'max:480'],
             'categorie'   => ['required', 'string', 'max:60'],
-            'actif'       => ['boolean'],
         ], [
             'nom_service.required' => 'Le nom du service est obligatoire.',
             'prix.required'        => 'Le prix est obligatoire.',
@@ -70,7 +69,7 @@ class ServiceController extends Controller
         ]);
 
         $data['salon_id'] = $salon->id;
-        $data['actif']    = $request->boolean('actif', true);
+        $data['actif']    = $request->boolean('actif');
 
         Service::create($data);
 
@@ -107,10 +106,9 @@ class ServiceController extends Controller
             'prix'        => ['required', 'numeric', 'min:0', 'max:99999'],
             'duree_minu'  => ['required', 'integer', 'min:10', 'max:480'],
             'categorie'   => ['required', 'string', 'max:60'],
-            'actif'       => ['boolean'],
         ]);
 
-        $data['actif'] = $request->boolean('actif', true);
+        $data['actif'] = $request->boolean('actif');
         $service->update($data);
 
         return redirect()->route('salon.services.index')

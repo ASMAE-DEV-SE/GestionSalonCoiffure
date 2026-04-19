@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Salon;
 
 use App\Http\Controllers\Controller;
 use App\Models\Avis;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 
 class AvisController extends Controller
 {
+    public function __construct(private NotificationService $notifService) {}
+
     private function salon()
     {
         return Auth::user()->salon()->firstOrFail();
@@ -77,6 +80,10 @@ class AvisController extends Controller
         ]);
 
         $avis->update(['reponse_salon' => $request->reponse_salon]);
+
+        // Notifier le client (in-app + email)
+        $avis->load('reservation.client', 'reservation.salon');
+        $this->notifService->notifierReponseAvis($avis);
 
         return back()->with('success', 'Votre réponse a été publiée.');
     }

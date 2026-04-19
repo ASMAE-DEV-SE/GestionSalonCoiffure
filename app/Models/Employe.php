@@ -50,10 +50,23 @@ class Employe extends Model
 
     public function getPhotoUrlAttribute(): string
     {
-        if ($this->photo && file_exists(storage_path('app/public/' . $this->photo))) {
-            return asset('storage/' . $this->photo);
+        if ($this->photo) {
+            $storagePath = storage_path('app/public/' . $this->photo);
+            if (file_exists($storagePath)) {
+                return asset('storage/' . $this->photo);
+            }
+            $publicPath = public_path('images/' . $this->photo);
+            if (file_exists($publicPath)) {
+                return asset('images/' . $this->photo);
+            }
         }
-        return asset('images/employe-placeholder.jpg');
+
+        // Avatar unique par employé — photos variées de personnes
+        // Les IDs pairs → hommes, impairs → femmes (cohérent par employé)
+        $id     = (int) ($this->id ?? 1);
+        $genre  = ($id % 2 === 0) ? 'men' : 'women';
+        $imgNum = (($id - 1) % 50) + 1; // 1–50 par genre
+        return "https://randomuser.me/api/portraits/{$genre}/{$imgNum}.jpg";
     }
 
     /** Vérifie si l'employé est disponible un jour donné */

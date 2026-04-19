@@ -62,11 +62,11 @@
         </div>
         <div class="emp-foot">
           <button class="tbl-btn tbl-btn-e"
-                  onclick="openEditEmp({{ $emp->id }}, '{{ $emp->prenom }}', '{{ $emp->nom }}', '{{ $emp->email }}', '{{ $emp->tel }}')">
+                  onclick="openEditEmp({{ $emp->id }}, @json($emp->prenom), @json($emp->nom), @json($emp->email ?? ''), @json($emp->tel ?? ''))">
             Modifier
           </button>
           <form method="POST" action="{{ route('salon.employes.destroy', $emp->id) }}"
-                onsubmit="return confirm('Retirer {{ $emp->nomComplet() }} de l\'équipe ?')">
+                onsubmit="return confirm('Retirer ' + @json($emp->nomComplet()) + ' de l\'équipe ?')">
             @csrf @method('DELETE')
             <button type="submit" class="tbl-btn tbl-btn-r">Retirer</button>
           </form>

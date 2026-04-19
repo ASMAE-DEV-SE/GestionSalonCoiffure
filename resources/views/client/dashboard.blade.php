@@ -73,11 +73,13 @@
         <div style="display:flex;gap:.6rem;margin-top:1.2rem">
           <a href="{{ route('salons.show', [$prochainRdv->salon->ville->nom_ville, $prochainRdv->salon->slug]) }}"
              class="btn-apt-primary" style="flex:1;text-decoration:none">Voir le salon</a>
-          <form method="POST" action="{{ route('reservations.annuler', $prochainRdv->id) }}"
-                onsubmit="return confirm('Annuler ce rendez-vous ?')">
-            @csrf
-            <button type="submit" class="btn-apt-ghost">Annuler</button>
-          </form>
+          @if($prochainRdv->peutEtreAnnulee())
+            <form method="POST" action="{{ route('reservations.annuler', $prochainRdv->id) }}"
+                  onsubmit="return confirm('Annuler ce rendez-vous ?')">
+                @csrf
+                <button type="submit" class="btn-apt-ghost">Annuler</button>
+            </form>
+          @endif
         </div>
       </div>
     @else
@@ -110,6 +112,7 @@
     @if($rdvSansAvis->count())
       <div class="dash-section-title" style="margin-top:2rem;margin-bottom:.8rem">
         Laissez un avis &#9733;
+        <a href="{{ route('client.avis.index') }}" class="dash-section-link">Voir mes avis</a>
       </div>
       @foreach($rdvSansAvis as $rdv)
         <div class="review-prompt">

@@ -15,7 +15,7 @@
       <input type="text" id="villeSearch" class="cities-search-input"
              placeholder="&#128269;  Rechercher une ville..."
              oninput="filterVilles(this.value)">
-      <button class="cities-search-btn">Rechercher</button>
+      <button type="button" class="cities-search-btn" onclick="filterVilles(document.getElementById('villeSearch').value)">Rechercher</button>
     </div>
 
     <div class="cities-stats">
@@ -50,7 +50,7 @@
     @foreach($villesPrincipales as $ville)
       <a href="{{ route('salons.index', $ville->nom_ville) }}" class="city-card large">
         <img class="city-card-img"
-             src="https://images.unsplash.com/photo-{{ $loop->first ? '1555448248-2571daf6344b' : '1558618666-fcd25c85cd64' }}?w=600&h=320&fit=crop&q=80"
+             src="{{ $ville->photo_url }}"
              alt="{{ $ville->nom_ville }}">
         <div class="city-card-overlay">
           <div class="city-card-name">{{ $ville->nom_ville }}</div>
@@ -85,7 +85,7 @@
          class="city-card ville-item"
          data-nom="{{ strtolower($ville->nom_ville) }}">
         <img class="city-card-img"
-             src="https://images.unsplash.com/photo-{{ $photos[$loop->index % count($photos)] }}?w=400&h=220&fit=crop&q=80"
+             src="{{ $ville->photo_url }}"
              alt="{{ $ville->nom_ville }}">
         <div class="city-card-overlay">
           <div class="city-card-name">{{ $ville->nom_ville }}</div>
@@ -100,18 +100,23 @@
 
 @push('scripts')
 <script>
+function normaliseTexte(s) {
+  return String(s).toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/[^a-z0-9]/gi, '');
+}
+
 function filterVilles(q) {
-  const terme  = q.toLowerCase().trim();
-  const items  = document.querySelectorAll('.ville-item');
-  let visible  = 0;
+  const termeNorm = normaliseTexte(q);
+  const items = document.querySelectorAll('.ville-item');
+  let visible = 0;
 
   items.forEach(item => {
-    const match = item.dataset.nom.includes(terme);
+    const nomItem = item.dataset.nom || '';
+    const match = normaliseTexte(nomItem).includes(termeNorm);
     item.style.display = match ? '' : 'none';
     if (match) visible++;
   });
 
-  document.getElementById('villesCount').textContent = visible + ' ville' + (visible > 1 ? 's' : '');
+  document.getElementById('villesCount').textContent = visible + ' ville' + (visible !== 1 ? 's' : '');
 }
 </script>
 @endpush

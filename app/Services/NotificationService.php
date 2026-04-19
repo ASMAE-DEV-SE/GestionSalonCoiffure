@@ -4,8 +4,11 @@ namespace App\Services;
 
 use App\Mail\Rappel24hMail;
 use App\Mail\Rappel2hMail;
+use App\Mail\ReponseAvisMail;
 use App\Mail\ReservationConfirmeeMail;
 use App\Mail\ReservationAnnuleeMail;
+use App\Mail\ReservationTermineeMail;
+use App\Models\Avis;
 use App\Models\Notification;
 use App\Models\Reservation;
 use App\Models\User;
@@ -18,8 +21,10 @@ class NotificationService
         'nouvelle_reservation' => 'Nouvelle réservation de :client pour :service le :date à :heure.',
         'reservation_confirmee' => 'Votre réservation chez :salon pour :service le :date à :heure a été confirmée.',
         'reservation_annulee'   => 'Votre réservation chez :salon pour :service le :date a été annulée. Motif : :motif.',
+        'reservation_terminee' => 'Votre réservation chez :salon pour :service le :date à :heure est maintenant terminée.',
         'rappel_24h'            => 'Rappel : votre rendez-vous chez :salon est demain à :heure pour :service.',
         'rappel_2h'             => 'Rappel : votre rendez-vous chez :salon est dans 2h (:heure) pour :service.',
+        'reponse_avis'          => ':salon a répondu à votre avis.',
     ];
 
     /**
@@ -62,6 +67,10 @@ class NotificationService
                     ? Mail::to($user->email)->send(new ReservationAnnuleeMail($reservation))
                     : null,
 
+                'reservation_terminee' => $reservation
+                    ? Mail::to($user->email)->send(new ReservationTermineeMail($reservation))
+                    : null,
+
                 'rappel_24h' => $reservation
                     ? Mail::to($user->email)->send(new Rappel24hMail($reservation))
                     : null,
@@ -81,6 +90,61 @@ class NotificationService
         }
 
         return $notif;
+    }
+
+    /**
+     * Annule automatiquement les réservations en attente dont le créneau est déjà passé.
+     */
+    public function annulerReservationsExpirees(): int
+    {
+        $reservations = Reservation::where('statut', 'en_attente')
+            ->where('date_heure', '<', now())
+            ->with(['client', 'salon.ville', 'service', 'employe'])
+            ->get();
+
+        foreach ($reservations as $r) {
+            /** @var Reservation $r */
+            $r->update([
+                'statut'      => 'annulee',
+                'annulee_par' => 'systeme',
+                'date_annul'  => now(),
+                'motif_annul' => 'Réservation expirée automatiquement après la date prévue.',
+            ]);
+
+            $this->envoyerAvecEmail($r->client_id, 'reservation_annulee', [
+                'salon'   => $r->salon->nom_salon,
+                'service' => $r->service->nom_service,
+                'date'    => $r->date_heure->translatedFormat('D d M Y'),
+                'motif'   => $r->motif_annul,
+            ], $r);
+        }
+
+        return $reservations->count();
+    }
+
+    /**
+     * Marque automatiquement comme terminées les réservations confirmées dont le RDV est passé.
+     */
+    public function terminerReservationsPassees(): int
+    {
+        $reservations = Reservation::where('statut', 'confirmee')
+            ->where('date_heure', '<', now())
+            ->with(['client', 'salon.ville', 'service', 'employe'])
+            ->get();
+
+        foreach ($reservations as $r) {
+            /** @var Reservation $r */
+            $r->update(['statut' => 'terminee']);
+
+            $this->envoyerAvecEmail($r->client_id, 'reservation_terminee', [
+                'salon'   => $r->salon->nom_salon,
+                'service' => $r->service->nom_service,
+                'date'    => $r->date_heure->translatedFormat('D d M Y'),
+                'heure'   => $r->date_heure->format('H:i'),
+            ], $r);
+        }
+
+        return $reservations->count();
     }
 
     /**
@@ -139,5 +203,31 @@ class NotificationService
         }
 
         return $reservations->count();
+    }
+
+    /**
+     * Notifie le client qu'un salon a répondu à son avis (in-app + email).
+     */
+    public function notifierReponseAvis(Avis $avis): void
+    {
+        $reservation = $avis->reservation;
+        $clientId    = $reservation->client_id;
+        $nomSalon    = $reservation->salon->nom_salon;
+
+        $this->envoyer($clientId, 'reponse_avis', [
+            'salon' => $nomSalon,
+        ]);
+
+        try {
+            $client = User::find($clientId);
+            if ($client) {
+                Mail::to($client->email)->send(new ReponseAvisMail($avis));
+            }
+        } catch (\Throwable $e) {
+            Log::error('Erreur email réponse avis', [
+                'avis_id' => $avis->id,
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 }

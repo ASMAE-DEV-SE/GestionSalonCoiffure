@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Ville;
 use App\Models\Salon;
 use App\Models\Avis;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -131,9 +132,23 @@ class SalonController extends Controller
             ->groupBy('categorie')
             ->sortKeys();
 
+        // Réservation terminée du client connecté, sans avis → CTA "Laisser un avis"
+        $reservationAEvaluer = null;
+        if (Auth::check() && Auth::user()->isClient()) {
+            $reservationAEvaluer = Reservation::where('client_id', Auth::id())
+                ->where('salon_id', $salon->id)
+                ->where(fn($q) => $q
+                    ->where('statut', 'terminee')
+                    ->orWhere(fn($q2) => $q2->where('statut', 'confirmee')->where('date_heure', '<', now()))
+                )
+                ->doesntHave('avis')
+                ->latest('date_heure')
+                ->first();
+        }
+
         return view('salons.show', compact(
             'salon', 'villeModel', 'avis',
-            'distribution', 'servicesByCategorie'
+            'distribution', 'servicesByCategorie', 'reservationAEvaluer'
         ));
     }
 }

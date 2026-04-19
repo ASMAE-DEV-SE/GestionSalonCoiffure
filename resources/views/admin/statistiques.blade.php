@@ -86,7 +86,7 @@
       <div style="text-align:center;padding:.8rem 0;margin-bottom:1rem">
         <div style="font-family:var(--fh);font-size:3rem;font-weight:700;color:var(--ink-h);line-height:1">{{ $kpi['note_moy'] }}</div>
         <div style="color:#D4A844;font-size:1.1rem;letter-spacing:2px;margin:.3rem 0">
-          {{ str_repeat('★', (int)round($kpi['note_moy'])) }}{{ str_repeat('☆', 5 - (int)round($kpi['note_moy'])) }}
+          {{ str_repeat('★', (int)round($kpi['note_moy_raw'])) }}{{ str_repeat('☆', 5 - (int)round($kpi['note_moy_raw'])) }}
         </div>
         <div style="font-size:.72rem;color:var(--ink-m);font-weight:600">Note moyenne globale</div>
       </div>

@@ -15,7 +15,7 @@
       <input type="text" id="villeSearch" class="cities-search-input"
              placeholder="&#128269;  Rechercher une ville..."
              oninput="filterVilles(this.value)">
-      <button class="cities-search-btn" onclick="filterVilles(document.getElementById('villeSearch').value)">Rechercher</button>
+      <button type="button" class="cities-search-btn" onclick="filterVilles(document.getElementById('villeSearch').value)">Rechercher</button>
     </div>
 
     {{-- Bouton géolocalisation --}}
@@ -77,7 +77,7 @@
     @foreach($villesPrincipales as $ville)
       <a href="{{ route('salons.index', $ville->nom_ville) }}" class="city-card large">
         <img class="city-card-img"
-             src="https://images.unsplash.com/photo-{{ $loop->first ? '1555448248-2571daf6344b' : '1558618666-fcd25c85cd64' }}?w=600&h=320&fit=crop&q=80"
+             src="{{ $ville->photo_url }}"
              alt="{{ $ville->nom_ville }}">
         <div class="city-card-overlay">
           <div class="city-card-name">{{ $ville->nom_ville }}</div>
@@ -97,22 +97,12 @@
   </div>
 
   <div class="cities-grid" id="villesGrid">
-    @php
-      $photos = [
-        '1540541338287-41700207dee6','1539020140153-e479b8c22e70',
-        '1558618047-3c8c76ca7d13','1521590832167-7bcbfaa6381f',
-        '1507003211169-0a1dd7228f2d','1531746020798-e6953c6e8e04',
-        '1580489944761-15a19d654956','1534528741775-53994a69daeb',
-        '1494790108377-be9c29b29330','1438761681033-6461ffad8d80',
-      ];
-    @endphp
-
     @foreach($villes as $ville)
       <a href="{{ route('salons.index', $ville->nom_ville) }}"
          class="city-card ville-item"
          data-nom="{{ strtolower($ville->nom_ville) }}">
         <img class="city-card-img"
-             src="https://images.unsplash.com/photo-{{ $photos[$loop->index % count($photos)] }}?w=400&h=220&fit=crop&q=80"
+             src="{{ $ville->photo_url }}"
              alt="{{ $ville->nom_ville }}">
         <div class="city-card-overlay">
           <div class="city-card-name">{{ $ville->nom_ville }}</div>
@@ -128,12 +118,22 @@
 @push('scripts')
 <script>
 // ── Filtrage texte ─────────────────────────────────────────────
+function normaliseTexte(s) {
+  return String(s)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]/g, '');
+}
+
 function filterVilles(q) {
   const terme = q.toLowerCase().trim();
+  const termeNorm = normaliseTexte(terme);
   const items = document.querySelectorAll('.ville-item');
   let visible = 0;
   items.forEach(item => {
-    const match = item.dataset.nom.includes(terme);
+    const nomItem = item.dataset.nom || '';
+    const match = normaliseTexte(nomItem).includes(termeNorm);
     item.style.display = match ? '' : 'none';
     if (match) visible++;
   });
@@ -244,3 +244,5 @@ function resetBtn(btn, icon, text) {
 </script>
 @endpush
 @endsection
+
+

@@ -106,6 +106,10 @@
           <span class="sidebar-nav-badge">{{ $aVenir }}</span>
         @endif
       </a>
+      <a href="{{ route('client.avis.index') }}"
+         class="sidebar-nav-link {{ request()->routeIs('client.avis.*') ? 'active' : '' }}">
+        <div class="sidebar-nav-icon">&#9733;</div>Mes avis
+      </a>
       <a href="{{ route('client.profil.edit') }}"
          class="sidebar-nav-link {{ request()->routeIs('client.profil.*') ? 'active' : '' }}">
         <div class="sidebar-nav-icon">&#9786;</div>Mon profil

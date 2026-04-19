@@ -33,10 +33,30 @@ class VilleController extends Controller
             'code_postal' => $request->code_postal,
             'region'      => $request->region,
             'pays'        => 'Maroc',
-            'actif'       => 1,
+            'actif'       => $request->boolean('actif'),
         ]);
 
         return back()->with('success', 'Ville ajoutée.');
+    }
+
+    public function update(Request $request, int $id): RedirectResponse
+    {
+        $ville = Ville::findOrFail($id);
+
+        $request->validate([
+            'nom_ville'   => ['required', 'string', 'max:100', 'unique:villes,nom_ville,' . $id],
+            'code_postal' => ['required', 'string', 'max:10'],
+            'region'      => ['required', 'string', 'max:100'],
+        ]);
+
+        $ville->update([
+            'nom_ville'   => $request->nom_ville,
+            'code_postal' => $request->code_postal,
+            'region'      => $request->region,
+            'actif'       => $request->boolean('actif'),
+        ]);
+
+        return back()->with('success', "Ville « {$ville->nom_ville} » mise à jour.");
     }
 
     public function destroy(int $id): RedirectResponse

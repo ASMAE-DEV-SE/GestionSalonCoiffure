@@ -15,7 +15,8 @@
       <h1 class="hero-name">{{ $salon->nom_salon }}</h1>
       <div class="hero-location">&#128205; {{ $salon->adresse }}, {{ $salon->quartier }}, {{ $salon->ville->nom_ville }}</div>
       <div class="hero-rating">
-        <span class="hero-stars">{{ str_repeat('★', round($salon->note_moy)) }}{{ str_repeat('☆', 5 - round($salon->note_moy)) }}</span>
+        @php $noteMoyInt = (int)round((float)($salon->note_moy ?? 0)); @endphp
+      <span class="hero-stars">{{ str_repeat('★', $noteMoyInt) }}{{ str_repeat('☆', 5 - $noteMoyInt) }}</span>
         <span class="hero-score">{{ number_format($salon->note_moy, 1) }} <span>({{ $salon->nb_avis }} avis)</span></span>
         <span class="bge-ok" style="margin-left:.5rem">Salon vérifié &#10003;</span>
       </div>
@@ -41,7 +42,7 @@
         <h2 class="section-title">{{ $categorie }}</h2>
         <div class="services-grid" style="margin-bottom:2rem">
           @foreach($services as $svc)
-            <div class="service-row" onclick="selectService({{ $svc->id }}, '{{ $svc->nom_service }}', {{ $svc->duree_minu }}, {{ $svc->prix }})">
+            <div class="service-row" onclick="selectService({{ $svc->id }}, @json($svc->nom_service), {{ (int)$svc->duree_minu }}, {{ (float)$svc->prix }})">
               <div>
                 <div class="service-row-name">{{ $svc->nom_service }}</div>
                 <div class="service-row-duration">&#128337; {{ $svc->duree_formatee }}</div>
@@ -84,14 +85,22 @@
 
     {{-- ── AVIS ───────────────────────────────────────────────── --}}
     <div id="tab-avis" style="display:none">
-      <h2 class="section-title">Avis clients</h2>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.2rem">
+        <h2 class="section-title" style="margin:0">Avis clients</h2>
+        @if(!empty($reservationAEvaluer))
+          <a href="{{ route('avis.create', $reservationAEvaluer->id) }}"
+             style="background:var(--p4d);color:#fff;font-family:var(--fh);font-size:.78rem;font-weight:700;padding:.55rem 1.1rem;text-decoration:none;letter-spacing:.4px">
+            &#9733; Écrire un avis
+          </a>
+        @endif
+      </div>
 
       {{-- Résumé --}}
       @if($salon->nb_avis > 0)
         <div class="reviews-summary">
           <div>
             <div class="reviews-big-score">{{ number_format($salon->note_moy, 1) }}</div>
-            <div class="reviews-stars-large">{{ str_repeat('★', round($salon->note_moy)) }}{{ str_repeat('☆', 5 - round($salon->note_moy)) }}</div>
+            <div class="reviews-stars-large">{{ str_repeat('★', $noteMoyInt) }}{{ str_repeat('☆', 5 - $noteMoyInt) }}</div>
             <div class="reviews-total">{{ $salon->nb_avis }} avis vérifiés</div>
           </div>
           <div style="flex:1">
@@ -135,7 +144,15 @@
             @endif
           </div>
         @empty
-          <p style="color:var(--ink-m);font-size:.9rem;padding:2rem 0">Aucun avis pour ce salon. Soyez le premier !</p>
+          <div style="padding:2rem 0;text-align:center">
+            <p style="color:var(--ink-m);font-size:.9rem;margin-bottom:1rem">Aucun avis pour ce salon. Soyez le premier !</p>
+            @if(!empty($reservationAEvaluer))
+              <a href="{{ route('avis.create', $reservationAEvaluer->id) }}"
+                 style="background:var(--p4d);color:#fff;font-family:var(--fh);font-size:.8rem;font-weight:700;padding:.6rem 1.4rem;text-decoration:none;letter-spacing:.4px">
+                &#9733; Écrire le premier avis
+              </a>
+            @endif
+          </div>
         @endforelse
       </div>
     </div>
@@ -222,6 +239,16 @@
       <div style="font-size:.74rem;color:var(--ink-m);text-align:center">
         Réservation gratuite — Annulation libre 24h avant
       </div>
+
+      @if(!empty($reservationAEvaluer))
+        <div style="margin-top:1.2rem;border-top:1px solid var(--border2);padding-top:1.1rem;text-align:center">
+          <div style="font-size:.74rem;color:var(--ink-m);margin-bottom:.6rem">Vous avez visité ce salon</div>
+          <a href="{{ route('avis.create', $reservationAEvaluer->id) }}"
+             style="display:block;background:var(--p4d);color:#fff;font-family:var(--fh);font-size:.82rem;font-weight:700;padding:.7rem 1rem;text-decoration:none;text-align:center;letter-spacing:.5px">
+            &#9733; Laisser un avis
+          </a>
+        </div>
+      @endif
     </div>
 
     {{-- Infos rapides --}}

@@ -55,4 +55,15 @@ class HomeController extends Controller
             'villes', 'salonsFeatured', 'stats', 'recherche'
         ));
     }
+
+    public function about(): \Illuminate\View\View
+    {
+        $stats = [
+            'salons'       => \App\Models\Salon::valides()->count(),
+            'villes'       => \App\Models\Ville::actives()->count(),
+            'reservations' => \App\Models\Reservation::count(),
+        ];
+
+        return view('public.about', compact('stats'));
+    }
 }

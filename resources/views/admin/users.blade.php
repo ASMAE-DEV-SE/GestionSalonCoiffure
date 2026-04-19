@@ -18,7 +18,7 @@
 {{-- Filtres ─────────────────────────────────────────────── --}}
 <form method="GET" style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:1.8rem">
   <input type="text" name="q" class="tb-search" placeholder="&#128269; Nom, email..." value="{{ request('q') }}" style="min-width:260px">
-  @foreach([''=>'Tous','client'=>'Clients','salon'=>'Gérants','admin'=>'Admins'] as $v => $l)
+  @foreach([''=>'Tous','client'=>'Clients','salon'=>'Salons','admin'=>'Admins'] as $v => $l)
     <a href="{{ request()->fullUrlWithQuery(['role'=>$v,'page'=>1]) }}"
        class="tb-filter {{ request('role','')===$v ? 'on' : '' }}">{{ $l }}</a>
   @endforeach
@@ -58,6 +58,7 @@
           <td style="font-size:.78rem;color:var(--ink-m)">{{ $u->created_at->translatedFormat('d M Y') }}</td>
           <td>
             <div style="display:flex;gap:.5rem">
+              <a href="{{ route('admin.users.show', $u->id) }}" class="admin-table-action">Voir</a>
               <a href="{{ route('admin.users.edit', $u->id) }}" class="admin-table-action">Modifier</a>
               @if($u->isSalon() && $u->salon)
                 <a href="{{ route('admin.salons.show', $u->salon->id) }}" class="admin-table-action" style="color:var(--p4d)">Salon</a>

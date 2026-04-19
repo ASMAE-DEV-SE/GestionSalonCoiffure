@@ -17,9 +17,9 @@
 <div class="confirm-hero">
   <div class="wrap">
     <div class="confirm-pulse"><div class="confirm-check">&#10003;</div></div>
-    <h1 class="confirm-title">Réservation <em>confirmée</em> !</h1>
+    <h1 class="confirm-title">Réservation <em>effectuée</em> !</h1>
     <p class="confirm-desc">
-      Votre rendez-vous a bien été enregistré. Vous recevrez une confirmation par email
+      Votre rendez-vous a bien été enregistré. Vous receffectuéeevrez une confirmation par email
       et un rappel SMS 24h avant.
     </p>
     <div>
@@ -182,13 +182,17 @@
         Au-delà, l'annulation peut entraîner des frais selon le salon.
       </p>
       <div style="margin-top:.9rem">
-        <form method="POST" action="{{ route('reservations.annuler', $reservation->id) }}"
-              onsubmit="return confirm('Confirmer l\'annulation de cette réservation ?')">
-          @csrf
-          <button type="submit" style="background:none;border:none;font-size:.76rem;font-weight:700;color:#8B2222;text-decoration:underline;cursor:pointer;font-family:var(--fb)">
-            Annuler cette réservation
-          </button>
-        </form>
+        @if($reservation->peutEtreAnnulee())
+          <form method="POST" action="{{ route('reservations.annuler', $reservation->id) }}"
+                onsubmit="return confirm('Confirmer l\'annulation de cette réservation ?')">
+            @csrf
+            <button type="submit" style="background:none;border:none;font-size:.76rem;font-weight:700;color:#8B2222;text-decoration:underline;cursor:pointer;font-family:var(--fb)">
+              Annuler cette réservation
+            </button>
+          </form>
+        @else
+          <div style="font-size:.84rem;color:#6E6B66;">Cette réservation n'est plus annulable car elle est à moins de 24h ou le rendez-vous est déjà passé.</div>
+        @endif
       </div>
     </div>
   </div>

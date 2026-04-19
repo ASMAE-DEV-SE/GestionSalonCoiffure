@@ -14,16 +14,35 @@ class AvisController extends Controller
 {
     /*
     |------------------------------------------------------------------
+    | Mes avis publiés  GET /client/avis
+    |------------------------------------------------------------------
+    */
+    public function index(): View
+    {
+        $avis = Avis::whereHas('reservation', fn($q) =>
+                    $q->where('client_id', Auth::id())
+                )
+                ->with(['reservation.salon.ville', 'reservation.service'])
+                ->latest()
+                ->paginate(10);
+
+        return view('client.mes_avis', compact('avis'));
+    }
+
+    /*
+    |------------------------------------------------------------------
     | Formulaire de publication  GET /avis/publier/{reservation}
     |------------------------------------------------------------------
     */
     public function create(int $reservation): View
     {
-        // Vérifier que la réservation appartient au client et est terminée
         $reservation = Reservation::with(['salon.ville', 'service', 'employe'])
             ->where('client_id', Auth::id())
-            ->where('statut', 'terminee')
-            ->doesntHave('avis')     // Pas encore d'avis
+            ->where(fn($q) => $q
+                ->where('statut', 'terminee')
+                ->orWhere(fn($q2) => $q2->where('statut', 'confirmee')->where('date_heure', '<', now()))
+            )
+            ->doesntHave('avis')
             ->findOrFail($reservation);
 
         return view('client.avis', compact('reservation'));
@@ -39,19 +58,26 @@ class AvisController extends Controller
         $request->validate([
             'reservation_id' => ['required', 'exists:reservations,id'],
             'note'           => ['required', 'integer', 'between:1,5'],
-            'commentaire'    => ['nullable', 'string', 'min:10', 'max:1000'],
+            'commentaire'    => ['nullable', 'string', 'max:1000'],
         ], [
-            'note.required'      => 'Veuillez attribuer une note.',
-            'note.between'       => 'La note doit être entre 1 et 5.',
-            'commentaire.min'    => 'Le commentaire doit contenir au moins 10 caractères.',
+            'note.required'  => 'Veuillez attribuer une note.',
+            'note.between'   => 'La note doit être entre 1 et 5.',
         ]);
 
-        // Double vérification sécurité : la réservation appartient bien au client
+        // Double vérification sécurité
         $reservation = Reservation::with('salon')
             ->where('client_id', Auth::id())
-            ->where('statut', 'terminee')
+            ->where(fn($q) => $q
+                ->where('statut', 'terminee')
+                ->orWhere(fn($q2) => $q2->where('statut', 'confirmee')->where('date_heure', '<', now()))
+            )
             ->doesntHave('avis')
             ->findOrFail($request->reservation_id);
+
+        // Si la réservation est encore "confirmee" mais la date est passée → marquer terminée
+        if ($reservation->statut === 'confirmee') {
+            $reservation->update(['statut' => 'terminee']);
+        }
 
         // Créer l'avis
         Avis::create([
