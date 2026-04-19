@@ -59,11 +59,9 @@ Route::middleware('guest')->group(function () {
 });
 
 // Email verification
-Route::middleware('auth')->group(function () {
-    Route::get('/verification-email', [VerifyEmailController::class, 'notice'])->name('verification.notice');
-    Route::get('/verification-email/{id}/{hash}', [VerifyEmailController::class, 'verify'])->name('verification.verify')->middleware('signed');
-    Route::post('/verification-email/renvoyer', [VerifyEmailController::class, 'resend'])->name('verification.send')->middleware('throttle:6,1');
-});
+Route::get('/verification-email', [VerifyEmailController::class, 'notice'])->name('verification.notice')->middleware('auth');
+Route::get('/verification-email/{id}/{hash}', [VerifyEmailController::class, 'verify'])->name('verification.verify')->middleware('signed');
+Route::post('/verification-email/renvoyer', [VerifyEmailController::class, 'resend'])->name('verification.send')->middleware(['auth', 'throttle:6,1']);
 
 // Client routes
 Route::middleware(['auth', 'verified'])->prefix('client')->name('client.')->group(function () {

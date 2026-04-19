@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
@@ -23,20 +24,41 @@ class VerifyEmailController extends Controller
         return view('auth.verify-email');
     }
 
-    public function verify(EmailVerificationRequest $request): RedirectResponse
+    public function verify(Request $request, int $id, string $hash): RedirectResponse
     {
-        if ($request->user()->hasVerifiedEmail()) {
-            Log::info('Auth: email deja verifie', ['user_id' => $request->user()->id]);
-            return $this->redirectApreVerification($request)
+        // Vérifier la signature de l'URL
+        if (! $request->hasValidSignature()) {
+            return redirect()->route('verification.notice')
+                ->with('error', 'Le lien de vérification est invalide ou a expiré. Demandez-en un nouveau.');
+        }
+
+        $user = User::findOrFail($id);
+
+        // Vérifier le hash email
+        if (! hash_equals(sha1($user->email), $hash)) {
+            return redirect()->route('verification.notice')
+                ->with('error', 'Lien de vérification invalide.');
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            Log::info('Auth: email deja verifie', ['user_id' => $user->id]);
+            // Connecter l'utilisateur s'il ne l'est pas déjà
+            if (! Auth::check() || Auth::id() !== $user->id) {
+                Auth::login($user);
+            }
+            return $this->redirectUserApreVerification($user)
                 ->with('info', 'Email déjà vérifié.');
         }
 
-        if ($request->user()->markEmailAsVerified()) {
-            event(new Verified($request->user()));
-            Log::info('Auth: email verifie avec succes', ['user_id' => $request->user()->id]);
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
+            Log::info('Auth: email verifie avec succes', ['user_id' => $user->id]);
         }
 
-        return $this->redirectApreVerification($request)
+        // Connecter l'utilisateur vérifié
+        Auth::login($user);
+
+        return $this->redirectUserApreVerification($user)
             ->with('success', 'Email vérifié avec succès ! Bienvenue sur Salonify.');
     }
 
@@ -62,8 +84,11 @@ class VerifyEmailController extends Controller
 
     protected function redirectApreVerification(Request $request): RedirectResponse
     {
-        $user = $request->user();
+        return $this->redirectUserApreVerification($request->user());
+    }
 
+    protected function redirectUserApreVerification(User $user): RedirectResponse
+    {
         return match($user->role) {
             'admin'  => redirect()->route('admin.dashboard'),
             'salon'  => redirect()->route('salon.dashboard'),
