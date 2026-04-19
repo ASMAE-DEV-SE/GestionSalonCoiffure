@@ -5027,6 +5027,13 @@ textarea.contact-form-input {
   grid-template-columns: 260px 1fr;
   min-height: calc(100vh - 90px);
 }
+
+.client-sidebar {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-right: 1px solid var(--border2);
+}
  
 .sidebar-nav-link {
   display: flex;
@@ -5064,7 +5071,45 @@ textarea.contact-form-input {
 }
  
 .sidebar-divider { height: 1px; background: var(--border2); margin: .5rem 1.4rem; }
- 
+
+/* Bouton déconnexion dans la sidebar client — cohérent avec .btn-ins du site */
+.sidebar-logout {
+  margin-top: auto;
+  padding: 1.1rem 1.2rem 1.4rem;
+  border-top: 1px solid var(--border2);
+}
+
+.sidebar-logout form { margin: 0; }
+
+.btn-logout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  width: 100%;
+  padding: .6rem 1.2rem;
+  border-radius: 24px;
+  font-family: var(--fb);
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .3px;
+  background: var(--ink-h);
+  color: #fff;
+  border: 1.5px solid var(--ink-h);
+  cursor: pointer;
+  transition: var(--tr);
+  text-decoration: none;
+}
+
+.btn-logout:hover {
+  background: var(--p4d);
+  border-color: var(--p4d);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(46,43,33,.18);
+}
+
+.btn-logout:active { transform: translateY(0); box-shadow: none; }
+
 .dash-page-header {
   display: flex;
   align-items: flex-start;
