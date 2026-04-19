@@ -9,22 +9,19 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class NotificationController extends Controller
 {
-    /*
-    |------------------------------------------------------------------
-    | Liste des notifications  GET /client/notifications
-    |------------------------------------------------------------------
-    */
     public function index(): View
     {
+        Log::info('Notifications: liste consultée', ['user_id' => Auth::id()]);
+
         $notifications = Auth::user()
             ->notifications()
             ->orderBy('cree_le', 'desc')
             ->paginate(20);
 
-        // Marquer toutes comme lues lors de la consultation
         Auth::user()
             ->notificationsNonLues()
             ->update(['lu_le' => now()]);
@@ -32,17 +29,17 @@ class NotificationController extends Controller
         return view('client.notifications', compact('notifications'));
     }
 
-    /*
-    |------------------------------------------------------------------
-    | Marquer une notification comme lue  POST /client/notifications/{id}/lu
-    |------------------------------------------------------------------
-    */
     public function marquerLu(Request $request, string $id): JsonResponse|RedirectResponse
     {
         $notification = Notification::where('user_id', Auth::id())
             ->findOrFail($id);
 
         $notification->marquerLue();
+
+        Log::info('Notifications: notification marquée lue', [
+            'user_id'         => Auth::id(),
+            'notification_id' => $id,
+        ]);
 
         if ($request->expectsJson()) {
             return response()->json(['ok' => true]);
@@ -51,14 +48,12 @@ class NotificationController extends Controller
         return back();
     }
 
-    /*
-    |------------------------------------------------------------------
-    | Compteur non lus (appelé en AJAX pour la cloche navbar)
-    |------------------------------------------------------------------
-    */
     public function count(): JsonResponse
     {
         $count = Auth::user()->notificationsNonLues()->count();
+
+        Log::debug('Notifications: compteur non lus', ['user_id' => Auth::id(), 'count' => $count]);
+
         return response()->json(['count' => $count]);
     }
 }

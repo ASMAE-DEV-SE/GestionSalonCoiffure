@@ -10,14 +10,17 @@ use App\Models\Ville;
 use App\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class SalonController extends Controller
 {
     public function index(Request $request): View
     {
+        Log::info('Admin: liste salons', ['admin_id' => Auth::id(), 'filters' => $request->only('statut', 'ville_id', 'q')]);
+
         $query = Salon::with(['user', 'ville']);
 
         if ($request->filled('statut')) {
@@ -53,6 +56,8 @@ class SalonController extends Controller
 
     public function show(int $id): View
     {
+        Log::info('Admin: detail salon', ['admin_id' => Auth::id(), 'salon_id' => $id]);
+
         $salon = Salon::with([
             'user', 'ville', 'services', 'employes',
             'reservations.client', 'reservations.service',
@@ -72,12 +77,12 @@ class SalonController extends Controller
         $salon = Salon::with(['user', 'ville'])->findOrFail($id);
         $salon->update(['valide' => 1, 'date_valid' => now()]);
 
-        // Notification en base
+        Log::info('Admin: salon valide', ['admin_id' => Auth::id(), 'salon_id' => $id, 'nom' => $salon->nom_salon]);
+
         app(NotificationService::class)->envoyer($salon->user_id, 'salon_valide', [
             'salon' => $salon->nom_salon,
         ]);
 
-        // Email au gérant
         try {
             Mail::to($salon->user->email)->send(new SalonValideMail($salon));
         } catch (\Throwable $e) {
@@ -94,12 +99,12 @@ class SalonController extends Controller
         $salon = Salon::with(['user', 'ville'])->findOrFail($id);
         $salon->update(['valide' => -1]);
 
-        // Notification en base
+        Log::info('Admin: salon suspendu', ['admin_id' => Auth::id(), 'salon_id' => $id, 'nom' => $salon->nom_salon]);
+
         app(NotificationService::class)->envoyer($salon->user_id, 'salon_suspendu', [
             'salon' => $salon->nom_salon,
         ]);
 
-        // Email au gérant
         try {
             Mail::to($salon->user->email)->send(new SalonSuspenduMail($salon, $request->motif));
         } catch (\Throwable $e) {
@@ -114,6 +119,8 @@ class SalonController extends Controller
         $salon = Salon::findOrFail($id);
         $nom   = $salon->nom_salon;
         $salon->delete();
+
+        Log::info('Admin: salon supprime', ['admin_id' => Auth::id(), 'salon_id' => $id, 'nom' => $nom]);
 
         return redirect()->route('admin.salons.index')->with('success', "Salon « {$nom} » supprimé.");
     }

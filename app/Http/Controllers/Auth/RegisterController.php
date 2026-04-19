@@ -29,6 +29,8 @@ class RegisterController extends Controller
 
     public function register(Request $request): RedirectResponse
     {
+        Log::info('Auth: tentative inscription', ['email' => $request->email, 'role' => $request->role]);
+
         $request->validate([
             'prenom'        => ['required', 'string', 'max:80'],
             'nom'           => ['required', 'string', 'max:80'],
@@ -73,6 +75,8 @@ class RegisterController extends Controller
             'role'         => $request->role,
         ]);
 
+        Log::info('Auth: utilisateur cree', ['user_id' => $user->id, 'role' => $user->role]);
+
         $salon = null;
         if ($request->role === 'salon') {
             $salon = Salon::create([
@@ -85,23 +89,21 @@ class RegisterController extends Controller
                 'email'     => $request->email,
                 'valide'    => 0,
             ]);
+            Log::info('Auth: salon cree en attente validation', ['salon_id' => $salon->id, 'user_id' => $user->id]);
         }
 
-        // Déclencher l'événement Registered (nécessaire pour MustVerifyEmail)
         try {
             event(new Registered($user));
         } catch (\Throwable $e) {
-            Log::error('Erreur envoi email vérification', ['user_id' => $user->id, 'message' => $e->getMessage()]);
+            Log::error('Erreur envoi email verification', ['user_id' => $user->id, 'message' => $e->getMessage()]);
         }
 
-        // Générer l'URL de vérification pour l'inclure dans l'email de bienvenue
         $urlVerification = URL::temporarySignedRoute(
             'verification.verify',
             now()->addHours(24),
             ['id' => $user->id, 'hash' => sha1($user->email)]
         );
 
-        // Envoyer l'email de bienvenue personnalisé
         try {
             if ($request->role === 'salon' && $salon) {
                 Mail::to($user->email)->send(new BienvenueSalonMail(
@@ -117,6 +119,7 @@ class RegisterController extends Controller
                     urlVerification: $urlVerification,
                 ));
             }
+            Log::info('Auth: email bienvenue envoye', ['user_id' => $user->id]);
         } catch (\Throwable $e) {
             Log::error('Erreur email bienvenue', [
                 'user_id' => $user->id,

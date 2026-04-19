@@ -3,6 +3,7 @@
 namespace App\Mail\Transport;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mailer\Transport\AbstractTransport;
 use Symfony\Component\Mime\MessageConverter;
@@ -34,14 +35,34 @@ class BrevoTransport extends AbstractTransport
             'textContent' => $email->getTextBody(),
         ]);
 
+        $recipient = $to[0]['email'] ?? 'unknown';
+
+        Log::info('Brevo: envoi email', [
+            'to'          => $recipient,
+            'subject'     => $email->getSubject(),
+            'api_key_len' => strlen($this->apiKey),
+        ]);
+
         $response = Http::withHeaders([
             'api-key'      => $this->apiKey,
             'Content-Type' => 'application/json',
         ])->post('https://api.brevo.com/v3/smtp/email', $payload);
 
         if (! $response->successful()) {
+            Log::error('Brevo: échec envoi email', [
+                'to'          => $recipient,
+                'subject'     => $email->getSubject(),
+                'http_status' => $response->status(),
+                'body'        => $response->body(),
+            ]);
             throw new \RuntimeException('Brevo API error: ' . $response->body());
         }
+
+        $messageId = $response->json('messageId') ?? 'n/a';
+        Log::info('Brevo: email envoyé avec succès', [
+            'to'         => $recipient,
+            'messageId'  => $messageId,
+        ]);
     }
 
     public function __toString(): string

@@ -8,17 +8,13 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password as PasswordRule;
 
 class ResetPasswordController extends Controller
 {
-    /*
-    |------------------------------------------------------------------
-    | Afficher le formulaire de réinitialisation
-    |------------------------------------------------------------------
-    */
     public function showResetForm(Request $request, string $token): View
     {
         return view('auth.reset-password', [
@@ -27,11 +23,6 @@ class ResetPasswordController extends Controller
         ]);
     }
 
-    /*
-    |------------------------------------------------------------------
-    | Traiter la réinitialisation
-    |------------------------------------------------------------------
-    */
     public function reset(Request $request): RedirectResponse
     {
         $request->validate([
@@ -47,7 +38,8 @@ class ResetPasswordController extends Controller
             'mot_de_passe.min'          => 'Le mot de passe doit contenir au moins 8 caractères.',
         ]);
 
-        // Le broker Password s'occupe de vérifier le token et de mettre à jour
+        Log::info('Auth: tentative reinitialisation mot de passe', ['email' => $request->email]);
+
         $status = Password::reset(
             [
                 'email'                 => $request->email,
@@ -61,6 +53,8 @@ class ResetPasswordController extends Controller
                     'remember_token' => Str::random(60),
                 ])->save();
 
+                Log::info('Auth: mot de passe reinitialise', ['user_id' => $user->id]);
+
                 event(new PasswordReset($user));
             }
         );
@@ -69,6 +63,8 @@ class ResetPasswordController extends Controller
             return redirect()->route('login')
                 ->with('success', 'Mot de passe modifié avec succès. Vous pouvez vous connecter.');
         }
+
+        Log::warning('Auth: echec reinitialisation mot de passe', ['email' => $request->email, 'status' => $status]);
 
         return back()
             ->withInput($request->only('email'))

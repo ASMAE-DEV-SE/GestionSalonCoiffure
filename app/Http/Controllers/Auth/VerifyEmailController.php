@@ -7,61 +7,52 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class VerifyEmailController extends Controller
 {
-    /*
-    |------------------------------------------------------------------
-    | Page "Vérifiez votre email"
-    |------------------------------------------------------------------
-    */
     public function notice(Request $request): View|RedirectResponse
     {
-        // Si déjà vérifié → rediriger
         if ($request->user()->hasVerifiedEmail()) {
             return $this->redirectApreVerification($request);
         }
 
+        Log::info('Auth: page verification email affichee', ['user_id' => $request->user()->id]);
+
         return view('auth.verify-email');
     }
 
-    /*
-    |------------------------------------------------------------------
-    | Traiter le clic sur le lien du mail (GET /verify-email/{id}/{hash})
-    |------------------------------------------------------------------
-    */
     public function verify(EmailVerificationRequest $request): RedirectResponse
     {
         if ($request->user()->hasVerifiedEmail()) {
+            Log::info('Auth: email deja verifie', ['user_id' => $request->user()->id]);
             return $this->redirectApreVerification($request)
                 ->with('info', 'Email déjà vérifié.');
         }
 
         if ($request->user()->markEmailAsVerified()) {
             event(new Verified($request->user()));
+            Log::info('Auth: email verifie avec succes', ['user_id' => $request->user()->id]);
         }
 
         return $this->redirectApreVerification($request)
             ->with('success', 'Email vérifié avec succès ! Bienvenue sur Salonify.');
     }
 
-    /*
-    |------------------------------------------------------------------
-    | Renvoyer l'email de vérification
-    |------------------------------------------------------------------
-    */
     public function resend(Request $request): RedirectResponse
     {
         if ($request->user()->hasVerifiedEmail()) {
             return $this->redirectApreVerification($request);
         }
 
+        Log::info('Auth: renvoi email verification', ['user_id' => $request->user()->id]);
+
         try {
             $request->user()->sendEmailVerificationNotification();
             return back()->with('success', 'Email de vérification renvoyé. Vérifiez votre boîte mail (et le dossier spam).');
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::error('Erreur renvoi email vérification', [
+            Log::error('Erreur renvoi email verification', [
                 'user_id' => $request->user()->id,
                 'message' => $e->getMessage(),
             ]);
@@ -69,11 +60,6 @@ class VerifyEmailController extends Controller
         }
     }
 
-    /*
-    |------------------------------------------------------------------
-    | Redirection post-vérification selon le rôle
-    |------------------------------------------------------------------
-    */
     protected function redirectApreVerification(Request $request): RedirectResponse
     {
         $user = $request->user();

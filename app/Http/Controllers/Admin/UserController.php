@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
@@ -14,6 +16,8 @@ class UserController extends Controller
 {
     public function index(Request $request): View
     {
+        Log::info('Admin: liste utilisateurs', ['admin_id' => Auth::id(), 'filters' => $request->only('role', 'verifie', 'q')]);
+
         $query = User::query();
 
         if ($request->filled('role')) {
@@ -62,7 +66,7 @@ class UserController extends Controller
             'telephone'    => ['nullable', 'string', 'max:20'],
         ]);
 
-        User::create([
+        $user = User::create([
             'nom'          => $data['nom'],
             'prenom'       => $data['prenom'],
             'email'        => $data['email'],
@@ -71,11 +75,15 @@ class UserController extends Controller
             'telephone'    => $data['telephone'] ?? null,
         ]);
 
+        Log::info('Admin: utilisateur cree', ['admin_id' => Auth::id(), 'new_user_id' => $user->id, 'role' => $user->role]);
+
         return redirect()->route('admin.users.index')->with('success', 'Utilisateur créé.');
     }
 
     public function show(int $id): View
     {
+        Log::info('Admin: detail utilisateur', ['admin_id' => Auth::id(), 'user_id' => $id]);
+
         $user = User::with([
             'salon.ville',
             'salon.services',
@@ -110,7 +118,6 @@ class UserController extends Controller
     public function edit(int $id): View
     {
         $user = User::findOrFail($id);
-
         return view('admin.user_form', compact('user'));
     }
 
@@ -128,6 +135,8 @@ class UserController extends Controller
 
         $user->update($data);
 
+        Log::info('Admin: utilisateur mis a jour', ['admin_id' => Auth::id(), 'user_id' => $id]);
+
         return redirect()->route('admin.users.index')->with('success', 'Utilisateur mis à jour.');
     }
 
@@ -135,6 +144,8 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
+
+        Log::info('Admin: utilisateur supprime', ['admin_id' => Auth::id(), 'user_id' => $id]);
 
         return redirect()->route('admin.users.index')->with('success', 'Utilisateur supprimé.');
     }

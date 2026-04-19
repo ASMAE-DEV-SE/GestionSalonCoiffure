@@ -7,66 +7,59 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
 class GoogleController extends Controller
 {
-    /**
-     * Redirige l'utilisateur vers la page d'authentification Google.
-     */
     public function redirect(): RedirectResponse
     {
+        Log::info('Auth: redirection OAuth Google');
         return Socialite::driver('google')->redirect();
     }
 
-    /**
-     * Traite le retour de Google après authentification.
-     * Détermine le rôle (admin / salon / client) et redirige en conséquence.
-     */
     public function callback(): RedirectResponse
     {
         try {
             $googleUser = Socialite::driver('google')->user();
         } catch (\Throwable $e) {
+            Log::warning('Auth: callback Google echoue', ['message' => $e->getMessage()]);
             return redirect()->route('login')
                 ->with('error', 'Connexion Google annulée ou expirée. Veuillez réessayer.');
         }
 
-        // Chercher un compte existant par email
         $user = User::where('email', $googleUser->getEmail())->first();
 
         if ($user) {
-            // Compte existant → connexion directe
-            // Marquer l'email comme vérifié si ce n'est pas encore fait
             if (! $user->hasVerifiedEmail()) {
                 $user->markEmailAsVerified();
             }
 
             Auth::login($user, remember: true);
 
+            Log::info('Auth: connexion Google (compte existant)', ['user_id' => $user->id, 'role' => $user->role]);
+
             return $this->redirectParRole($user);
         }
 
-        // Nouveau compte → créer en tant que client (Google = email vérifié)
         $user = User::create([
             'prenom'           => $googleUser->user['given_name']  ?? explode(' ', $googleUser->getName())[0],
             'nom'              => $googleUser->user['family_name'] ?? (explode(' ', $googleUser->getName())[1] ?? ''),
             'email'            => $googleUser->getEmail(),
-            'mot_de_passe'     => Hash::make(Str::random(32)), // mot de passe aléatoire
+            'mot_de_passe'     => Hash::make(Str::random(32)),
             'role'             => 'client',
-            'email_verifie_le' => now(), // Google garantit l'email vérifié
+            'email_verifie_le' => now(),
         ]);
 
         Auth::login($user, remember: true);
+
+        Log::info('Auth: nouveau compte cree via Google', ['user_id' => $user->id]);
 
         return redirect()->route('client.dashboard')
             ->with('success', 'Bienvenue sur Salonify, ' . $user->prenom . ' ! Votre compte a été créé via Google.');
     }
 
-    /**
-     * Redirige selon le rôle de l'utilisateur connecté.
-     */
     private function redirectParRole(User $user): RedirectResponse
     {
         return match($user->role) {

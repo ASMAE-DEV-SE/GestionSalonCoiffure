@@ -5,16 +5,20 @@ namespace App\Http\Controllers\Salon;
 use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 use App\Models\Avis;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
     public function index(): View
     {
+        Log::info('Salon: dashboard consulte', ['user_id' => Auth::id()]);
+
         $salon = Auth::user()->salon()->with(['ville', 'employesActifs'])->firstOrFail();
 
-        // ── RDV du jour ───────────────────────────────────────────
+        Log::debug('Salon: dashboard pour salon', ['salon_id' => $salon->id, 'nom' => $salon->nom_salon]);
+
         $rdvAujourdhui = Reservation::where('salon_id', $salon->id)
             ->whereDate('date_heure', today())
             ->whereIn('statut', ['confirmee', 'en_attente'])
@@ -22,7 +26,6 @@ class DashboardController extends Controller
             ->orderBy('date_heure')
             ->get();
 
-        // ── KPI semaine ───────────────────────────────────────────
         $rdvSemaine = Reservation::where('salon_id', $salon->id)
             ->whereBetween('date_heure', [now()->startOfWeek(), now()->endOfWeek()])
             ->whereIn('statut', ['confirmee', 'en_attente', 'terminee'])
@@ -34,7 +37,6 @@ class DashboardController extends Controller
             ->join('services', 'reservations.service_id', '=', 'services.id')
             ->sum('services.prix');
 
-        // ── En attente de confirmation ────────────────────────────
         $enAttente = Reservation::where('salon_id', $salon->id)
             ->where('statut', 'en_attente')
             ->where('date_heure', '>=', now())
@@ -42,7 +44,6 @@ class DashboardController extends Controller
             ->orderBy('date_heure')
             ->get();
 
-        // ── Prochains RDV 7 jours ─────────────────────────────────
         $prochains = Reservation::where('salon_id', $salon->id)
             ->whereIn('statut', ['confirmee', 'en_attente'])
             ->whereBetween('date_heure', [now(), now()->addDays(7)])
@@ -50,7 +51,6 @@ class DashboardController extends Controller
             ->orderBy('date_heure')
             ->get();
 
-        // ── Graphique : RDV 7 derniers jours ─────────────────────
         $chartData = [];
         for ($i = 6; $i >= 0; $i--) {
             $date        = now()->subDays($i);
@@ -64,7 +64,6 @@ class DashboardController extends Controller
             ];
         }
 
-        // ── Top 5 services ────────────────────────────────────────
         $totalTerminees = Reservation::where('salon_id', $salon->id)
             ->where('statut', 'terminee')->count();
 
@@ -77,7 +76,6 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        // ── 3 derniers avis ───────────────────────────────────────
         $derniersAvis = Avis::whereHas('reservation',
                 fn($q) => $q->where('salon_id', $salon->id)
             )
@@ -85,6 +83,13 @@ class DashboardController extends Controller
             ->latest()
             ->limit(3)
             ->get();
+
+        Log::debug('Salon: dashboard chiffres', [
+            'salon_id'       => $salon->id,
+            'rdv_auj'        => $rdvAujourdhui->count(),
+            'en_attente'     => $enAttente->count(),
+            'rdv_semaine'    => $rdvSemaine,
+        ]);
 
         return view('salon.dashboard', compact(
             'salon', 'rdvAujourdhui', 'rdvSemaine', 'caSemaine',

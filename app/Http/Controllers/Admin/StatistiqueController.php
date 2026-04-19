@@ -10,6 +10,8 @@ use App\Models\User;
 use App\Models\Ville;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class StatistiqueController extends Controller
@@ -23,7 +25,12 @@ class StatistiqueController extends Controller
             ? Carbon::parse($request->fin)->endOfDay()
             : now()->endOfDay();
 
-        // KPI sur la période
+        Log::info('Admin: statistiques consultees', [
+            'admin_id' => Auth::id(),
+            'debut'    => $debut->toDateString(),
+            'fin'      => $fin->toDateString(),
+        ]);
+
         $totalResa = Reservation::whereBetween('date_heure', [$debut, $fin])->count();
         $annulees  = Reservation::whereBetween('date_heure', [$debut, $fin])
             ->where('statut', 'annulee')->count();
@@ -51,7 +58,8 @@ class StatistiqueController extends Controller
             'note_moy_raw' => $noteMoyRaw ? (float) $noteMoyRaw : 0.0,
         ];
 
-        // Réservations par mois sur la période
+        Log::debug('Admin: KPI statistiques', $kpi);
+
         $resaParMois = [];
         $cursor = $debut->copy()->startOfMonth();
         while ($cursor->lte($fin)) {
@@ -71,7 +79,6 @@ class StatistiqueController extends Controller
             $cursor->addMonth();
         }
 
-        // Distribution des notes (1-5)
         $totalAvis = Avis::count() ?: 1;
         $distNotes = [];
         for ($i = 1; $i <= 5; $i++) {
@@ -82,7 +89,6 @@ class StatistiqueController extends Controller
             ];
         }
 
-        // Top salons sur la période
         $topSalons = Salon::select('salons.id', 'salons.nom_salon')
             ->selectRaw('COUNT(reservations.id) as nb_resa')
             ->leftJoin('reservations', function ($j) use ($debut, $fin) {
@@ -94,7 +100,6 @@ class StatistiqueController extends Controller
             ->limit(8)
             ->get();
 
-        // Par catégorie de service
         $parCategorie = Reservation::whereBetween('reservations.date_heure', [$debut, $fin])
             ->join('services', 'services.id', '=', 'reservations.service_id')
             ->selectRaw('services.categorie, COUNT(reservations.id) as total')
@@ -102,7 +107,6 @@ class StatistiqueController extends Controller
             ->orderByDesc('total')
             ->get();
 
-        // Par ville
         $parVille = Ville::select('villes.id', 'villes.nom_ville')
             ->selectRaw('COUNT(reservations.id) as nb_resa')
             ->leftJoin('salons', 'salons.ville_id', '=', 'villes.id')
@@ -126,12 +130,19 @@ class StatistiqueController extends Controller
         $debut = $request->filled('debut') ? Carbon::parse($request->debut)->startOfDay() : now()->subDays(30)->startOfDay();
         $fin   = $request->filled('fin')   ? Carbon::parse($request->fin)->endOfDay()     : now()->endOfDay();
 
+        Log::info('Admin: export CSV reservations', [
+            'admin_id' => Auth::id(),
+            'debut'    => $debut->toDateString(),
+            'fin'      => $fin->toDateString(),
+        ]);
+
         $reservations = Reservation::with(['client', 'salon.ville', 'service'])
             ->whereBetween('date_heure', [$debut, $fin])
             ->orderByDesc('date_heure')
             ->get();
 
-        // BOM UTF-8 obligatoire pour qu'Excel reconnaisse l'encodage
+        Log::info('Admin: export CSV - nb reservations', ['count' => $reservations->count()]);
+
         $bom = "\xEF\xBB\xBF";
 
         $rows   = [];
@@ -154,7 +165,6 @@ class StatistiqueController extends Controller
             ];
         }
 
-        // Encoder chaque cellule : guillemets doubles, \r\n pour Windows/Excel
         $csv = $bom;
         foreach ($rows as $row) {
             $csv .= implode(';', array_map(

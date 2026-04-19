@@ -9,15 +9,18 @@ use App\Models\Salon;
 use App\Models\User;
 use App\Models\Ville;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
     public function index(): View
     {
+        Log::info('Admin: dashboard consulte', ['admin_id' => Auth::id()]);
+
         $now = Carbon::now();
 
-        // KPI
         $salonsTotal   = Salon::count();
         $salonsValides = Salon::where('valide', 1)->count();
         $salonsAttente = Salon::where('valide', 0)->count();
@@ -41,7 +44,8 @@ class DashboardController extends Controller
             'villes_actives'  => $villesActives,
         ];
 
-        // Alertes dynamiques
+        Log::debug('Admin: KPI charges', $kpi);
+
         $alertes = [];
         if ($salonsAttente > 0) {
             $alertes[] = [
@@ -58,17 +62,14 @@ class DashboardController extends Controller
             ];
         }
 
-        // Salons en attente de validation
         $salonsEnAttente = Salon::with(['ville', 'user'])
             ->where('valide', 0)
             ->latest()
             ->limit(5)
             ->get();
 
-        // Derniers inscrits
         $derniersUsers = User::latest()->limit(6)->get();
 
-        // Top villes par nombre de réservations
         $topVilles = Ville::select('villes.id', 'villes.nom_ville')
             ->selectRaw('COUNT(reservations.id) as nb_resa')
             ->leftJoin('salons', 'salons.ville_id', '=', 'villes.id')
@@ -78,7 +79,6 @@ class DashboardController extends Controller
             ->limit(6)
             ->get();
 
-        // Chart réservations 6 derniers mois
         $chartResa = [];
         for ($i = 5; $i >= 0; $i--) {
             $mois = $now->copy()->subMonths($i);

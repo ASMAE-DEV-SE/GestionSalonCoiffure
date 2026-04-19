@@ -2,6 +2,7 @@ FROM php:8.4-cli-alpine
 
 RUN apk add --no-cache \
     mysql-client \
+    ca-certificates \
     libzip-dev \
     libpng-dev \
     oniguruma-dev \

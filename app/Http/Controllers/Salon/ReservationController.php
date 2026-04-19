@@ -8,8 +8,9 @@ use App\Models\Employe;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 class ReservationController extends Controller
 {
@@ -20,41 +21,34 @@ class ReservationController extends Controller
         return Auth::user()->salon()->firstOrFail();
     }
 
-    /*
-    |------------------------------------------------------------------
-    | GET /salon/reservations
-    |------------------------------------------------------------------
-    */
     public function index(Request $request): View
     {
         $salon = $this->salon();
 
+        Log::info('Salon: liste reservations', [
+            'salon_id' => $salon->id,
+            'filters'  => $request->only('statut', 'date', 'employe_id'),
+        ]);
+
         $query = Reservation::where('salon_id', $salon->id)
             ->with(['service', 'employe', 'client', 'avis']);
 
-        // Filtre statut
         if ($request->filled('statut')) {
             $query->where('statut', $request->statut);
         }
-
-        // Filtre date
         if ($request->filled('date')) {
             $query->whereDate('date_heure', $request->date);
         }
-
-        // Filtre employé
         if ($request->filled('employe_id')) {
             $query->where('employe_id', $request->employe_id);
         }
 
-        // Tri par défaut : prochains d'abord
         $query->orderBy('date_heure', $request->get('tri') === 'ancien' ? 'asc' : 'desc');
 
         $reservations = $query->paginate(15)->withQueryString();
 
         $employes = Employe::where('salon_id', $salon->id)->actifs()->get();
 
-        // Compteurs par statut pour les onglets
         $compteurs = [
             'en_attente' => Reservation::where('salon_id', $salon->id)
                 ->where('statut', 'en_attente')
@@ -73,11 +67,6 @@ class ReservationController extends Controller
         ));
     }
 
-    /*
-    |------------------------------------------------------------------
-    | GET /salon/reservations/{id}
-    |------------------------------------------------------------------
-    */
     public function show(int $id): View
     {
         $salon       = $this->salon();
@@ -85,14 +74,11 @@ class ReservationController extends Controller
             ->with(['service', 'employe', 'client', 'avis'])
             ->findOrFail($id);
 
+        Log::info('Salon: detail reservation', ['salon_id' => $salon->id, 'reservation_id' => $id]);
+
         return view('salon.reservation_detail', compact('salon', 'reservation'));
     }
 
-    /*
-    |------------------------------------------------------------------
-    | POST /salon/reservations/{id}/confirmer
-    |------------------------------------------------------------------
-    */
     public function confirmer(int $id): RedirectResponse
     {
         $salon       = $this->salon();
@@ -102,7 +88,8 @@ class ReservationController extends Controller
 
         $reservation->update(['statut' => 'confirmee']);
 
-        // Envoyer notification + email au client
+        Log::info('Salon: reservation confirmee', ['salon_id' => $salon->id, 'reservation_id' => $id]);
+
         $this->notifService->envoyerAvecEmail(
             $reservation->client_id,
             'reservation_confirmee',
@@ -118,11 +105,6 @@ class ReservationController extends Controller
         return back()->with('success', 'Réservation confirmée. Le client a été notifié.');
     }
 
-    /*
-    |------------------------------------------------------------------
-    | POST /salon/reservations/{id}/terminer
-    |------------------------------------------------------------------
-    */
     public function terminer(int $id): RedirectResponse
     {
         $salon       = $this->salon();
@@ -132,14 +114,11 @@ class ReservationController extends Controller
 
         $reservation->update(['statut' => 'terminee']);
 
+        Log::info('Salon: reservation terminee', ['salon_id' => $salon->id, 'reservation_id' => $id]);
+
         return back()->with('success', 'Réservation marquée comme terminée.');
     }
 
-    /*
-    |------------------------------------------------------------------
-    | POST /salon/reservations/{id}/annuler
-    |------------------------------------------------------------------
-    */
     public function annuler(Request $request, int $id): RedirectResponse
     {
         $salon       = $this->salon();
@@ -160,7 +139,12 @@ class ReservationController extends Controller
             'motif_annul' => $request->motif,
         ]);
 
-        // Notifier le client + email
+        Log::info('Salon: reservation annulee', [
+            'salon_id'       => $salon->id,
+            'reservation_id' => $id,
+            'motif'          => $request->motif,
+        ]);
+
         $this->notifService->envoyerAvecEmail(
             $reservation->client_id,
             'reservation_annulee',
