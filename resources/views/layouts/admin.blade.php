@@ -139,23 +139,31 @@
 
   {{-- Contenu principal --}}
   <main class="admin-main">
-
-    {{-- Flash messages --}}
-    @foreach(['success','error','warning','info'] as $type)
-      @if(session($type))
-        <div class="flash flash-{{ $type }}" style="margin-bottom:1.4rem">
-          {{ session($type) }}
-          <button class="flash-close" onclick="this.parentElement.remove()">&#10005;</button>
-        </div>
-      @endif
-    @endforeach
-
     @yield('content')
   </main>
 </div>
 
+{{-- Flash messages (même zone flottante que le reste du site) --}}
+@if(session()->hasAny(['success','error','warning','info']))
+  <div class="flash-zone">
+    @foreach(['success','error','warning','info'] as $type)
+      @if(session($type))
+        <div class="flash flash-{{ $type }}">
+          {{ session($type) }}
+          <button class="flash-close" onclick="this.parentElement.classList.add('is-leaving');setTimeout(()=>this.parentElement.remove(),280)">&#10005;</button>
+        </div>
+      @endif
+    @endforeach
+  </div>
+@endif
+
 <script>
-document.querySelectorAll('.flash').forEach(f => setTimeout(() => f.remove(), 5000));
+document.querySelectorAll('.flash').forEach(f => {
+  setTimeout(() => {
+    f.classList.add('is-leaving');
+    setTimeout(() => f.remove(), 280);
+  }, 5000);
+});
 </script>
 @stack('scripts')
 </body>

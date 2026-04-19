@@ -65,14 +65,18 @@
 </header>
 
 {{-- ══ FLASH ════════════════════════════════════════════════════ --}}
-@foreach(['success','error','warning','info'] as $type)
-  @if(session($type))
-    <div class="flash flash-{{ $type }}">
-      {{ session($type) }}
-      <button class="flash-close" onclick="this.parentElement.remove()">&#10005;</button>
-    </div>
-  @endif
-@endforeach
+@if(session()->hasAny(['success','error','warning','info']))
+  <div class="flash-zone">
+    @foreach(['success','error','warning','info'] as $type)
+      @if(session($type))
+        <div class="flash flash-{{ $type }}">
+          {{ session($type) }}
+          <button class="flash-close" onclick="this.parentElement.classList.add('is-leaving');setTimeout(()=>this.parentElement.remove(),280)">&#10005;</button>
+        </div>
+      @endif
+    @endforeach
+  </div>
+@endif
 
 {{-- ══ LAYOUT POUR CLIENTS (sidebar + main) ════════════════════ --}}
 @if(auth()->user()->isClient())
@@ -152,7 +156,12 @@
 @endif
 
 <script>
-document.querySelectorAll('.flash').forEach(f => setTimeout(() => f.remove(), 5000));
+document.querySelectorAll('.flash').forEach(f => {
+  setTimeout(() => {
+    f.classList.add('is-leaving');
+    setTimeout(() => f.remove(), 280);
+  }, 5000);
+});
 </script>
 @stack('scripts')
 </body>

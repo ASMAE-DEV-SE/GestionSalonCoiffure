@@ -114,7 +114,7 @@
       @if(session($type))
         <div class="flash flash-{{ $type }}">
           {{ session($type) }}
-          <button class="flash-close" onclick="this.parentElement.remove()">&#10005;</button>
+          <button class="flash-close" onclick="this.parentElement.classList.add('is-leaving');setTimeout(()=>this.parentElement.remove(),280)">&#10005;</button>
         </div>
       @endif
     @endforeach
@@ -144,9 +144,12 @@ const brg = document.getElementById('brg');
 const mm  = document.getElementById('mm');
 if (brg) brg.addEventListener('click', () => mm.classList.toggle('open'));
 
-// Fermer les flash automatiquement après 5s
+// Fermer les flash automatiquement après 5s (avec animation de sortie)
 document.querySelectorAll('.flash').forEach(f => {
-  setTimeout(() => f.remove(), 5000);
+  setTimeout(() => {
+    f.classList.add('is-leaving');
+    setTimeout(() => f.remove(), 280);
+  }, 5000);
 });
 </script>
 @stack('scripts')
