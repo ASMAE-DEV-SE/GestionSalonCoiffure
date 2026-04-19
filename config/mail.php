@@ -34,6 +34,11 @@ return [
             'transport' => 'array',
         ],
 
+        'brevo' => [
+            'transport' => 'brevo',
+            'api_key'   => env('BREVO_API_KEY'),
+        ],
+
     ],
 
     'from' => [
