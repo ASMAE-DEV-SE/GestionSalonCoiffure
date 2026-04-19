@@ -26,20 +26,40 @@ class VerifyEmailController extends Controller
 
     public function verify(Request $request, int $id, string $hash): RedirectResponse
     {
-        $user = User::findOrFail($id);
+        // Validation robuste de la signature : essaie absolu puis relatif.
+        // Indispensable derrière un proxy (Railway) où l'URL signée peut
+        // avoir été générée en https mais reçue en http côté app.
+        $signatureOk = $request->hasValidSignature()
+            || $request->hasValidRelativeSignature();
+
+        if (! $signatureOk) {
+            Log::warning('Auth: signature verification invalide', [
+                'user_id' => $id,
+                'url'     => $request->fullUrl(),
+            ]);
+            return redirect()->route('login')
+                ->with('error', 'Lien de vérification invalide ou expiré. Connectez-vous et demandez un nouvel email.');
+        }
+
+        $user = User::find($id);
+
+        if (! $user) {
+            return redirect()->route('login')
+                ->with('error', 'Compte introuvable.');
+        }
 
         // Vérifier le hash email
-        if (! hash_equals(sha1($user->email), $hash)) {
-            return redirect()->route('verification.notice')
+        if (! hash_equals(sha1($user->email), (string) $hash)) {
+            return redirect()->route('login')
                 ->with('error', 'Lien de vérification invalide.');
         }
 
         if ($user->hasVerifiedEmail()) {
             Log::info('Auth: email deja verifie', ['user_id' => $user->id]);
-            // Connecter l'utilisateur s'il ne l'est pas déjà
             if (! Auth::check() || Auth::id() !== $user->id) {
-                Auth::login($user);
+                Auth::login($user, true);
             }
+            $request->session()->regenerate();
             return $this->redirectUserApreVerification($user)
                 ->with('info', 'Email déjà vérifié.');
         }
@@ -49,8 +69,9 @@ class VerifyEmailController extends Controller
             Log::info('Auth: email verifie avec succes', ['user_id' => $user->id]);
         }
 
-        // Connecter l'utilisateur vérifié
-        Auth::login($user);
+        // Connecter l'utilisateur vérifié (avec remember + régénération session)
+        Auth::login($user, true);
+        $request->session()->regenerate();
 
         return $this->redirectUserApreVerification($user)
             ->with('success', 'Email vérifié avec succès ! Bienvenue sur Salonify.');

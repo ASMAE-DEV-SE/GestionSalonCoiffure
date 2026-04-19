@@ -88,6 +88,25 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->notify(new VerifyEmailNotification);
     }
 
+    // Vérification email — on écrit directement sur la vraie colonne
+    // pour éviter tout aléa du mutateur email_verified_at.
+    public function hasVerifiedEmail(): bool
+    {
+        return ! is_null($this->email_verifie_le);
+    }
+
+    public function markEmailAsVerified(): bool
+    {
+        return $this->forceFill([
+            'email_verifie_le' => $this->freshTimestamp(),
+        ])->save();
+    }
+
+    public function getEmailForVerification(): string
+    {
+        return $this->email;
+    }
+
     /*
     |------------------------------------------------------------------
     | RELATIONS

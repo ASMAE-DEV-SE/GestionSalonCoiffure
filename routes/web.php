@@ -60,7 +60,7 @@ Route::middleware('guest')->group(function () {
 
 // Email verification
 Route::get('/verification-email', [VerifyEmailController::class, 'notice'])->name('verification.notice')->middleware('auth');
-Route::get('/verification-email/{id}/{hash}', [VerifyEmailController::class, 'verify'])->name('verification.verify')->middleware('signed:relative');
+Route::get('/verification-email/{id}/{hash}', [VerifyEmailController::class, 'verify'])->name('verification.verify');
 Route::post('/verification-email/renvoyer', [VerifyEmailController::class, 'resend'])->name('verification.send')->middleware(['auth', 'throttle:6,1']);
 
 // Client routes

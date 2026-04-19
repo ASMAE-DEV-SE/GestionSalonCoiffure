@@ -20,8 +20,16 @@ return Application::configure(basePath: dirname(__DIR__))
             'verified'     => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         ]);
 
-        // ── Middleware web global ─────────────────────────────────
-        // (les middlewares Laravel de base sont déjà inclus)
+        // Railway / reverse proxy: faire confiance aux en-têtes X-Forwarded-*
+        // afin que Laravel détecte le vrai scheme https et reconstruise
+        // correctement l'URL pour la validation de signature des emails.
+        $middleware->trustProxies(at: '*', headers:
+            \Illuminate\Http\Request::HEADER_X_FORWARDED_FOR |
+            \Illuminate\Http\Request::HEADER_X_FORWARDED_HOST |
+            \Illuminate\Http\Request::HEADER_X_FORWARDED_PORT |
+            \Illuminate\Http\Request::HEADER_X_FORWARDED_PROTO |
+            \Illuminate\Http\Request::HEADER_X_FORWARDED_AWS_ELB
+        );
     })
     ->withExceptions(function (Exceptions $exceptions) {
 
