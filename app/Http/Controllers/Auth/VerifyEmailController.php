@@ -57,9 +57,16 @@ class VerifyEmailController extends Controller
             return $this->redirectApreVerification($request);
         }
 
-        $request->user()->sendEmailVerificationNotification();
-
-        return back()->with('success', 'Email de vérification renvoyé. Vérifiez votre boîte mail.');
+        try {
+            $request->user()->sendEmailVerificationNotification();
+            return back()->with('success', 'Email de vérification renvoyé. Vérifiez votre boîte mail (et le dossier spam).');
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Erreur renvoi email vérification', [
+                'user_id' => $request->user()->id,
+                'message' => $e->getMessage(),
+            ]);
+            return back()->with('error', 'Impossible d\'envoyer l\'email : ' . $e->getMessage());
+        }
     }
 
     /*
