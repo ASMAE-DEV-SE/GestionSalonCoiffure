@@ -7,12 +7,20 @@ use App\Models\Ville;
 use App\Models\Salon;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
     public function index(Request $request): View
     {
+        Log::info('[Home] Page accueil', [
+            'user_id' => Auth::id(),
+            'q'       => $request->input('q'),
+            'ville'   => $request->input('ville'),
+        ]);
+
         // Villes actives avec au moins un salon validé + compteur
         $villes = Ville::actives()
             ->withCount(['salonsValides'])

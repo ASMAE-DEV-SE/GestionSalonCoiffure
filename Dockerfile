@@ -26,6 +26,14 @@ RUN composer dump-autoload --optimize \
     && chmod -R 775 storage bootstrap/cache \
     && php artisan storage:link || true
 
+ENV LOG_CHANNEL=stderr \
+    LOG_LEVEL=debug \
+    APP_DEBUG=true
+
 EXPOSE 8000
 
-CMD php artisan config:clear && php artisan config:cache && php artisan route:cache && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+CMD php artisan config:clear \
+    && php artisan config:cache \
+    && php artisan route:cache \
+    && echo "[BOOT] MAIL_MAILER=${MAIL_MAILER} | BREVO_API_KEY set? $([ -n \"$BREVO_API_KEY\" ] && echo yes || echo NO)" \
+    && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}

@@ -10,6 +10,7 @@ use App\Services\ReservationService;
 use App\Services\GestionnaireDisponibilite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ReservationController extends Controller
 {
@@ -22,6 +23,10 @@ class ReservationController extends Controller
     public function step1(string $salon)
     {
         $salonModel = $this->getSalonOr404($salon);
+        Log::info('[Client] Wizard step1', [
+            'user_id'  => Auth::id(),
+            'salon_id' => $salonModel->id,
+        ]);
         $categories = $salonModel->servicesActifs->pluck('categorie')->unique()->values();
         $services   = $salonModel->servicesActifs;
         return view('reservations.step1', compact('salonModel','services','categories'));
@@ -79,6 +84,12 @@ class ReservationController extends Controller
     {
         $salonModel = $this->getSalonOr404($salon);
 
+        Log::info('[Client] Wizard store → tentative création', [
+            'user_id'  => Auth::id(),
+            'salon_id' => $salonModel->id,
+            'payload'  => $request->only('service_id', 'employe_id', 'date_heure', 'duree_minutes'),
+        ]);
+
         $data = $request->validate([
             'service_id'    => ['required','exists:services,id'],
             'employe_id'    => ['nullable','exists:employes,id'],
@@ -93,8 +104,12 @@ class ReservationController extends Controller
             $data
         );
 
-        // Vider la session du wizard
         $request->session()->forget("wizard_{$salonModel->id}");
+
+        Log::info('[Client] Wizard store ✓ reservation créée', [
+            'reservation_id' => $reservation->id,
+            'user_id'        => Auth::id(),
+        ]);
 
         return redirect()->route('reservations.confirmation', $reservation->id);
     }
@@ -144,6 +159,10 @@ class ReservationController extends Controller
         $reservation = Reservation::where('client_id', Auth::id())->findOrFail($id);
 
         if (! $reservation->peutEtreAnnulee()) {
+            Log::warning('[Client] Annulation refusée (trop tard)', [
+                'reservation_id' => $id,
+                'user_id'        => Auth::id(),
+            ]);
             return back()->with('error', 'Cette réservation ne peut plus être annulée (moins de 24h avant le RDV).');
         }
 
@@ -152,6 +171,12 @@ class ReservationController extends Controller
             'annulee_par' => 'client',
             'date_annul'  => now(),
             'motif_annul' => $request->motif ?? null,
+        ]);
+
+        Log::info('[Client] Reservation annulée par client', [
+            'reservation_id' => $id,
+            'user_id'        => Auth::id(),
+            'motif'          => $request->motif,
         ]);
 
         return redirect()->route('client.reservations.index')

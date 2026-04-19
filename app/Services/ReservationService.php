@@ -24,12 +24,25 @@ class ReservationService
      */
     public function creer(User $client, Salon $salon, array $data): Reservation
     {
-        $service  = Service::findOrFail($data['service_id']);
-        $employe  = isset($data['employe_id']) ? Employe::find($data['employe_id']) : null;
+        Log::info('[Reservation] → Création', [
+            'client_id'  => $client->id,
+            'salon_id'   => $salon->id,
+            'service_id' => $data['service_id'] ?? null,
+            'date_heure' => $data['date_heure'] ?? null,
+        ]);
+
+        $service   = Service::findOrFail($data['service_id']);
+        $employe   = isset($data['employe_id']) ? Employe::find($data['employe_id']) : null;
         $dateHeure = Carbon::parse($data['date_heure']);
 
-        // Vérification finale de disponibilité
         if (! $this->disponibilite->estDisponible($salon, $service, $dateHeure, $employe)) {
+            Log::warning('[Reservation] ✗ Créneau indisponible', [
+                'client_id'  => $client->id,
+                'salon_id'   => $salon->id,
+                'service_id' => $service->id,
+                'date_heure' => $dateHeure->toDateTimeString(),
+                'employe_id' => $employe?->id,
+            ]);
             abort(409, 'Ce créneau n\'est plus disponible. Veuillez en choisir un autre.');
         }
 
@@ -44,7 +57,13 @@ class ReservationService
             'statut'        => 'en_attente',
         ]);
 
-        // Notifier le salon (base de données)
+        Log::info('[Reservation] ✓ Créée', [
+            'reservation_id' => $reservation->id,
+            'client_id'      => $client->id,
+            'salon_id'       => $salon->id,
+            'statut'         => $reservation->statut,
+        ]);
+
         $this->notifService->envoyer(
             $salon->user_id,
             'nouvelle_reservation',
@@ -56,13 +75,18 @@ class ReservationService
             ]
         );
 
-        // Email au gérant du salon
         try {
             $reservation->load(['client', 'salon.ville', 'service', 'employe']);
-            Mail::to($salon->user->email)->send(new NouvelleReservationMail($reservation));
-        } catch (\Throwable $e) {
-            Log::error('Erreur email nouvelle_reservation', [
+            Log::info('[Reservation] → Envoi email au salon', [
                 'reservation_id' => $reservation->id,
+                'salon_email'    => $salon->user->email,
+            ]);
+            Mail::to($salon->user->email)->send(new NouvelleReservationMail($reservation));
+            Log::info('[Reservation] ✓ Email salon envoyé', ['reservation_id' => $reservation->id]);
+        } catch (\Throwable $e) {
+            Log::error('[Reservation] ✗ Erreur email nouvelle_reservation', [
+                'reservation_id' => $reservation->id,
+                'exception'      => get_class($e),
                 'message'        => $e->getMessage(),
             ]);
         }

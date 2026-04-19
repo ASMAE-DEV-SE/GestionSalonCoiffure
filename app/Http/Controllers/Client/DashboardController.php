@@ -8,12 +8,18 @@ use App\Models\Avis;
 use App\Models\Salon;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
     public function index(): View
     {
         $user = Auth::user();
+
+        Log::info('[Client] Dashboard', [
+            'user_id'  => $user->id,
+            'verified' => $user->hasVerifiedEmail(),
+        ]);
 
         // Prochain RDV confirmé ou en attente
         $prochainRdv = Reservation::with(['salon.ville', 'service', 'employe'])
