@@ -26,8 +26,8 @@ class VerifyEmailController extends Controller
 
     public function verify(Request $request, int $id, string $hash): RedirectResponse
     {
-        // Vérifier la signature de l'URL
-        if (! $request->hasValidSignature()) {
+        // Vérifier la signature de l'URL (accepte les deux formes car Railway utilise un proxy HTTPS)
+        if (! $request->hasValidSignature() && ! $request->hasValidRelativeSignature()) {
             return redirect()->route('verification.notice')
                 ->with('error', 'Le lien de vérification est invalide ou a expiré. Demandez-en un nouveau.');
         }
