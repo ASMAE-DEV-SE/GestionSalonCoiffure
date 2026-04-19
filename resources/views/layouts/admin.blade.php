@@ -51,6 +51,14 @@
          class="admin-topnav-tab {{ request()->routeIs('admin.statistiques.*') ? 'active' : '' }}">
         Statistiques
       </a>
+      <a href="{{ route('admin.contact.index') }}"
+         class="admin-topnav-tab {{ request()->routeIs('admin.contact.*') ? 'active' : '' }}">
+        Messages
+        @php $nonLus = \App\Models\ContactMessage::where('lu', false)->count(); @endphp
+        @if($nonLus > 0)
+          <span style="background:#E8562A;color:#fff;font-size:.6rem;font-weight:700;padding:.06rem .4rem;border-radius:8px;margin-left:.3rem">{{ $nonLus }}</span>
+        @endif
+      </a>
     </nav>
 
     <div class="admin-topbar-right">
@@ -112,6 +120,14 @@
     <a href="{{ route('admin.villes.index') }}"
        class="admin-sidebar-link {{ request()->routeIs('admin.villes.*') ? 'active' : '' }}">
       <div class="admin-sidebar-icon">&#127968;</div>Villes
+    </a>
+    <a href="{{ route('admin.contact.index') }}"
+       class="admin-sidebar-link {{ request()->routeIs('admin.contact.*') ? 'active' : '' }}">
+      <div class="admin-sidebar-icon">&#9993;</div>Messages
+      @php $nonLusSidebar = \App\Models\ContactMessage::where('lu', false)->count(); @endphp
+      @if($nonLusSidebar > 0)
+        <span class="admin-sidebar-badge danger">{{ $nonLusSidebar }}</span>
+      @endif
     </a>
 
     <div class="admin-sidebar-divider"></div>

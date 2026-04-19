@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\VilleController as AdminVilleController;
 use App\Http\Controllers\Admin\AvisController as AdminAvisController;
 use App\Http\Controllers\Admin\StatistiqueController;
+use App\Http\Controllers\Admin\ContactController as AdminContactController;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -146,4 +147,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::delete('/avis/{id}', [AdminAvisController::class, 'destroy'])->name('avis.destroy');
     Route::get('/statistiques', [StatistiqueController::class, 'index'])->name('statistiques.index');
     Route::get('/statistiques/export', [StatistiqueController::class, 'export'])->name('statistiques.export');
+    Route::get('/contact', [AdminContactController::class, 'index'])->name('contact.index');
+    Route::delete('/contact/{id}', [AdminContactController::class, 'destroy'])->name('contact.destroy');
 });

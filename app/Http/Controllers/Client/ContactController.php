@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\ContactMessage;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -30,11 +30,7 @@ class ContactController extends Controller
             'message.min'      => 'Le message doit contenir au moins 20 caractères.',
         ]);
 
-        // Envoi email (configurer MAIL_* dans .env)
-        // Mail::to('contact@salonify.ma')->send(new \App\Mail\ContactMail($request->all()));
-
-        // Log en attendant la config mail
-        \Illuminate\Support\Facades\Log::info('Contact Salonify', [
+        ContactMessage::create([
             'nom'     => $request->nom,
             'email'   => $request->email,
             'sujet'   => $request->sujet,
