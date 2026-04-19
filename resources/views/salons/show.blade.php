@@ -96,12 +96,12 @@
       </div>
 
       {{-- Résumé --}}
-      @if($salon->nb_avis > 0)
+      @if($totalAvis > 0)
         <div class="reviews-summary">
           <div>
-            <div class="reviews-big-score">{{ number_format($salon->note_moy, 1) }}</div>
+            <div class="reviews-big-score">{{ number_format($noteMoy, 1) }}</div>
             <div class="reviews-stars-large">{{ str_repeat('★', $noteMoyInt) }}{{ str_repeat('☆', 5 - $noteMoyInt) }}</div>
-            <div class="reviews-total">{{ $salon->nb_avis }} avis vérifiés</div>
+            <div class="reviews-total">{{ $totalAvis }} avis vérifiés</div>
           </div>
           <div style="flex:1">
             @for($i = 5; $i >= 1; $i--)

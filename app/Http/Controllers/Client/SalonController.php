@@ -114,6 +114,19 @@ class SalonController extends Controller
               ->limit(10)
               ->get();
 
+        // Calcul dynamique depuis la vraie table avis
+        $totalAvis = Avis::whereHas('reservation', fn($q) =>
+            $q->where('salon_id', $salon->id)
+        )->count();
+
+        $noteMoy = $totalAvis > 0
+            ? round(Avis::whereHas('reservation', fn($q) =>
+                $q->where('salon_id', $salon->id)
+              )->avg('note'), 1)
+            : 0;
+
+        $noteMoyInt = (int) round($noteMoy);
+
         $distribution = [];
         for ($i = 5; $i >= 1; $i--) {
             $nb = Avis::whereHas('reservation', fn($q) =>
@@ -122,9 +135,7 @@ class SalonController extends Controller
 
             $distribution[$i] = [
                 'count' => $nb,
-                'pct'   => $salon->nb_avis > 0
-                    ? round($nb / $salon->nb_avis * 100)
-                    : 0,
+                'pct'   => $totalAvis > 0 ? round($nb / $totalAvis * 100) : 0,
             ];
         }
 
@@ -148,7 +159,8 @@ class SalonController extends Controller
 
         return view('salons.show', compact(
             'salon', 'villeModel', 'avis',
-            'distribution', 'servicesByCategorie', 'reservationAEvaluer'
+            'distribution', 'servicesByCategorie', 'reservationAEvaluer',
+            'totalAvis', 'noteMoy', 'noteMoyInt'
         ));
     }
 }
