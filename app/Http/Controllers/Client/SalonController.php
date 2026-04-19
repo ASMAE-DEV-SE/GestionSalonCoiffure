@@ -25,7 +25,19 @@ class SalonController extends Controller
             ->where('nom_ville', 'like', $ville)
             ->firstOrFail();
 
+        $realNbAvis = Avis::selectRaw('COUNT(*)')
+            ->join('reservations', 'avis.reservation_id', '=', 'reservations.id')
+            ->whereColumn('reservations.salon_id', 'salons.id');
+
+        $realNoteMoy = Avis::selectRaw('COALESCE(ROUND(AVG(avis.note), 1), 0)')
+            ->join('reservations', 'avis.reservation_id', '=', 'reservations.id')
+            ->whereColumn('reservations.salon_id', 'salons.id');
+
         $query = Salon::valides()
+            ->addSelect(['*',
+                'real_nb_avis'  => $realNbAvis,
+                'real_note_moy' => $realNoteMoy,
+            ])
             ->with(['ville', 'servicesActifs'])
             ->parVille($villeModel->id);
 

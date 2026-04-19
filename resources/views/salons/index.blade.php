@@ -121,9 +121,13 @@
           <div class="card-body">
             <div class="card-name">{{ $salon->nom_salon }}</div>
             <div class="card-rating">
-              <span class="card-stars">{{ str_repeat('★', round($salon->note_moy)) }}{{ str_repeat('☆', 5 - round($salon->note_moy)) }}</span>
-              <span class="card-score">{{ number_format($salon->note_moy, 1) }}</span>
-              <span class="card-reviews">({{ $salon->nb_avis }} avis)</span>
+              @if($salon->real_nb_avis > 0)
+                <span class="card-stars">{{ str_repeat('★', (int) round($salon->real_note_moy)) }}{{ str_repeat('☆', 5 - (int) round($salon->real_note_moy)) }}</span>
+                <span class="card-score">{{ number_format($salon->real_note_moy, 1) }}</span>
+                <span class="card-reviews">({{ $salon->real_nb_avis }} avis)</span>
+              @else
+                <span class="card-reviews" style="color:var(--ink-m)">Aucun avis</span>
+              @endif
             </div>
             <div class="card-location">
               <span class="verified-dot"></span>{{ $salon->quartier }}, {{ $villeModel->nom_ville }}
