@@ -11,12 +11,13 @@
     <h1>Nos <em style="font-style:italic;color:var(--p2)">villes</em></h1>
     <p class="cities-hero-sub">{{ $villes->count() }} villes, {{ $totalSalons }}+ salons référencés sur toute l'étendue du royaume.</p>
 
-    <div class="cities-search-bar">
+    <form class="cities-search-bar" onsubmit="return submitSearch(event)">
       <input type="text" id="villeSearch" class="cities-search-input"
              placeholder="&#128269;  Rechercher une ville..."
+             autocomplete="off"
              oninput="filterVilles(this.value)">
-      <button type="button" class="cities-search-btn" onclick="filterVilles(document.getElementById('villeSearch').value)">Rechercher</button>
-    </div>
+      <button type="submit" class="cities-search-btn">Rechercher</button>
+    </form>
 
     {{-- Bouton géolocalisation --}}
     <div style="margin-top:1.2rem">
@@ -73,9 +74,12 @@
 
   @php $villesPrincipales = $villes->take(2); $autresVilles = $villes->skip(2); @endphp
 
-  <div class="cities-grid" style="margin-bottom:3rem">
+  <div class="cities-grid" id="villesPrincipalesGrid" style="margin-bottom:3rem">
     @foreach($villesPrincipales as $ville)
-      <a href="{{ route('salons.index', $ville->nom_ville) }}" class="city-card large">
+      <a href="{{ route('salons.index', $ville->nom_ville) }}"
+         class="city-card large ville-item"
+         data-nom="{{ strtolower($ville->nom_ville) }}"
+         data-slug="{{ $ville->nom_ville }}">
         <img class="city-card-img"
              src="{{ $ville->photo_url }}"
              alt="{{ $ville->nom_ville }}">
@@ -96,11 +100,16 @@
     <span class="cities-section-sub" id="villesCount">{{ $villes->count() }} villes</span>
   </div>
 
+  <div id="villesEmpty" style="display:none;text-align:center;padding:3rem 1rem;color:var(--ink-m);font-size:.9rem;background:#fff;border:1px solid var(--border2);margin-bottom:1.5rem">
+    Aucune ville ne correspond à votre recherche.
+  </div>
+
   <div class="cities-grid" id="villesGrid">
     @foreach($villes as $ville)
       <a href="{{ route('salons.index', $ville->nom_ville) }}"
          class="city-card ville-item"
-         data-nom="{{ strtolower($ville->nom_ville) }}">
+         data-nom="{{ strtolower($ville->nom_ville) }}"
+         data-slug="{{ $ville->nom_ville }}">
         <img class="city-card-img"
              src="{{ $ville->photo_url }}"
              alt="{{ $ville->nom_ville }}">
@@ -127,17 +136,44 @@ function normaliseTexte(s) {
 }
 
 function filterVilles(q) {
-  const terme = q.toLowerCase().trim();
-  const termeNorm = normaliseTexte(terme);
+  const termeNorm = normaliseTexte(q);
   const items = document.querySelectorAll('.ville-item');
   let visible = 0;
   items.forEach(item => {
     const nomItem = item.dataset.nom || '';
-    const match = normaliseTexte(nomItem).includes(termeNorm);
+    const match = termeNorm === '' ? true : normaliseTexte(nomItem).includes(termeNorm);
     item.style.display = match ? '' : 'none';
     if (match) visible++;
   });
-  document.getElementById('villesCount').textContent = visible + ' ville' + (visible !== 1 ? 's' : '');
+
+  // Mise à jour du compteur + état "aucun résultat"
+  const count = document.getElementById('villesCount');
+  if (count) count.textContent = visible + ' ville' + (visible !== 1 ? 's' : '');
+
+  const emptyMsg = document.getElementById('villesEmpty');
+  if (emptyMsg) emptyMsg.style.display = (visible === 0 && termeNorm !== '') ? 'block' : 'none';
+}
+
+// ── Submit du formulaire ───────────────────────────────────────
+function submitSearch(e) {
+  e.preventDefault();
+  const q = document.getElementById('villeSearch').value;
+  const termeNorm = normaliseTexte(q);
+  if (termeNorm === '') return false;
+
+  // Applique le filtre (pour la section ci-dessous)
+  filterVilles(q);
+
+  // S'il y a au moins une ville correspondante, redirige vers la première
+  const first = document.querySelector('.ville-item:not([style*="display: none"])');
+  if (first && first.dataset.slug) {
+    window.location.href = first.getAttribute('href');
+    return false;
+  }
+
+  // Sinon, scroll jusqu'aux résultats filtrés (message "aucun résultat")
+  document.getElementById('villesList').scrollIntoView({ behavior: 'smooth' });
+  return false;
 }
 
 // ── Géolocalisation ────────────────────────────────────────────
