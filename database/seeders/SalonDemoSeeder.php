@@ -85,12 +85,12 @@ class SalonDemoSeeder extends Seeder
         ]);
 
         // Services salon 1
-        $svc1 = Service::create(['salon_id' => $salon1->id, 'nom_service' => 'Coupe femme',        'prix' => 120, 'duree_minu' => 45,  'categorie' => 'Coiffure', 'actif' => 1, 'description' => 'Coupe, shampooing et brushing inclus.']);
-        $svc2 = Service::create(['salon_id' => $salon1->id, 'nom_service' => 'Coupe + Brushing',   'prix' => 160, 'duree_minu' => 60,  'categorie' => 'Coiffure', 'actif' => 1, 'description' => 'Coupe sur mesure avec brushing volume longue durée.']);
-        $svc3 = Service::create(['salon_id' => $salon1->id, 'nom_service' => 'Coloration globale', 'prix' => 280, 'duree_minu' => 90,  'categorie' => 'Couleur',  'actif' => 1, 'description' => 'Coloration uniforme, produits inclus.']);
-        $svc4 = Service::create(['salon_id' => $salon1->id, 'nom_service' => 'Mèches / Balayage',  'prix' => 380, 'duree_minu' => 120, 'categorie' => 'Couleur',  'actif' => 1, 'description' => 'Balayage naturel. Brushing inclus.']);
-        $svc5 = Service::create(['salon_id' => $salon1->id, 'nom_service' => 'Brushing seul',      'prix' => 80,  'duree_minu' => 30,  'categorie' => 'Coiffure', 'actif' => 1, 'description' => 'Brushing volume et brillance.']);
-        $svc6 = Service::create(['salon_id' => $salon1->id, 'nom_service' => 'Soin visage hydratant','prix' => 190, 'duree_minu' => 60, 'categorie' => 'Soins',   'actif' => 1, 'description' => 'Nettoyage, gommage et masque hydratant.']);
+        $svc1 = Service::updateOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Coupe femme'],         ['prix' => 120, 'duree_minu' => 45,  'categorie' => 'Coiffure', 'actif' => 1, 'description' => 'Coupe, shampooing et brushing inclus.']);
+        $svc2 = Service::updateOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Coupe + Brushing'],    ['prix' => 160, 'duree_minu' => 60,  'categorie' => 'Coiffure', 'actif' => 1, 'description' => 'Coupe sur mesure avec brushing volume longue durée.']);
+        $svc3 = Service::updateOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Coloration globale'],  ['prix' => 280, 'duree_minu' => 90,  'categorie' => 'Couleur',  'actif' => 1, 'description' => 'Coloration uniforme, produits inclus.']);
+        $svc4 = Service::updateOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Mèches / Balayage'],   ['prix' => 380, 'duree_minu' => 120, 'categorie' => 'Couleur',  'actif' => 1, 'description' => 'Balayage naturel. Brushing inclus.']);
+        $svc5 = Service::updateOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Brushing seul'],       ['prix' => 80,  'duree_minu' => 30,  'categorie' => 'Coiffure', 'actif' => 1, 'description' => 'Brushing volume et brillance.']);
+        $svc6 = Service::updateOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Soin visage hydratant'],['prix' => 190, 'duree_minu' => 60, 'categorie' => 'Soins',    'actif' => 1, 'description' => 'Nettoyage, gommage et masque hydratant.']);
 
         // ══════════════════════════════════════════════════════════
         // SALON 2 — Prestige Hair Studio (Hay Riad)
@@ -133,9 +133,9 @@ class SalonDemoSeeder extends Seeder
             'actif'       => true,
         ]);
 
-        Service::create(['salon_id' => $salon2->id, 'nom_service' => 'Coupe femme premium', 'prix' => 150, 'duree_minu' => 60,  'categorie' => 'Coiffure', 'actif' => 1, 'description' => 'Consultation + coupe + brushing.']);
-        Service::create(['salon_id' => $salon2->id, 'nom_service' => 'Lissage brésilien',   'prix' => 550, 'duree_minu' => 180, 'categorie' => 'Couleur',  'actif' => 1, 'description' => 'Kératine longue durée. 4 à 6 mois.']);
-        Service::create(['salon_id' => $salon2->id, 'nom_service' => 'Manucure classique',  'prix' => 110, 'duree_minu' => 45,  'categorie' => 'Ongles',   'actif' => 1, 'description' => 'Soin mains + vernis.']);
+        Service::updateOrCreate(['salon_id' => $salon2->id, 'nom_service' => 'Coupe femme premium'], ['prix' => 150, 'duree_minu' => 60,  'categorie' => 'Coiffure', 'actif' => 1, 'description' => 'Consultation + coupe + brushing.']);
+        Service::updateOrCreate(['salon_id' => $salon2->id, 'nom_service' => 'Lissage brésilien'],  ['prix' => 550, 'duree_minu' => 180, 'categorie' => 'Couleur',  'actif' => 1, 'description' => 'Kératine longue durée. 4 à 6 mois.']);
+        Service::updateOrCreate(['salon_id' => $salon2->id, 'nom_service' => 'Manucure classique'], ['prix' => 110, 'duree_minu' => 45,  'categorie' => 'Ongles',   'actif' => 1, 'description' => 'Soin mains + vernis.']);
 
         // ══════════════════════════════════════════════════════════
         // SALON 3 — L'Atelier Beauté (Souissi)
@@ -178,9 +178,9 @@ class SalonDemoSeeder extends Seeder
             'actif'       => true,
         ]);
 
-        Service::create(['salon_id' => $salon3->id, 'nom_service' => 'Soin visage éclat', 'prix' => 220, 'duree_minu' => 75, 'categorie' => 'Soins',    'actif' => 1, 'description' => 'Rituel : démaquillage, peeling, masque, sérum.']);
-        Service::create(['salon_id' => $salon3->id, 'nom_service' => 'Massage relaxant',   'prix' => 280, 'duree_minu' => 60, 'categorie' => 'Massage',  'actif' => 1, 'description' => 'Massage corps complet aux huiles essentielles.']);
-        Service::create(['salon_id' => $salon3->id, 'nom_service' => 'Hammam & gommage',   'prix' => 250, 'duree_minu' => 90, 'categorie' => 'Soins',    'actif' => 1, 'description' => 'Hammam traditionnel + savon beldi et kessa.']);
+        Service::updateOrCreate(['salon_id' => $salon3->id, 'nom_service' => 'Soin visage éclat'], ['prix' => 220, 'duree_minu' => 75, 'categorie' => 'Soins',   'actif' => 1, 'description' => 'Rituel : démaquillage, peeling, masque, sérum.']);
+        Service::updateOrCreate(['salon_id' => $salon3->id, 'nom_service' => 'Massage relaxant'],  ['prix' => 280, 'duree_minu' => 60, 'categorie' => 'Massage', 'actif' => 1, 'description' => 'Massage corps complet aux huiles essentielles.']);
+        Service::updateOrCreate(['salon_id' => $salon3->id, 'nom_service' => 'Hammam & gommage'],  ['prix' => 250, 'duree_minu' => 90, 'categorie' => 'Soins',   'actif' => 1, 'description' => 'Hammam traditionnel + savon beldi et kessa.']);
 
         // ══════════════════════════════════════════════════════════
         // RÉSERVATIONS DE DÉMO
