@@ -36,7 +36,7 @@ class ReservationController extends Controller
         $sessionData = $request->session()->get("wizard_{$salonModel->id}", []);
         
         // On récupère soit le tableau service_ids, soit l'unique service_id (flexibilité)
-        $serviceIds = $sessionData['service_ids'] ?? ($sessionData['service_id'] ? [$sessionData['service_id']] : null);
+        $serviceIds = $sessionData['service_ids'] ?? (isset($sessionData['service_id']) ? [$sessionData['service_id']] : null);
 
         if (!$serviceIds) {
             return redirect()->route('reservations.step1', $salon)
@@ -45,9 +45,18 @@ class ReservationController extends Controller
 
         $services = $salonModel->servicesActifs()->whereIn('id', $serviceIds)->get();
         $employes = $salonModel->employesActifs;
+        $debut = now()->startOfMonth()->startOfDay();
+        $fin = now()->addMonth()->endOfMonth()->endOfDay();
 
-        // Note : Les créneaux sont désormais chargés via getCreneaux() en AJAX dans la vue
-        return view('reservations.step2', compact('salonModel','services','employes'));
+        $creneauxParService = $services->mapWithKeys(function ($service) use ($salonModel, $debut, $fin) {
+            return [
+                (string) $service->id => $this->disponibiliteService
+                    ->creneauxDisponibles($salonModel, $service, $debut, $fin)
+                    ->toArray(),
+            ];
+        });
+
+        return view('reservations.step2', compact('salonModel','services','employes', 'creneauxParService'));
     }
 
     /** AJAX — Nouvelle fonction pour le chargement dynamique (indispensable pour l'optimisation) */
@@ -131,6 +140,140 @@ class ReservationController extends Controller
         return redirect()->route('reservations.confirmation', $reservations->first()->id);
     }
 
-    /** Les autres fonctions (confirmation, index, show, annuler, saveStep, getSalonOr404) 
-        restent identiques pour préserver l'intégrité du projet. */
+    public function saveStep(Request $request, string $salon)
+    {
+        $salonModel = $this->getSalonOr404($salon);
+        $wizardKey = "wizard_{$salonModel->id}";
+        $payload = $request->session()->get($wizardKey, []);
+        $step = $request->input('step');
+
+        if ($step === 'services') {
+            $validated = $request->validate([
+                'service_ids' => ['required', 'array', 'min:1'],
+                'service_ids.*' => ['required', 'integer', 'exists:services,id'],
+                'redirect_to' => ['nullable', 'url'],
+            ]);
+
+            $validIds = $salonModel->servicesActifs()
+                ->whereIn('id', $validated['service_ids'])
+                ->pluck('id')
+                ->map(fn ($id) => (int) $id)
+                ->values()
+                ->all();
+
+            if (empty($validIds)) {
+                return back()->with('error', 'Aucun service valide sélectionné pour ce salon.');
+            }
+
+            $payload['service_ids'] = $validIds;
+            $payload['service_id'] = $validIds[0];
+            $payload['selections'] = [];
+        }
+
+        if ($step === 'creneaux') {
+            $validated = $request->validate([
+                'selections' => ['required', 'array', 'min:1'],
+                'selections.*.service_id' => ['required', 'integer', 'exists:services,id'],
+                'selections.*.employe_id' => ['nullable', 'integer', 'exists:employes,id'],
+                'selections.*.date_heure' => ['required', 'date', 'after:now'],
+            ]);
+
+            $serviceIdsActifs = $salonModel->servicesActifs()->pluck('id')->all();
+            $selections = collect($validated['selections'])
+                ->filter(fn ($sel) => in_array((int) $sel['service_id'], $serviceIdsActifs, true))
+                ->map(fn ($sel) => [
+                    'service_id' => (int) $sel['service_id'],
+                    'employe_id' => !empty($sel['employe_id']) ? (int) $sel['employe_id'] : null,
+                    'date_heure' => $sel['date_heure'],
+                ])
+                ->values()
+                ->all();
+
+            if (empty($selections)) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Aucun créneau valide transmis.',
+                ], 422);
+            }
+
+            $payload['selections'] = $selections;
+        }
+
+        $request->session()->put($wizardKey, $payload);
+
+        $redirectTo = $request->input('redirect_to');
+        if ($redirectTo) {
+            return redirect()->to($redirectTo);
+        }
+
+        return response()->json(['ok' => true]);
+    }
+
+    public function confirmation(int $id)
+    {
+        $reservation = Reservation::with(['salon.ville', 'service', 'employe', 'client'])
+            ->where('client_id', Auth::id())
+            ->findOrFail($id);
+
+        $groupe = null;
+        if (!empty($reservation->groupe_uuid)) {
+            $groupe = Reservation::with(['service', 'employe'])
+                ->where('client_id', Auth::id())
+                ->where('groupe_uuid', $reservation->groupe_uuid)
+                ->orderBy('date_heure')
+                ->get();
+        }
+
+        return view('reservations.confirmation', compact('reservation', 'groupe'));
+    }
+
+    public function index(Request $request)
+    {
+        $statut = $request->query('statut');
+
+        $reservations = Reservation::with(['salon.ville', 'service', 'employe', 'avis'])
+            ->where('client_id', Auth::id())
+            ->when($statut, fn ($query) => $query->where('statut', $statut))
+            ->orderByDesc('date_heure')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('reservations.index', compact('reservations'));
+    }
+
+    public function show(int $id)
+    {
+        $reservation = Reservation::with(['salon.ville', 'service', 'employe', 'avis'])
+            ->where('client_id', Auth::id())
+            ->findOrFail($id);
+
+        return view('reservations.show', compact('reservation'));
+    }
+
+    public function annuler(Request $request, int $id)
+    {
+        $reservation = Reservation::where('client_id', Auth::id())->findOrFail($id);
+
+        if (! $reservation->peutEtreAnnulee()) {
+            return back()->with('error', 'Cette réservation ne peut plus être annulée.');
+        }
+
+        $reservation->update([
+            'statut' => 'annulee',
+            'annulee_par' => 'client',
+            'date_annul' => now(),
+            'motif_annul' => $request->input('motif_annul', 'Annulation par le client'),
+        ]);
+
+        return back()->with('success', 'La réservation a été annulée avec succès.');
+    }
+
+    private function getSalonOr404(string $salonSlug): Salon
+    {
+        return Salon::query()
+            ->with(['ville', 'servicesActifs', 'employesActifs'])
+            ->where('valide', 1)
+            ->get()
+            ->firstOrFail(fn (Salon $salon) => $salon->slug === $salonSlug);
+    }
 }
