@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class ReservationService
@@ -107,22 +108,33 @@ class ReservationService
         // Détection de chevauchement interne (mêmes employé/salon dans le panier)
         $this->detecterChevauchementInterne($parsed);
 
-        $groupeUuid   = count($parsed) > 1 ? (string) Str::uuid() : null;
+        // Si la colonne groupe_uuid n'est pas (encore) disponible en base, on omet le champ
+        $hasGroupeCol = true;
+        try {
+            $hasGroupeCol = Schema::hasColumn('reservations', 'groupe_uuid');
+        } catch (\Throwable $e) {
+            $hasGroupeCol = false;
+        }
+
+        $groupeUuid   = ($hasGroupeCol && count($parsed) > 1) ? (string) Str::uuid() : null;
         $reservations = collect();
 
-        DB::transaction(function () use ($parsed, $client, $salon, $notesClient, $groupeUuid, &$reservations) {
+        DB::transaction(function () use ($parsed, $client, $salon, $notesClient, $groupeUuid, $hasGroupeCol, &$reservations) {
             foreach ($parsed as $p) {
-                $reservations->push(Reservation::create([
+                $payload = [
                     'client_id'     => $client->id,
                     'salon_id'      => $salon->id,
                     'service_id'    => $p['service']->id,
                     'employe_id'    => $p['employe']?->id,
-                    'groupe_uuid'   => $groupeUuid,
                     'date_heure'    => $p['dateHeure'],
                     'duree_minutes' => $p['service']->duree_minu ?? 30,
                     'notes_client'  => $notesClient,
                     'statut'        => 'en_attente',
-                ]));
+                ];
+                if ($hasGroupeCol) {
+                    $payload['groupe_uuid'] = $groupeUuid;
+                }
+                $reservations->push(Reservation::create($payload));
             }
         });
 
