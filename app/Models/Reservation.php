@@ -22,6 +22,7 @@ class Reservation extends Model
         'salon_id',
         'service_id',
         'employe_id',
+        'groupe_uuid',
         'date_heure',
         'duree_minutes',
         'notes_client',

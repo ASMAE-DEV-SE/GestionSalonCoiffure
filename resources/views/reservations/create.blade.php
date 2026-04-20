@@ -16,8 +16,8 @@
 {{-- ── Stepper ─────────────────────────────────────────────── --}}
 <div class="stepper-bar-wrap">
   <div class="stepper-bar">
-    <div class="step done"><div class="step-dot">&#10003;</div><div class="step-label">Service</div></div>
-    <div class="step done"><div class="step-dot">&#10003;</div><div class="step-label">Créneau</div></div>
+    <div class="step done"><div class="step-dot">&#10003;</div><div class="step-label">Services</div></div>
+    <div class="step done"><div class="step-dot">&#10003;</div><div class="step-label">Créneaux</div></div>
     <div class="step current"><div class="step-dot">3</div><div class="step-label">Vos infos</div></div>
     <div class="step"><div class="step-dot">4</div><div class="step-label">Confirmation</div></div>
   </div>
@@ -26,31 +26,28 @@
 <div class="wizard-layout">
   <div>
 
-    {{-- Étapes complétées --}}
-    <div class="completed-step">
-      <div>
-        <div class="completed-step-label">Service choisi</div>
-        <div class="completed-step-value">{{ $service->nom_service }}</div>
-        <div class="completed-step-meta">{{ $service->duree_formatee }}</div>
+    {{-- Liste des prestations choisies --}}
+    <div class="form-card" style="padding:1.4rem;margin-bottom:1.5rem">
+      <div class="form-card-title">Récapitulatif des prestations</div>
+      <div style="margin-top:1rem">
+        @foreach($items as $item)
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:.9rem 0;border-bottom:1.5px solid var(--border2)">
+            <div>
+              <div style="font-weight:700;color:var(--ink-d);font-size:.94rem">{{ $item['service']->nom_service }}</div>
+              <div style="font-size:.76rem;color:var(--ink-m);margin-top:.25rem">
+                {{ \Carbon\Carbon::parse($item['date_heure'])->translatedFormat('l d F Y') }}
+                · {{ \Carbon\Carbon::parse($item['date_heure'])->format('H:i') }}
+                · {{ $item['service']->duree_formatee }}
+                @if($item['employe']) · {{ $item['employe']->nomComplet() }} @else · Styliste au choix @endif
+              </div>
+            </div>
+            <div style="font-family:var(--fh);font-weight:700;color:var(--ink-h);font-size:1.1rem">
+              {{ $item['service']->prix_format }}
+            </div>
+          </div>
+        @endforeach
       </div>
-      <div class="completed-step-right">
-        <div class="completed-step-price">{{ $service->prix_format }}</div>
-        <a href="{{ route('reservations.step1', $salonModel->slug) }}" class="btn-edit-step">Modifier</a>
-      </div>
-    </div>
-
-    <div class="completed-step" style="margin-bottom:1.5rem">
-      <div>
-        <div class="completed-step-label">Créneau choisi</div>
-        <div class="completed-step-value">
-          {{ \Carbon\Carbon::parse($sessionData['date_heure'])->translatedFormat('l d F Y') }}
-        </div>
-        <div class="completed-step-meta">
-          {{ \Carbon\Carbon::parse($sessionData['date_heure'])->format('H:i') }}
-          @if($employe) · {{ $employe->nomComplet() }} @endif
-        </div>
-      </div>
-      <div class="completed-step-right">
+      <div style="text-align:right;margin-top:.8rem">
         <a href="{{ route('reservations.step2', $salonModel->slug) }}" class="btn-edit-step">Modifier</a>
       </div>
     </div>
@@ -62,10 +59,12 @@
 
       <form method="POST" action="{{ route('reservations.store', $salonModel->slug) }}" id="reservationForm">
         @csrf
-        <input type="hidden" name="service_id"    value="{{ $service->id }}">
-        <input type="hidden" name="employe_id"    value="{{ $employe?->id }}">
-        <input type="hidden" name="date_heure"    value="{{ $sessionData['date_heure'] }}">
-        <input type="hidden" name="duree_minutes" value="{{ $service->duree_minu }}">
+
+        @foreach($items as $i => $item)
+          <input type="hidden" name="selections[{{ $i }}][service_id]" value="{{ $item['service']->id }}">
+          <input type="hidden" name="selections[{{ $i }}][employe_id]" value="{{ $item['employe']?->id }}">
+          <input type="hidden" name="selections[{{ $i }}][date_heure]" value="{{ $item['date_heure'] }}">
+        @endforeach
 
         <div class="row-two-col">
           <div class="form-group">
@@ -104,17 +103,19 @@
 
         {{-- Récap total --}}
         <div class="total-box">
-          <div class="total-row">
-            <span class="total-key">{{ $service->nom_service }}</span>
-            <span class="total-value">{{ $service->prix_format }}</span>
-          </div>
+          @foreach($items as $item)
+            <div class="total-row">
+              <span class="total-key">{{ $item['service']->nom_service }}</span>
+              <span class="total-value">{{ $item['service']->prix_format }}</span>
+            </div>
+          @endforeach
           <div class="total-row">
             <span class="total-key">Frais de réservation</span>
             <span class="total-value free">Gratuit</span>
           </div>
           <div class="total-final">
             <span class="total-final-label">Total à payer au salon</span>
-            <span class="total-final-amount">{{ $service->prix_format }}</span>
+            <span class="total-final-amount">{{ number_format($total, 0, ',', ' ') }} MAD</span>
           </div>
         </div>
 
@@ -128,8 +129,10 @@
         </div>
 
         <div class="wizard-navigation">
-          <a href="{{ route('reservations.step2', $salonModel->slug) }}" class="btn-wizard-back">&#8592; Créneau</a>
-          <button type="submit" class="btn-wizard-confirm">Confirmer la réservation &#10003;</button>
+          <a href="{{ route('reservations.step2', $salonModel->slug) }}" class="btn-wizard-back">&#8592; Créneaux</a>
+          <button type="submit" class="btn-wizard-confirm">
+            Confirmer {{ $items->count() > 1 ? 'les réservations' : 'la réservation' }} &#10003;
+          </button>
         </div>
       </form>
     </div>
@@ -151,22 +154,24 @@
           <div class="recap-salon-location">{{ $salonModel->quartier }}, {{ $salonModel->ville->nom_ville }}</div>
         </div>
       </div>
-      <div class="recap-row"><span class="recap-key">Service</span><span class="recap-value">{{ $service->nom_service }}</span></div>
-      <div class="recap-row"><span class="recap-key">Durée</span><span class="recap-value">{{ $service->duree_formatee }}</span></div>
-      <div class="recap-row">
-        <span class="recap-key">Date</span>
-        <span class="recap-value">{{ \Carbon\Carbon::parse($sessionData['date_heure'])->translatedFormat('D d M') }}</span>
-      </div>
-      <div class="recap-row">
-        <span class="recap-key">Heure</span>
-        <span class="recap-value">{{ \Carbon\Carbon::parse($sessionData['date_heure'])->format('H:i') }}</span>
-      </div>
-      @if($employe)
-        <div class="recap-row"><span class="recap-key">Styliste</span><span class="recap-value">{{ $employe->nomComplet() }}</span></div>
-      @endif
+
+      @foreach($items as $item)
+        <div style="padding:.7rem 0;border-top:1.5px dashed var(--p2)">
+          <div style="display:flex;justify-content:space-between;font-size:.84rem">
+            <span style="font-weight:700;color:var(--ink-d)">{{ $item['service']->nom_service }}</span>
+            <span style="color:var(--ink-h);font-weight:700">{{ $item['service']->prix_format }}</span>
+          </div>
+          <div style="font-size:.72rem;color:var(--ink-m);margin-top:.2rem">
+            {{ \Carbon\Carbon::parse($item['date_heure'])->translatedFormat('D d M') }}
+            · {{ \Carbon\Carbon::parse($item['date_heure'])->format('H:i') }}
+            @if($item['employe']) · {{ $item['employe']->nomComplet() }} @endif
+          </div>
+        </div>
+      @endforeach
+
       <div class="recap-total-row">
         <span class="recap-total-label">Total</span>
-        <span class="recap-total-amount">{{ $service->prix_format }}</span>
+        <span class="recap-total-amount">{{ number_format($total, 0, ',', ' ') }} MAD</span>
       </div>
       <div style="margin-top:1rem;padding:.9rem;background:rgba(197,216,157,.15);border:1px solid var(--p2);font-size:.74rem;color:var(--ink-s);line-height:1.7">
         &#128197; Paiement au salon · Annulation gratuite 24h avant

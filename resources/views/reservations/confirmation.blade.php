@@ -62,23 +62,50 @@
         </div>
       </div>
 
-      <div class="recap-details-grid">
-        <div class="recap-detail-cell">
-          <div class="detail-label">Service</div>
-          <div class="detail-value">{{ $reservation->service->nom_service }}</div>
-          <div class="detail-sub">{{ $reservation->service->duree_formatee }}</div>
+      @if($groupe && $groupe->count() > 1)
+        <div style="padding:1rem 1.5rem">
+          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ink-m);margin-bottom:.8rem">
+            {{ $groupe->count() }} prestations réservées
+          </div>
+          @foreach($groupe as $r)
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;padding:.8rem 0;border-bottom:1.5px solid var(--border2)">
+              <div>
+                <div class="detail-label">Service</div>
+                <div class="detail-value">{{ $r->service->nom_service }}</div>
+                <div class="detail-sub">{{ $r->service->duree_formatee }}</div>
+              </div>
+              <div>
+                <div class="detail-label">Date &amp; Heure</div>
+                <div class="detail-value">{{ $r->date_heure->translatedFormat('D d M Y') }}</div>
+                <div class="detail-sub">{{ $r->date_heure->format('H:i') }}</div>
+              </div>
+              <div>
+                <div class="detail-label">Styliste</div>
+                <div class="detail-value">{{ $r->employe?->nomComplet() ?? 'Au choix' }}</div>
+                <div class="detail-sub">Réf. #SAL-{{ str_pad($r->id, 6, '0', STR_PAD_LEFT) }}</div>
+              </div>
+            </div>
+          @endforeach
         </div>
-        <div class="recap-detail-cell">
-          <div class="detail-label">Date &amp; Heure</div>
-          <div class="detail-value">{{ $reservation->date_heure->translatedFormat('D d M Y') }}</div>
-          <div class="detail-sub">{{ $reservation->date_heure->format('H:i') }}</div>
+      @else
+        <div class="recap-details-grid">
+          <div class="recap-detail-cell">
+            <div class="detail-label">Service</div>
+            <div class="detail-value">{{ $reservation->service->nom_service }}</div>
+            <div class="detail-sub">{{ $reservation->service->duree_formatee }}</div>
+          </div>
+          <div class="recap-detail-cell">
+            <div class="detail-label">Date &amp; Heure</div>
+            <div class="detail-value">{{ $reservation->date_heure->translatedFormat('D d M Y') }}</div>
+            <div class="detail-sub">{{ $reservation->date_heure->format('H:i') }}</div>
+          </div>
+          <div class="recap-detail-cell">
+            <div class="detail-label">Styliste</div>
+            <div class="detail-value">{{ $reservation->employe?->nomComplet() ?? 'Au choix' }}</div>
+            <div class="detail-sub">Professionnel(le) certifié(e)</div>
+          </div>
         </div>
-        <div class="recap-detail-cell">
-          <div class="detail-label">Styliste</div>
-          <div class="detail-value">{{ $reservation->employe?->nomComplet() ?? 'Au choix' }}</div>
-          <div class="detail-sub">Professionnel(le) certifié(e)</div>
-        </div>
-      </div>
+      @endif
 
       <div class="recap-client">
         <div>
@@ -93,12 +120,17 @@
         </div>
       </div>
 
+      @php
+        $montantTotal = $groupe
+          ? $groupe->sum(fn($r) => (float) $r->service->prix)
+          : (float) $reservation->service->prix;
+      @endphp
       <div class="recap-total">
         <div>
           <div class="total-label">Montant à payer au salon</div>
           <div class="total-note">Paiement en espèces ou carte directement sur place</div>
         </div>
-        <div class="total-amount">{{ $reservation->service->prix_format }}</div>
+        <div class="total-amount">{{ number_format($montantTotal, 0, ',', ' ') }} MAD</div>
       </div>
     </div>
 

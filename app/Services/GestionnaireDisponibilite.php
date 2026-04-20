@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\DisponibiliteException;
 use App\Models\Employe;
 use App\Models\Reservation;
 use App\Models\Salon;
@@ -23,35 +24,39 @@ class GestionnaireDisponibilite
         Carbon   $date,
         ?Employe $employe = null
     ): array {
-        $jours = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
-        $jour  = $jours[$date->dayOfWeek];
-
-        if (! $salon->estOuvert($jour)) {
+        // Plage horaire effective du salon pour ce jour (tient compte des exceptions)
+        $plage = $this->plageSalonPourDate($salon, $date);
+        if (! $plage) {
             return [];
         }
 
-        $debut = Carbon::parse($date->toDateString() . ' ' . ($salon->heureOuverture($jour) ?? '09:00'));
-        $fin   = Carbon::parse($date->toDateString() . ' ' . ($salon->heureFermeture($jour) ?? '18:00'));
+        [$debut, $fin] = $plage;
 
-        // Réservations existantes ce jour-là
-        $query = Reservation::where('salon_id', $salon->id)
-            ->whereDate('date_heure', $date->toDateString())
-            ->whereIn('statut', ['en_attente', 'confirmee']);
-
+        // Si un employé précis est demandé, restreindre à ses horaires + absences
         if ($employe) {
-            $query->where('employe_id', $employe->id);
+            $plageEmp = $this->plageEmployePourDate($employe, $date);
+            if (! $plageEmp) return [];
+            [$dE, $fE] = $plageEmp;
+            if ($dE->gt($debut)) $debut = $dE;
+            if ($fE->lt($fin))   $fin   = $fE;
+            if ($debut->gte($fin)) return [];
         }
 
-        $reservations = $query->get();
+        $reservations = $this->reservationsDuJour($salon, $date, $employe);
 
         $creneaux = [];
         $cursor   = $debut->copy();
+        $dureeSvc = $service->duree_minu ?? 30;
 
-        while ($cursor->copy()->addMinutes($service->duree_minu ?? 30)->lte($fin)) {
+        while ($cursor->copy()->addMinutes($dureeSvc)->lte($fin)) {
             $dateheure  = $cursor->copy();
-            $disponible = $this->creneauLibre($dateheure, $service->duree_minu ?? 30, $reservations, $employe);
+            $disponible = $this->creneauLibre($dateheure, $dureeSvc, $reservations, $employe);
 
-            // Ne pas proposer les créneaux passés
+            // Si pas d'employé précis mais équipe présente, au moins un employé doit couvrir ce créneau
+            if ($disponible && ! $employe) {
+                $disponible = $this->auMoinsUnEmployeDispo($salon, $dateheure, $dureeSvc);
+            }
+
             if ($dateheure->isPast()) {
                 $disponible = false;
             }
@@ -69,7 +74,7 @@ class GestionnaireDisponibilite
     }
 
     /**
-     * Créneaux disponibles sur une plage de dates (pour le wizard step 2).
+     * Créneaux disponibles sur une plage de dates.
      */
     public function creneauxDisponibles(
         Salon    $salon,
@@ -78,14 +83,11 @@ class GestionnaireDisponibilite
         Carbon   $fin
     ): Collection {
         $result = collect();
-
         $cursor = $debut->copy()->startOfDay();
         while ($cursor->lte($fin)) {
-            $creneaux = $this->creneauxDuJour($salon, $service, $cursor->copy());
-            $result->put($cursor->toDateString(), $creneaux);
+            $result->put($cursor->toDateString(), $this->creneauxDuJour($salon, $service, $cursor->copy()));
             $cursor->addDay();
         }
-
         return $result;
     }
 
@@ -100,24 +102,33 @@ class GestionnaireDisponibilite
     ): bool {
         if ($dateHeure->isPast()) return false;
 
-        $jours = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
-        $jour  = $jours[$dateHeure->dayOfWeek];
+        $plage = $this->plageSalonPourDate($salon, $dateHeure);
+        if (! $plage) return false;
+        [$debut, $fin] = $plage;
 
-        if (! $salon->estOuvert($jour)) return false;
+        $duree   = $service->duree_minu ?? 30;
+        $finCren = $dateHeure->copy()->addMinutes($duree);
 
-        $duree = $service->duree_minu ?? 30;
-
-        $query = Reservation::where('salon_id', $salon->id)
-            ->whereDate('date_heure', $dateHeure->toDateString())
-            ->whereIn('statut', ['en_attente', 'confirmee']);
+        if ($dateHeure->lt($debut) || $finCren->gt($fin)) return false;
 
         if ($employe) {
-            $query->where('employe_id', $employe->id);
+            $plageEmp = $this->plageEmployePourDate($employe, $dateHeure);
+            if (! $plageEmp) return false;
+            [$dE, $fE] = $plageEmp;
+            if ($dateHeure->lt($dE) || $finCren->gt($fE)) return false;
         }
 
-        $reservations = $query->get();
+        $reservations = $this->reservationsDuJour($salon, $dateHeure, $employe);
 
-        return $this->creneauLibre($dateHeure, $duree, $reservations, $employe);
+        if (! $this->creneauLibre($dateHeure, $duree, $reservations, $employe)) {
+            return false;
+        }
+
+        if (! $employe) {
+            return $this->auMoinsUnEmployeDispo($salon, $dateHeure, $duree);
+        }
+
+        return true;
     }
 
     /**
@@ -130,10 +141,120 @@ class GestionnaireDisponibilite
             ->whereIn('statut', ['en_attente', 'confirmee', 'terminee'])
             ->count();
 
-        // Estimation : 8h/jour × 2 créneaux/h × 7 jours × nb_employes
         $capacite = max(1, ($salon->nb_employes ?? 1)) * 7 * 16;
 
         return min(100, round(($total / $capacite) * 100, 1));
+    }
+
+    /*
+    |------------------------------------------------------------------
+    | Helpers : plages horaires effectives (horaires hebdo + exceptions)
+    |------------------------------------------------------------------
+    */
+
+    /** Retourne [Carbon $debut, Carbon $fin] pour le salon à cette date, ou null si fermé. */
+    private function plageSalonPourDate(Salon $salon, Carbon $date): ?array
+    {
+        // Exception au niveau salon (employe_id null)
+        $ex = DisponibiliteException::where('salon_id', $salon->id)
+            ->whereNull('employe_id')
+            ->whereDate('date', $date->toDateString())
+            ->first();
+
+        if ($ex) {
+            if ($ex->ferme) return null;
+            return [
+                Carbon::parse($date->toDateString() . ' ' . $ex->debut),
+                Carbon::parse($date->toDateString() . ' ' . $ex->fin),
+            ];
+        }
+
+        // Horaires hebdo
+        $jours = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+        $jour  = $jours[$date->dayOfWeek];
+
+        if (! $salon->estOuvert($jour)) return null;
+
+        $debut = $salon->heureOuverture($jour) ?? '09:00';
+        $fin   = $salon->heureFermeture($jour) ?? '18:00';
+
+        return [
+            Carbon::parse($date->toDateString() . ' ' . $debut),
+            Carbon::parse($date->toDateString() . ' ' . $fin),
+        ];
+    }
+
+    /** Retourne [Carbon $debut, Carbon $fin] pour l'employé, ou null si absent/repos. */
+    private function plageEmployePourDate(Employe $employe, Carbon $date): ?array
+    {
+        // Exception employé précis
+        $ex = DisponibiliteException::where('employe_id', $employe->id)
+            ->whereDate('date', $date->toDateString())
+            ->first();
+
+        if ($ex) {
+            if ($ex->ferme) return null;
+            return [
+                Carbon::parse($date->toDateString() . ' ' . $ex->debut),
+                Carbon::parse($date->toDateString() . ' ' . $ex->fin),
+            ];
+        }
+
+        // Horaires hebdo de l'employé
+        $jours = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+        $jour  = $jours[$date->dayOfWeek];
+
+        $h = $employe->horaires ?? [];
+        if (! $h || ! isset($h[$jour]) || ($h[$jour]['ferme'] ?? false)) {
+            // Si pas d'horaires renseignés, on s'aligne sur le salon
+            if (empty($h)) return null;
+            return null;
+        }
+
+        return [
+            Carbon::parse($date->toDateString() . ' ' . ($h[$jour]['debut'] ?? '09:00')),
+            Carbon::parse($date->toDateString() . ' ' . ($h[$jour]['fin']   ?? '18:00')),
+        ];
+    }
+
+    private function reservationsDuJour(Salon $salon, Carbon $date, ?Employe $employe): Collection
+    {
+        $q = Reservation::where('salon_id', $salon->id)
+            ->whereDate('date_heure', $date->toDateString())
+            ->whereIn('statut', ['en_attente', 'confirmee']);
+
+        if ($employe) {
+            $q->where('employe_id', $employe->id);
+        }
+
+        return $q->get();
+    }
+
+    /**
+     * Vrai si au moins un employé actif du salon peut prendre ce créneau
+     * (horaires OK, pas d'exception d'absence, pas de réservation qui chevauche).
+     */
+    private function auMoinsUnEmployeDispo(Salon $salon, Carbon $dateHeure, int $duree): bool
+    {
+        $employes = $salon->employesActifs;
+
+        // Si aucun employé configuré, on considère disponible (salon type individuel)
+        if ($employes->isEmpty()) return true;
+
+        foreach ($employes as $emp) {
+            $plage = $this->plageEmployePourDate($emp, $dateHeure);
+            if (! $plage) continue;
+            [$dE, $fE] = $plage;
+            $finCren = $dateHeure->copy()->addMinutes($duree);
+            if ($dateHeure->lt($dE) || $finCren->gt($fE)) continue;
+
+            $resas = $this->reservationsDuJour($salon, $dateHeure, $emp);
+            if ($this->creneauLibre($dateHeure, $duree, $resas, $emp)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -148,7 +269,6 @@ class GestionnaireDisponibilite
         $finCreneau = $dateHeure->copy()->addMinutes($dureeMinutes);
 
         foreach ($reservations as $r) {
-            // Vérification de l'employé
             if ($employe && $r->employe_id && $r->employe_id !== $employe->id) {
                 continue;
             }
@@ -156,7 +276,6 @@ class GestionnaireDisponibilite
             $debutRes = Carbon::parse($r->date_heure);
             $finRes   = $debutRes->copy()->addMinutes($r->duree_minutes ?? 30);
 
-            // Chevauchement si les plages se superposent
             if ($dateHeure->lt($finRes) && $finCreneau->gt($debutRes)) {
                 return false;
             }

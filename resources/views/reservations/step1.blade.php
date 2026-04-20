@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Réservation — Choix du service')
+@section('title', 'Réservation — Choix des services')
 
 @section('content')
 
@@ -16,8 +16,8 @@
 {{-- ── Stepper ─────────────────────────────────────────────── --}}
 <div class="stepper-bar-wrap">
   <div class="stepper-bar">
-    <div class="step current"><div class="step-dot">1</div><div class="step-label">Service</div></div>
-    <div class="step"><div class="step-dot">2</div><div class="step-label">Créneau</div></div>
+    <div class="step current"><div class="step-dot">1</div><div class="step-label">Services</div></div>
+    <div class="step"><div class="step-dot">2</div><div class="step-label">Créneaux</div></div>
     <div class="step"><div class="step-dot">3</div><div class="step-label">Vos infos</div></div>
     <div class="step"><div class="step-dot">4</div><div class="step-label">Confirmation</div></div>
   </div>
@@ -40,8 +40,8 @@
 <div class="wizard-layout">
   <div>
     <div class="form-card" style="padding:1.8rem">
-      <div class="form-card-title">Choisissez votre service</div>
-      <div class="form-card-subtitle">Sélectionnez une prestation proposée par {{ $salonModel->nom_salon }}.</div>
+      <div class="form-card-title">Choisissez vos services</div>
+      <div class="form-card-subtitle">Cochez une ou plusieurs prestations proposées par {{ $salonModel->nom_salon }}.</div>
 
       <div class="svc-select-grid" id="svcGrid">
         @foreach($services as $svc)
@@ -50,8 +50,9 @@
                data-id="{{ $svc->id }}"
                data-name="{{ $svc->nom_service }}"
                data-duration="{{ $svc->duree_formatee }}"
+               data-price-raw="{{ $svc->prix }}"
                data-price="{{ $svc->prix_format }}"
-               onclick="selectSvc(this)">
+               onclick="toggleSvc(this)">
             <div class="svc-select-left">
               <div class="svc-select-cat">{{ $svc->categorie }}</div>
               <div class="svc-select-name">{{ $svc->nom_service }}</div>
@@ -65,6 +66,7 @@
             <div class="svc-select-right">
               <div class="svc-select-price">{{ $svc->prix }}</div>
               <div class="svc-select-price-lbl">MAD</div>
+              <div class="svc-select-check" style="margin-top:.6rem;width:22px;height:22px;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;color:#fff;background:#fff"></div>
             </div>
           </div>
         @endforeach
@@ -76,7 +78,7 @@
         <button class="btn-wizard-confirm" id="btnNext"
                 style="opacity:.4;pointer-events:none;border:none;cursor:pointer"
                 onclick="goStep2()">
-          Choisir un créneau &#8594;
+          Choisir les créneaux &#8594;
         </button>
       </div>
     </div>
@@ -98,16 +100,12 @@
         </div>
       </div>
 
-      <div id="recapService" style="padding:.8rem 0;border-bottom:1.5px solid var(--p2);margin-bottom:.8rem">
-        <div style="font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ink-m);margin-bottom:.3rem">Service sélectionné</div>
-        <div id="recapSvcName" style="font-size:.96rem;font-weight:700;color:var(--p4d)">—</div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:.3rem">
-          <span id="recapSvcDuration" style="font-size:.76rem;color:var(--ink-m)">—</span>
-          <span id="recapSvcPrice" style="font-family:var(--fh);font-size:1.3rem;font-weight:700;color:var(--ink-h)">—</span>
-        </div>
+      <div id="recapServicesList" style="padding:.4rem 0;border-bottom:1.5px solid var(--p2);margin-bottom:.8rem;min-height:60px">
+        <div style="font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ink-m);margin-bottom:.5rem">Services sélectionnés</div>
+        <div id="recapSvcItems" style="color:var(--ink-m);font-size:.82rem">Aucun service sélectionné</div>
       </div>
 
-      <div class="recap-row"><span class="recap-key">Créneau</span><span class="recap-value" style="color:var(--ink-d)">À choisir</span></div>
+      <div class="recap-row"><span class="recap-key">Créneaux</span><span class="recap-value" style="color:var(--ink-d)">À choisir</span></div>
 
       <div class="recap-total-row">
         <span class="recap-total-label">Total</span>
@@ -126,10 +124,10 @@
 
 @push('scripts')
 <script>
-var selectedServiceId = null;
-var step2Url = '{{ route('reservations.step2', $salonModel->slug) }}';
+var selectedServices = []; // [{id, name, duration, price_raw, price}]
+var step2Url    = '{{ route('reservations.step2', $salonModel->slug) }}';
 var saveStepUrl = '{{ route('reservations.save-step', $salonModel->slug) }}';
-var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+var csrfToken   = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
 function filterCat(btn, cat) {
   document.querySelectorAll('.svc-cat-tab').forEach(b => b.classList.remove('on'));
@@ -139,27 +137,71 @@ function filterCat(btn, cat) {
   });
 }
 
-function selectSvc(card) {
-  document.querySelectorAll('.svc-select-card').forEach(c => c.classList.remove('selected'));
-  card.classList.add('selected');
-  selectedServiceId = card.dataset.id;
+function toggleSvc(card) {
+  var id   = card.dataset.id;
+  var idx  = selectedServices.findIndex(function(s){ return s.id === id; });
+  var check = card.querySelector('.svc-select-check');
+  if (idx >= 0) {
+    selectedServices.splice(idx, 1);
+    card.classList.remove('selected');
+    if (check) { check.textContent = ''; check.style.background = '#fff'; check.style.borderColor = 'var(--border2)'; }
+  } else {
+    selectedServices.push({
+      id:        id,
+      name:      card.dataset.name,
+      duration:  card.dataset.duration,
+      price_raw: parseFloat(card.dataset.priceRaw) || 0,
+      price:     card.dataset.price,
+    });
+    card.classList.add('selected');
+    if (check) { check.textContent = '\u2713'; check.style.background = 'var(--p4)'; check.style.borderColor = 'var(--p4)'; }
+  }
+  updateRecap();
+}
 
-  document.getElementById('recapSvcName').textContent    = card.dataset.name;
-  document.getElementById('recapSvcDuration').textContent = card.dataset.duration;
-  document.getElementById('recapSvcPrice').textContent   = card.dataset.price;
-  document.getElementById('recapTotal').textContent      = card.dataset.price;
+function updateRecap() {
+  var list = document.getElementById('recapSvcItems');
+  if (selectedServices.length === 0) {
+    list.innerHTML = 'Aucun service sélectionné';
+    list.style.color = 'var(--ink-m)';
+    document.getElementById('recapTotal').textContent = '—';
+  } else {
+    var html = '';
+    var total = 0;
+    selectedServices.forEach(function(s){
+      total += s.price_raw;
+      html += '<div style="display:flex;justify-content:space-between;padding:.35rem 0;border-top:1px dashed var(--p2);font-size:.82rem">'
+            + '<span style="color:var(--ink-d);font-weight:600">' + escapeHtml(s.name) + '</span>'
+            + '<span style="color:var(--ink-h);font-weight:700">' + escapeHtml(s.price) + '</span>'
+            + '</div>';
+    });
+    list.innerHTML = html;
+    list.style.color = '';
+    document.getElementById('recapTotal').textContent = total.toLocaleString('fr-FR') + ' MAD';
+  }
+  var btn = document.getElementById('btnNext');
+  if (selectedServices.length > 0) {
+    btn.style.opacity = '1';
+    btn.style.pointerEvents = 'auto';
+  } else {
+    btn.style.opacity = '.4';
+    btn.style.pointerEvents = 'none';
+  }
+}
 
-  const btn = document.getElementById('btnNext');
-  btn.style.opacity = '1';
-  btn.style.pointerEvents = 'auto';
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
 }
 
 function goStep2() {
-  if (!selectedServiceId) return;
+  if (selectedServices.length === 0) return;
+  var ids = selectedServices.map(function(s){ return s.id; });
   fetch(saveStepUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
-    body: JSON.stringify({ step: 'service_id', service_id: selectedServiceId })
+    body: JSON.stringify({ step: 'services', service_ids: ids })
   }).then(() => { window.location.href = step2Url; });
 }
 </script>

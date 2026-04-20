@@ -115,7 +115,11 @@ Route::middleware(['auth', 'role:salon'])->prefix('salon')->name('salon.')->grou
     Route::post('/reservations/{id}/annuler', [SalonReservationController::class, 'annuler'])->name('reservations.annuler');
     Route::get('/disponibilites', [DisponibiliteController::class, 'index'])->name('disponibilites.index');
     Route::post('/disponibilites/bloquer', [DisponibiliteController::class, 'bloquer'])->name('disponibilites.bloquer');
-    Route::delete('/disponibilites/{id}', [DisponibiliteController::class, 'debloquer'])->name('disponibilites.debloquer');
+    Route::delete('/disponibilites/bloc/{id}', [DisponibiliteController::class, 'debloquer'])->name('disponibilites.debloquer');
+    Route::put('/disponibilites/horaires', [DisponibiliteController::class, 'updateHoraires'])->name('disponibilites.horaires');
+    Route::put('/disponibilites/employes/{id}/horaires', [DisponibiliteController::class, 'updateEmployeHoraires'])->name('disponibilites.employe.horaires');
+    Route::post('/disponibilites/exceptions', [DisponibiliteController::class, 'storeException'])->name('disponibilites.exceptions.store');
+    Route::delete('/disponibilites/exceptions/{id}', [DisponibiliteController::class, 'destroyException'])->name('disponibilites.exceptions.destroy');
     Route::get('/avis', [SalonAvisController::class, 'index'])->name('avis.index');
     Route::post('/avis/{id}/repondre', [SalonAvisController::class, 'repondre'])->name('avis.repondre');
     Route::post('/avis/{id}/signaler', [SalonAvisController::class, 'signaler'])->name('avis.signaler');

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Réservation — Choix du créneau')
+@section('title', 'Réservation — Choix des créneaux')
 
 @section('content')
 
@@ -16,8 +16,8 @@
 {{-- ── Stepper ─────────────────────────────────────────────── --}}
 <div class="stepper-bar-wrap">
   <div class="stepper-bar">
-    <div class="step done"><div class="step-dot">&#10003;</div><div class="step-label">Service</div></div>
-    <div class="step current"><div class="step-dot">2</div><div class="step-label">Créneau</div></div>
+    <div class="step done"><div class="step-dot">&#10003;</div><div class="step-label">Services</div></div>
+    <div class="step current"><div class="step-dot">2</div><div class="step-label">Créneaux</div></div>
     <div class="step"><div class="step-dot">3</div><div class="step-label">Vos infos</div></div>
     <div class="step"><div class="step-dot">4</div><div class="step-label">Confirmation</div></div>
   </div>
@@ -26,16 +26,23 @@
 <div class="wizard-two-col">
   <div>
 
-    {{-- Service choisi ──────────────────────────────────────── --}}
-    <div class="completed-step">
-      <div>
-        <div class="completed-step-label">Service choisi</div>
-        <div class="completed-step-value">{{ $service->nom_service }}</div>
-        <div class="completed-step-meta">{{ $service->duree_formatee }}</div>
+    {{-- Onglets services ────────────────────────────────────── --}}
+    <div class="form-card" style="padding:1rem 1.2rem;margin-bottom:1rem">
+      <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ink-m);margin-bottom:.7rem">
+        Prestations à planifier ({{ $services->count() }})
       </div>
-      <div class="completed-step-right">
-        <div class="completed-step-price">{{ $service->prix_format }}</div>
-        <a href="{{ route('reservations.step1', $salonModel->slug) }}" class="btn-edit-step">Modifier</a>
+      <div id="svcTabs" style="display:flex;flex-wrap:wrap;gap:.5rem">
+        @foreach($services as $idx => $svc)
+          <button type="button"
+                  class="svc-tab-btn {{ $idx === 0 ? 'active' : '' }}"
+                  data-svc-id="{{ $svc->id }}"
+                  onclick="switchService('{{ $svc->id }}')"
+                  style="padding:.6rem .9rem;border:2px solid var(--border2);background:{{ $idx === 0 ? 'var(--p4)' : '#fff' }};color:{{ $idx === 0 ? '#fff' : 'var(--ink-d)' }};font-size:.78rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:.5rem">
+            <span class="svc-tab-check" style="display:none;color:#fff;font-weight:700">&#10003;</span>
+            <span>{{ $svc->nom_service }}</span>
+            <span style="opacity:.8;font-size:.7rem">({{ $svc->duree_formatee }})</span>
+          </button>
+        @endforeach
       </div>
     </div>
 
@@ -44,7 +51,7 @@
       <div class="emp-select-head">
         <div>
           <div class="emp-select-title">Choisissez votre styliste</div>
-          <div class="emp-select-sub">Optionnel — nous choisirons pour vous si non spécifié</div>
+          <div class="emp-select-sub">Pour la prestation en cours — optionnel</div>
         </div>
       </div>
 
@@ -108,7 +115,7 @@
 
     <div class="form-card" style="padding:1.6rem;margin-top:1.5rem">
       <div class="wizard-navigation">
-        <a href="{{ route('reservations.step1', $salonModel->slug) }}" class="btn-wizard-back">&#8592; Service</a>
+        <a href="{{ route('reservations.step1', $salonModel->slug) }}" class="btn-wizard-back">&#8592; Services</a>
         <button class="btn-wizard-confirm" id="btnNext3"
                 style="opacity:.4;pointer-events:none;border:none;cursor:pointer"
                 onclick="goStep3()">
@@ -135,15 +142,13 @@
         </div>
       </div>
 
-      <div class="recap-row"><span class="recap-key">Service</span><span class="recap-value">{{ $service->nom_service }}</span></div>
-      <div class="recap-row"><span class="recap-key">Durée</span><span class="recap-value">{{ $service->duree_formatee }}</span></div>
-      <div class="recap-row"><span class="recap-key">Styliste</span><span id="recapEmp" class="recap-value">Au choix</span></div>
-      <div class="recap-row"><span class="recap-key">Date</span><span id="recapDate" class="recap-value" style="color:var(--ink-d)">À choisir</span></div>
-      <div class="recap-row"><span class="recap-key">Heure</span><span id="recapTime" class="recap-value" style="color:var(--ink-d)">À choisir</span></div>
+      <div id="recapSelections" style="padding:.3rem 0"></div>
 
       <div class="recap-total-row">
         <span class="recap-total-label">Total</span>
-        <span class="recap-total-amount">{{ $service->prix_format }}</span>
+        <span id="recapTotal" class="recap-total-amount">
+          {{ number_format($services->sum('prix'), 0, ',', ' ') }} MAD
+        </span>
       </div>
       <div style="margin-top:1.2rem;padding:1rem;background:rgba(197,216,157,.15);border:1px solid var(--p2)">
         <div style="font-size:.72rem;color:var(--ink-s);line-height:1.7">
@@ -157,17 +162,23 @@
 
 @push('scripts')
 <script>
-// Créneaux depuis le serveur
-var creneauxData = @json($creneaux);
+// Données depuis le serveur
+var creneauxByService = @json($creneauxParService);
+var servicesMeta = @json($services->map(fn($s) => [
+    'id'       => (string) $s->id,
+    'name'     => $s->nom_service,
+    'duration' => $s->duree_formatee,
+    'price'    => $s->prix_format,
+    'prix'     => (float) $s->prix,
+])->values());
 
-var selectedEmpId = '';
-var selectedDate = null;
-var selectedTime = null;
+// selections: { [service_id]: { date_heure, employe_id, employe_name } }
+var selections = {};
+var currentServiceId = servicesMeta[0].id;
 var currentMonth, currentYear;
-var months = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+var months   = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 var monthsFr = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-
-var today = new Date();
+var today    = new Date();
 currentMonth = today.getMonth();
 currentYear  = today.getFullYear();
 
@@ -178,7 +189,32 @@ var csrfToken   = document.querySelector('meta[name="csrf-token"]').getAttribute
 function pad(n) { return n < 10 ? '0' + n : String(n); }
 function dateKey(y, m, d) { return y + '-' + pad(m + 1) + '-' + pad(d); }
 
+function currentCreneaux() {
+  return creneauxByService[currentServiceId] || {};
+}
+
+function switchService(id) {
+  currentServiceId = String(id);
+  document.querySelectorAll('.svc-tab-btn').forEach(function(b){
+    var active = b.dataset.svcId === currentServiceId;
+    var done   = !!selections[b.dataset.svcId];
+    b.style.background = active ? 'var(--p4)' : (done ? 'var(--p2)' : '#fff');
+    b.style.color      = active ? '#fff' : 'var(--ink-d)';
+    b.classList.toggle('active', active);
+    var check = b.querySelector('.svc-tab-check');
+    if (check) check.style.display = done ? 'inline' : 'none';
+  });
+
+  // Restaurer la sélection employé de ce service
+  var sel = selections[currentServiceId] || {};
+  highlightEmp(sel.employe_id || '');
+
+  buildCal();
+  document.getElementById('slotsSection').style.display = 'none';
+}
+
 function buildCal() {
+  var data = currentCreneaux();
   document.getElementById('calTitle').textContent = months[currentMonth] + ' ' + currentYear;
   var grid = document.getElementById('calDays');
   grid.innerHTML = '';
@@ -194,18 +230,21 @@ function buildCal() {
     grid.appendChild(d);
   }
 
+  var selDate = (selections[currentServiceId] && selections[currentServiceId].date_heure)
+              ? selections[currentServiceId].date_heure.substring(0, 10) : null;
+
   for (var day = 1; day <= days; day++) {
     var d = document.createElement('div');
     var key = dateKey(currentYear, currentMonth, day);
     var isPast = (new Date(currentYear, currentMonth, day) < new Date(today.getFullYear(), today.getMonth(), today.getDate()));
     var isToday = (day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear());
-    var hasSlots = creneauxData[key] && creneauxData[key].some(function(s){return s.disponible;}) && !isPast;
+    var hasSlots = data[key] && data[key].some(function(s){return s.disponible;}) && !isPast;
     var classes = ['cal-day'];
     if (isPast) classes.push('past');
     else if (!hasSlots) classes.push('disabled');
     if (isToday) classes.push('today');
     if (hasSlots) classes.push('has-slots');
-    if (key === selectedDate) classes.push('selected');
+    if (key === selDate) classes.push('selected');
     d.className = classes.join(' ');
     d.innerHTML = '<span class="cal-day-num">' + day + '</span>' + (hasSlots ? '<span class="cal-day-dot"></span>' : '');
     if (hasSlots) {
@@ -227,9 +266,7 @@ function buildCal() {
 }
 
 function selectDate(key, dayNum, month, year) {
-  selectedDate = key;
-  selectedTime = null;
-  buildCal();
+  buildCalHighlight(key);
 
   var jsFull = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
   var jsDate = new Date(year, month, dayNum);
@@ -239,13 +276,8 @@ function selectDate(key, dayNum, month, year) {
   document.getElementById('slotsDate').textContent = label;
   document.getElementById('slotsSection').style.display = 'block';
 
-  document.getElementById('recapDate').textContent = dayNum + ' ' + monthsFr[month];
-  document.getElementById('recapDate').style.color = '';
-  document.getElementById('recapTime').textContent = 'À choisir';
-  document.getElementById('recapTime').style.color = 'var(--ink-d)';
-
-  // Construire créneaux
-  var slots = creneauxData[key] || [];
+  var data = currentCreneaux();
+  var slots = data[key] || [];
   var body = document.getElementById('slotsBody');
   body.innerHTML = '';
   if (slots.length === 0) {
@@ -255,6 +287,8 @@ function selectDate(key, dayNum, month, year) {
 
   var matin = slots.filter(function(s){ return parseInt(s.heure.split(':')[0]) < 13; });
   var apmidi = slots.filter(function(s){ return parseInt(s.heure.split(':')[0]) >= 13; });
+
+  var currentDt = selections[currentServiceId] ? selections[currentServiceId].date_heure : null;
 
   function makeSlots(list, label) {
     if (!list.length) return;
@@ -266,7 +300,8 @@ function selectDate(key, dayNum, month, year) {
     grid.className = 'slots-grid';
     list.forEach(function(slot) {
       var el = document.createElement('div');
-      el.className = 'time-slot ' + (slot.disponible ? 'available' : 'unavailable');
+      var isSel = currentDt === slot.datetime;
+      el.className = 'time-slot ' + (slot.disponible ? 'available' : 'unavailable') + (isSel ? ' selected' : '');
       el.textContent = slot.heure;
       if (slot.disponible) {
         el.onclick = function() { selectSlot(el, slot.heure, slot.datetime); };
@@ -278,31 +313,100 @@ function selectDate(key, dayNum, month, year) {
 
   makeSlots(matin, 'Matin');
   makeSlots(apmidi, 'Après-midi');
-  checkComplete();
 }
 
-var selectedDatetime = null;
+function buildCalHighlight(key) {
+  document.querySelectorAll('.cal-day').forEach(function(d){ d.classList.remove('selected'); });
+  // sélection sera visuellement mise à jour au prochain buildCal via selections[currentServiceId]
+  if (!selections[currentServiceId]) selections[currentServiceId] = {};
+  // mémoriser la date provisoire (recalée à l'heure)
+}
 
 function selectSlot(el, time, datetime) {
   document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
   el.classList.add('selected');
-  selectedTime = time;
-  selectedDatetime = datetime;
-  document.getElementById('recapTime').textContent = time;
-  document.getElementById('recapTime').style.color = '';
+
+  var prevEmp = selections[currentServiceId] ? selections[currentServiceId].employe_id : '';
+  var prevEmpName = selections[currentServiceId] ? selections[currentServiceId].employe_name : '';
+  selections[currentServiceId] = {
+    date_heure:    datetime,
+    employe_id:    prevEmp || '',
+    employe_name:  prevEmpName || '',
+  };
+  refreshTabs();
+  refreshRecap();
   checkComplete();
+  buildCal(); // pour refléter la sélection du jour
 }
 
 function selectEmp(row, id, name) {
+  highlightEmp(id);
+  if (!selections[currentServiceId]) selections[currentServiceId] = { date_heure: '', employe_id: '', employe_name: '' };
+  selections[currentServiceId].employe_id   = id;
+  selections[currentServiceId].employe_name = id ? name : '';
+  refreshRecap();
+}
+
+function highlightEmp(id) {
   document.querySelectorAll('.emp-select-row').forEach(r => r.classList.remove('selected'));
-  row.classList.add('selected');
-  selectedEmpId = id;
-  document.getElementById('recapEmp').textContent = id ? name : 'Au choix';
+  if (!id) {
+    document.getElementById('empAny').classList.add('selected');
+  } else {
+    var row = document.getElementById('emp-' + id);
+    if (row) row.classList.add('selected');
+  }
+}
+
+function refreshTabs() {
+  document.querySelectorAll('.svc-tab-btn').forEach(function(b){
+    var sid  = b.dataset.svcId;
+    var done = !!(selections[sid] && selections[sid].date_heure);
+    var active = sid === currentServiceId;
+    b.style.background = active ? 'var(--p4)' : (done ? 'var(--p2)' : '#fff');
+    var check = b.querySelector('.svc-tab-check');
+    if (check) check.style.display = done ? 'inline' : 'none';
+  });
+}
+
+function refreshRecap() {
+  var box = document.getElementById('recapSelections');
+  var html = '';
+  var total = 0;
+  servicesMeta.forEach(function(m){
+    var s = selections[m.id];
+    var when = (s && s.date_heure)
+      ? formatDt(s.date_heure)
+      : '<span style="color:var(--ink-m)">À choisir</span>';
+    var emp  = (s && s.employe_name) ? s.employe_name : 'Au choix';
+    total += m.prix;
+    html += '<div style="padding:.6rem 0;border-bottom:1px dashed var(--p2)">'
+          + '<div style="display:flex;justify-content:space-between;font-size:.82rem">'
+          + '<span style="font-weight:700;color:var(--ink-d)">' + escapeHtml(m.name) + '</span>'
+          + '<span style="color:var(--ink-h);font-weight:700">' + escapeHtml(m.price) + '</span>'
+          + '</div>'
+          + '<div style="font-size:.72rem;color:var(--ink-m);margin-top:.2rem">' + when + ' · ' + escapeHtml(emp) + '</div>'
+          + '</div>';
+  });
+  box.innerHTML = html;
+  document.getElementById('recapTotal').textContent = total.toLocaleString('fr-FR') + ' MAD';
+}
+
+function formatDt(iso) {
+  var d = new Date(iso.replace(' ', 'T'));
+  if (isNaN(d)) return iso;
+  return pad(d.getDate()) + ' ' + monthsFr[d.getMonth()] + ' · ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
 }
 
 function checkComplete() {
+  var allSet = servicesMeta.every(function(m){ return selections[m.id] && selections[m.id].date_heure; });
   var btn = document.getElementById('btnNext3');
-  if (selectedDate && selectedTime) {
+  if (allSet) {
     btn.style.opacity = '1';
     btn.style.pointerEvents = 'auto';
   } else {
@@ -312,11 +416,20 @@ function checkComplete() {
 }
 
 function goStep3() {
-  if (!selectedDate || !selectedTime || !selectedDatetime) return;
+  var payload = servicesMeta.map(function(m){
+    var s = selections[m.id] || {};
+    return {
+      service_id: m.id,
+      date_heure: s.date_heure || '',
+      employe_id: s.employe_id || null,
+    };
+  });
+  if (payload.some(function(p){ return !p.date_heure; })) return;
+
   fetch(saveStepUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
-    body: JSON.stringify({ step: 'creneau', date_heure: selectedDatetime, employe_id: selectedEmpId || null })
+    body: JSON.stringify({ step: 'creneaux', selections: payload })
   }).then(() => { window.location.href = step3Url; });
 }
 
@@ -331,6 +444,7 @@ function nextMonth() {
   buildCal();
 }
 
+refreshRecap();
 buildCal();
 </script>
 @endpush

@@ -56,6 +56,11 @@
           <div>
             <div class="reservation-salon-name">{{ $resa->salon->nom_salon }}</div>
             <div class="reservation-salon-location">&#128205; {{ $resa->salon->quartier }}, {{ $resa->salon->ville?->nom_ville }}</div>
+            @if($resa->groupe_uuid)
+              <div style="margin-top:.3rem;font-size:.68rem;color:var(--p4d);font-weight:700">
+                &#128230; Réservation groupée
+              </div>
+            @endif
           </div>
           <div>
             @php

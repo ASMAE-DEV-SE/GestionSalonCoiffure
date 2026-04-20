@@ -19,7 +19,7 @@ class ReservationController extends Controller
         private GestionnaireDisponibilite $disponibiliteService,
     ) {}
 
-    /** STEP 1 — Choix du service */
+    /** STEP 1 — Choix des services (multi) */
     public function step1(string $salon)
     {
         $salonModel = $this->getSalonOr404($salon);
@@ -32,30 +32,40 @@ class ReservationController extends Controller
         return view('reservations.step1', compact('salonModel','services','categories'));
     }
 
-    /** STEP 2 — Choix du créneau */
+    /** STEP 2 — Choix des créneaux (un par service) */
     public function step2(Request $request, string $salon)
     {
         $salonModel  = $this->getSalonOr404($salon);
         $sessionData = $request->session()->get("wizard_{$salonModel->id}", []);
-        $serviceId   = $sessionData['service_id'] ?? null;
+        $serviceIds  = $sessionData['service_ids'] ?? null;
 
-        if (! $serviceId) {
-            return redirect()->route('reservations.step1', $salon)
-                             ->with('error', 'Veuillez d\'abord choisir un service.');
+        // Rétro-compatibilité : ancien format single-service
+        if (! $serviceIds && ! empty($sessionData['service_id'])) {
+            $serviceIds = [$sessionData['service_id']];
         }
 
-        $service  = $salonModel->servicesActifs()->findOrFail($serviceId);
+        if (empty($serviceIds)) {
+            return redirect()->route('reservations.step1', $salon)
+                             ->with('error', 'Veuillez d\'abord choisir au moins un service.');
+        }
+
+        $services = $salonModel->servicesActifs()->whereIn('id', $serviceIds)->get();
+        if ($services->isEmpty()) {
+            return redirect()->route('reservations.step1', $salon)
+                             ->with('error', 'Les services choisis sont introuvables.');
+        }
+
         $employes = $salonModel->employesActifs;
 
-        // Créneaux disponibles pour les 30 prochains jours
-        $creneaux = $this->disponibiliteService->creneauxDisponibles(
-            $salonModel,
-            $service,
-            now(),
-            now()->addDays(30)
-        );
+        // Créneaux par service pour les 30 prochains jours
+        $creneauxParService = [];
+        foreach ($services as $svc) {
+            $creneauxParService[$svc->id] = $this->disponibiliteService->creneauxDisponibles(
+                $salonModel, $svc, now(), now()->addDays(30)
+            );
+        }
 
-        return view('reservations.step2', compact('salonModel','service','employes','creneaux'));
+        return view('reservations.step2', compact('salonModel','services','employes','creneauxParService'));
     }
 
     /** STEP 3 — Informations client */
@@ -65,53 +75,75 @@ class ReservationController extends Controller
         $user       = Auth::user();
 
         $sessionData = $request->session()->get("wizard_{$salonModel->id}", []);
-        if (empty($sessionData['service_id']) || empty($sessionData['date_heure'])) {
+
+        // Normaliser : accepter ancien format (service_id + date_heure)
+        $selections = $sessionData['selections'] ?? null;
+        if (! $selections && ! empty($sessionData['service_id']) && ! empty($sessionData['date_heure'])) {
+            $selections = [[
+                'service_id' => (int) $sessionData['service_id'],
+                'date_heure' => $sessionData['date_heure'],
+                'employe_id' => $sessionData['employe_id'] ?? null,
+            ]];
+        }
+
+        if (empty($selections)) {
             return redirect()->route('reservations.step1', $salon);
         }
 
-        $service = $salonModel->servicesActifs()->find($sessionData['service_id']);
-        $employe = isset($sessionData['employe_id'])
-            ? Employe::find($sessionData['employe_id'])
-            : null;
+        $ids      = collect($selections)->pluck('service_id')->all();
+        $services = $salonModel->servicesActifs()->whereIn('id', $ids)->get()->keyBy('id');
+        $employes = Employe::whereIn('id', collect($selections)->pluck('employe_id')->filter()->all())->get()->keyBy('id');
+
+        // Préparer les items pour la vue
+        $items = collect($selections)->map(function($s) use ($services, $employes) {
+            return [
+                'service'    => $services[$s['service_id']] ?? null,
+                'employe'    => !empty($s['employe_id']) ? ($employes[$s['employe_id']] ?? null) : null,
+                'date_heure' => $s['date_heure'],
+            ];
+        })->filter(fn($i) => $i['service'] !== null)->values();
+
+        $total = $items->sum(fn($i) => (float) $i['service']->prix);
 
         return view('reservations.create', compact(
-            'salonModel','service','employe','sessionData','user'
+            'salonModel','items','user','total'
         ));
     }
 
-    /** STEP 4 — Enregistrement */
+    /** STEP 4 — Enregistrement (multi-réservations) */
     public function store(Request $request, string $salon)
     {
         $salonModel = $this->getSalonOr404($salon);
 
-        Log::info('[Client] Wizard store → tentative création', [
+        Log::info('[Client] Wizard store → tentative création groupe', [
             'user_id'  => Auth::id(),
             'salon_id' => $salonModel->id,
-            'payload'  => $request->only('service_id', 'employe_id', 'date_heure', 'duree_minutes'),
+            'count'    => count($request->input('selections', [])),
         ]);
 
         $data = $request->validate([
-            'service_id'    => ['required','exists:services,id'],
-            'employe_id'    => ['nullable','exists:employes,id'],
-            'date_heure'    => ['required','date','after:now'],
-            'duree_minutes' => ['required','integer','min:15','max:480'],
-            'notes_client'  => ['nullable','string','max:500'],
+            'selections'                  => ['required','array','min:1'],
+            'selections.*.service_id'    => ['required','exists:services,id'],
+            'selections.*.employe_id'    => ['nullable','exists:employes,id'],
+            'selections.*.date_heure'    => ['required','date','after:now'],
+            'notes_client'                => ['nullable','string','max:500'],
         ]);
 
-        $reservation = $this->reservationService->creer(
+        $reservations = $this->reservationService->creerGroupe(
             Auth::user(),
             $salonModel,
-            $data
+            $data['selections'],
+            $data['notes_client'] ?? null
         );
 
         $request->session()->forget("wizard_{$salonModel->id}");
 
-        Log::info('[Client] Wizard store ✓ reservation créée', [
-            'reservation_id' => $reservation->id,
-            'user_id'        => Auth::id(),
+        Log::info('[Client] Wizard store ✓ groupe créé', [
+            'reservation_ids' => $reservations->pluck('id'),
+            'user_id'         => Auth::id(),
         ]);
 
-        return redirect()->route('reservations.confirmation', $reservation->id);
+        return redirect()->route('reservations.confirmation', $reservations->first()->id);
     }
 
     /** Confirmation */
@@ -121,7 +153,17 @@ class ReservationController extends Controller
             ->where('client_id', Auth::id())
             ->findOrFail($id);
 
-        return view('reservations.confirmation', compact('reservation'));
+        // Si la réservation fait partie d'un groupe, charger toutes les réservations du groupe
+        $groupe = null;
+        if ($reservation->groupe_uuid) {
+            $groupe = Reservation::with(['service','employe'])
+                ->where('groupe_uuid', $reservation->groupe_uuid)
+                ->where('client_id', Auth::id())
+                ->orderBy('date_heure')
+                ->get();
+        }
+
+        return view('reservations.confirmation', compact('reservation','groupe'));
     }
 
     /** Liste réservations client */
