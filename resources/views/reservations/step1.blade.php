@@ -72,10 +72,22 @@
         @endforeach
       </div>
 
+      {{-- Formulaire caché pour soumettre les IDs de services --}}
+      <form id="wizardStep1Form"
+            action="{{ route('reservations.save-step', $salonModel->slug) }}"
+            method="POST"
+            style="display:none">
+        @csrf
+        <input type="hidden" name="step" value="services">
+        <input type="hidden" name="redirect_to" value="{{ route('reservations.step2', $salonModel->slug) }}">
+        <div id="serviceIdInputs"></div>
+      </form>
+
       <div class="wizard-navigation">
         <a href="{{ route('salons.show', [$salonModel->ville->nom_ville, $salonModel->slug]) }}"
            class="btn-wizard-back">&#8592; Retour au salon</a>
         <button class="btn-wizard-confirm" id="btnNext"
+                type="button"
                 style="opacity:.4;pointer-events:none;border:none;cursor:pointer"
                 onclick="goStep2()">
           Choisir les créneaux &#8594;
@@ -197,12 +209,20 @@ function escapeHtml(s) {
 
 function goStep2() {
   if (selectedServices.length === 0) return;
-  var ids = selectedServices.map(function(s){ return s.id; });
-  fetch(saveStepUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
-    body: JSON.stringify({ step: 'services', service_ids: ids })
-  }).then(() => { window.location.href = step2Url; });
+
+  // Construire les inputs cachés pour chaque service sélectionné
+  var container = document.getElementById('serviceIdInputs');
+  container.innerHTML = '';
+  selectedServices.forEach(function(s) {
+    var input = document.createElement('input');
+    input.type  = 'hidden';
+    input.name  = 'service_ids[]';
+    input.value = s.id;
+    container.appendChild(input);
+  });
+
+  // Soumettre le formulaire (POST classique → session garantie → redirect vers step2)
+  document.getElementById('wizardStep1Form').submit();
 }
 </script>
 @endpush

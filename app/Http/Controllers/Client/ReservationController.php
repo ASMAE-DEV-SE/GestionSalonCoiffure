@@ -230,7 +230,7 @@ class ReservationController extends Controller
     {
         $salonModel = $this->getSalonOr404($salon);
         $step       = $request->input('step');
-        $data       = $request->except(['_token','step']);
+        $data       = $request->except(['_token', 'step', 'redirect_to']);
 
         $request->session()->put("wizard_{$salonModel->id}_{$step}", $data);
         $request->session()->put("wizard_{$salonModel->id}", array_merge(
@@ -238,8 +238,15 @@ class ReservationController extends Controller
             $data
         ));
 
+        // Formulaire HTML classique → redirect_to présent
+        if ($redirectTo = $request->input('redirect_to')) {
+            return redirect($redirectTo);
+        }
+
+        // Requête AJAX → réponse JSON
         return response()->json(['ok' => true]);
     }
+
 
     private function getSalonOr404(string $slugOrId): Salon
     {
