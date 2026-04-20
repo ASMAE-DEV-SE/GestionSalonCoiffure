@@ -23,6 +23,7 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 COPY . .
 
 RUN composer dump-autoload --optimize \
+    && php artisan package:discover --ansi \
     && chmod -R 775 storage bootstrap/cache \
     && php artisan storage:link || true
 
