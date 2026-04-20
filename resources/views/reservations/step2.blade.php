@@ -164,13 +164,7 @@
 <script>
 // Données depuis le serveur
 var creneauxByService = @json($creneauxParService);
-var servicesMeta = @json($services->map(fn($s) => [
-    'id'       => (string) $s->id,
-    'name'     => $s->nom_service,
-    'duration' => $s->duree_formatee,
-    'price'    => $s->prix_format,
-    'prix'     => (float) $s->prix,
-])->values());
+var servicesMeta = @json($servicesMeta);
 
 // selections: { [service_id]: { date_heure, employe_id, employe_name } }
 var selections = {};

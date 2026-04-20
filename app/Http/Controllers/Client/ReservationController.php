@@ -51,8 +51,17 @@ class ReservationController extends Controller
         $employes = $salonModel->employesActifs;
         // Chargement lazy en AJAX dans la vue pour éviter les timeouts/500 en prod.
         $creneauxParService = collect();
+        $servicesMeta = $services->map(function ($service) {
+            return [
+                'id' => (string) $service->id,
+                'name' => $service->nom_service,
+                'duration' => $service->duree_formatee,
+                'price' => $service->prix_format,
+                'prix' => (float) $service->prix,
+            ];
+        })->values();
 
-        return view('reservations.step2', compact('salonModel','services','employes', 'creneauxParService'));
+        return view('reservations.step2', compact('salonModel', 'services', 'employes', 'creneauxParService', 'servicesMeta'));
     }
 
     /** AJAX — Nouvelle fonction pour le chargement dynamique (indispensable pour l'optimisation) */
