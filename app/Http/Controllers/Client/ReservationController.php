@@ -44,17 +44,14 @@ class ReservationController extends Controller
         }
 
         $services = $salonModel->servicesActifs()->whereIn('id', $serviceIds)->get();
-        $employes = $salonModel->employesActifs;
-        $debut = now()->startOfMonth()->startOfDay();
-        $fin = now()->addMonth()->endOfMonth()->endOfDay();
+        if ($services->isEmpty()) {
+            return redirect()->route('reservations.step1', $salon)
+                ->with('error', 'Veuillez sélectionner des services valides.');
+        }
 
-        $creneauxParService = $services->mapWithKeys(function ($service) use ($salonModel, $debut, $fin) {
-            return [
-                (string) $service->id => $this->disponibiliteService
-                    ->creneauxDisponibles($salonModel, $service, $debut, $fin)
-                    ->toArray(),
-            ];
-        });
+        $employes = $salonModel->employesActifs;
+        // Chargement lazy en AJAX dans la vue pour éviter les timeouts/500 en prod.
+        $creneauxParService = collect();
 
         return view('reservations.step2', compact('salonModel','services','employes', 'creneauxParService'));
     }

@@ -184,13 +184,40 @@ currentYear  = today.getFullYear();
 
 var saveStepUrl = '{{ route('reservations.save-step', $salonModel->slug) }}';
 var step3Url    = '{{ route('reservations.step3', $salonModel->slug) }}';
+var creneauxUrlBase = @json(url('/reservations/' . $salonModel->slug . '/creneaux'));
 var csrfToken   = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+var loadedMonths = {};
 
 function pad(n) { return n < 10 ? '0' + n : String(n); }
 function dateKey(y, m, d) { return y + '-' + pad(m + 1) + '-' + pad(d); }
 
 function currentCreneaux() {
   return creneauxByService[currentServiceId] || {};
+}
+
+function loadCreneauxForCurrentMonth() {
+  var monthKey = currentYear + '-' + pad(currentMonth + 1);
+  if (!loadedMonths[currentServiceId]) loadedMonths[currentServiceId] = {};
+  if (loadedMonths[currentServiceId][monthKey]) return;
+
+  loadedMonths[currentServiceId][monthKey] = true;
+  var url = creneauxUrlBase + '/' + encodeURIComponent(currentServiceId)
+    + '?annee=' + encodeURIComponent(currentYear)
+    + '&mois=' + encodeURIComponent(currentMonth + 1);
+
+  fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+    .then(function (r) { return r.ok ? r.json() : {}; })
+    .then(function (data) {
+      creneauxByService[currentServiceId] = Object.assign(
+        {},
+        creneauxByService[currentServiceId] || {},
+        data || {}
+      );
+      buildCal();
+    })
+    .catch(function () {
+      // Ne pas casser la page si une requête échoue : l'utilisateur peut changer de mois/service.
+    });
 }
 
 function switchService(id) {
@@ -214,6 +241,7 @@ function switchService(id) {
 }
 
 function buildCal() {
+  loadCreneauxForCurrentMonth();
   var data = currentCreneaux();
   document.getElementById('calTitle').textContent = months[currentMonth] + ' ' + currentYear;
   var grid = document.getElementById('calDays');
