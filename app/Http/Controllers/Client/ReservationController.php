@@ -10,7 +10,6 @@ use App\Services\ReservationService;
 use App\Services\GestionnaireDisponibilite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class ReservationController extends Controller
 {
@@ -265,12 +264,44 @@ class ReservationController extends Controller
         return back()->with('success', 'La réservation a été annulée avec succès.');
     }
 
-    private function getSalonOr404(string $salonSlug): Salon
+    private function getSalonOr404(string $slugOrId): Salon
     {
-        return Salon::query()
-            ->with(['ville', 'servicesActifs', 'employesActifs'])
-            ->where('valide', 1)
-            ->get()
-            ->firstOrFail(fn (Salon $salon) => $salon->slug === $salonSlug);
+        if (is_numeric($slugOrId)) {
+            return Salon::valides()
+                ->with(['ville', 'servicesActifs', 'employesActifs'])
+                ->findOrFail((int) $slugOrId);
+        }
+
+        // Recherche par slug sans charger tous les salons en mémoire.
+        $normalizedSlug = strtolower(trim($slugOrId));
+        $sqlSlug = str_replace(["'", ' '], ['', '-'], $normalizedSlug);
+
+        $salon = Salon::valides()
+            ->whereRaw('LOWER(REPLACE(REPLACE(nom_salon, " ", "-"), "\'", "")) = ?', [$sqlSlug])
+            ->first();
+
+        // Fallback: tentative via nom exact reconstruit depuis le slug.
+        if (! $salon) {
+            $nomSinceSlug = str_replace('-', ' ', $normalizedSlug);
+            $salon = Salon::valides()
+                ->whereRaw('LOWER(nom_salon) = ?', [$nomSinceSlug])
+                ->first();
+        }
+
+        // Dernier fallback robuste si format de slug atypique.
+        if (! $salon) {
+            $minimal = Salon::valides()->get(['id', 'nom_salon']);
+            $match = $minimal->first(fn (Salon $s) => $s->slug === $slugOrId);
+            if ($match) {
+                $salon = Salon::valides()->find($match->id);
+            }
+        }
+
+        if (! $salon) {
+            abort(404);
+        }
+
+        $salon->loadMissing(['ville', 'servicesActifs', 'employesActifs']);
+        return $salon;
     }
 }
