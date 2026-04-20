@@ -83,11 +83,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/reservations/{salon}/step3', [ReservationController::class, 'step3'])->name('reservations.step3');
     Route::post('/reservations/{salon}', [ReservationController::class, 'store'])->name('reservations.store');
     Route::post('/reservations/{salon}/save-step', [ReservationController::class, 'saveStep'])->name('reservations.save-step');
+    Route::get('/reservations/{salon}/creneaux/{serviceId}', [ReservationController::class, 'getCreneaux'])->name('reservations.creneaux');
     Route::get('/reservations/{id}/confirmation', [ReservationController::class, 'confirmation'])->name('reservations.confirmation');
     Route::get('/reservations/{id}', [ReservationController::class, 'show'])->name('reservations.show');
     Route::post('/reservations/{id}/annuler', [ReservationController::class, 'annuler'])->name('reservations.annuler');
     Route::get('/avis/create/{reservation}', [AvisController::class, 'create'])->name('avis.create');
     Route::post('/avis', [AvisController::class, 'store'])->name('avis.store');
+
 });
 
 // Salon routes
