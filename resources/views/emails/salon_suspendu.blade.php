@@ -12,11 +12,11 @@
 
 <div class="info-card" style="border-left-color:#C04A3D">
   <div class="info-row">
-    <span class="info-label">Salon</span>
+    <span class="info-label">Salon </span>
     <span class="info-value">{{ $nomSalon }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Statut</span>
+    <span class="info-label">Statut </span>
     <span class="info-value" style="color:#C04A3D">&#10005; Suspendu</span>
   </div>
   <div class="info-row">

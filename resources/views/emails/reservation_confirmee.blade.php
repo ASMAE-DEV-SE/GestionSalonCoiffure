@@ -11,33 +11,33 @@
 
 <div class="info-card">
   <div class="info-row">
-    <span class="info-label">Salon</span>
+    <span class="info-label">Salon </span>
     <span class="info-value">{{ $nomSalon }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Adresse</span>
+    <span class="info-label">Adresse </span>
     <span class="info-value">{{ $adresseSalon }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Service</span>
+    <span class="info-label">Service </span>
     <span class="info-value">{{ $nomService }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Date</span>
+    <span class="info-label">Date </span>
     <span class="info-value">{{ $date }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Heure</span>
+    <span class="info-label">Heure </span>
     <span class="info-value">{{ $heure }}</span>
   </div>
   @if($nomEmploye)
   <div class="info-row">
-    <span class="info-label">Styliste</span>
+    <span class="info-label">Styliste </span>
     <span class="info-value">{{ $nomEmploye }}</span>
   </div>
   @endif
   <div class="info-row">
-    <span class="info-label">Durée</span>
+    <span class="info-label">Durée </span>
     <span class="info-value">{{ $duree }}</span>
   </div>
 </div>

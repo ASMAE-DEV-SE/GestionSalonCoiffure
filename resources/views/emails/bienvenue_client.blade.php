@@ -13,7 +13,7 @@
   &#10003; &nbsp; Votre adresse email : <strong>{{ $email }}</strong>
 </div>
 
-<p class="text">Pour commencer, vérifiez votre adresse email en cliquant sur le bouton ci-dessous :</p>
+<p class="text">Pour commencer, vérifiez votre adresse email en cliquant sur le bouton ci-dessous : </p>
 
 <div style="text-align:center">
   <a href="{{ $urlVerification }}" class="btn">Vérifier mon email</a>
@@ -27,7 +27,7 @@
 </p>
 
 <p class="text" style="font-size:13px; color:#7A7570;">
-  Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :<br>
+  Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur : <br>
   <a href="{{ $urlVerification }}" style="color:#4E5C38;word-break:break-all;">{{ $urlVerification }}</a>
 </p>
 @endsection

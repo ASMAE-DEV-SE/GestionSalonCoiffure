@@ -12,15 +12,15 @@
 
 <div class="info-card">
   <div class="info-row">
-    <span class="info-label">Salon</span>
+    <span class="info-label">Salon </span>
     <span class="info-value">{{ $nomSalon }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Adresse</span>
+    <span class="info-label">Adresse </span>
     <span class="info-value">{{ $adresse }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Statut</span>
+    <span class="info-label">Statut </span>
     <span class="info-value" style="color:#4E5C38">&#10003; Validé</span>
   </div>
   <div class="info-row">
