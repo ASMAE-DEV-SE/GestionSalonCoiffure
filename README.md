@@ -354,3 +354,4 @@ Projet réalisé par **ASMAE** dans le cadre d'un projet tuteuré à l'**ISGA**.
 ---
 
 *Application développée avec [Laravel](https://laravel.com) 11 — PHP 8.2*
+> Note: This project is a work in progress.
