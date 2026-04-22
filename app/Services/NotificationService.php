@@ -155,8 +155,8 @@ class NotificationService
         $reservations = Reservation::where('statut', 'confirmee')
             ->where('rappel_24h', false)
             ->whereBetween('date_heure', [
-                now()->addHours(23),
-                now()->addHours(25),
+                now()->addHours(22),
+                now()->addHours(26),
             ])
             ->with(['client', 'salon.ville', 'service', 'employe'])
             ->get();
@@ -185,8 +185,8 @@ class NotificationService
         $reservations = Reservation::where('statut', 'confirmee')
             ->where('rappel_2h', false)
             ->whereBetween('date_heure', [
-                now()->addHours(1)->addMinutes(50),
-                now()->addHours(2)->addMinutes(10),
+                now()->addHour(),
+                now()->addHours(3),
             ])
             ->with(['client', 'salon.ville', 'service', 'employe'])
             ->get();
