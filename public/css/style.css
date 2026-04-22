@@ -7001,4 +7001,208 @@ select.pse-input{cursor:pointer}
   .flash{ font-size:.82rem; padding:.9rem 2.4rem .9rem 1rem; }
 }
 
+/* ───────────────────────────────────────────────────────────────
+   Sidebar client — carte profil (avatar, nom, email, badge)
+   Alignée avec la palette sage/crème de .profile-sidebar-card
+   ─────────────────────────────────────────────────────────────── */
+
+.client-sidebar-profile {
+  position: relative;
+  margin: 1rem 1rem .6rem;
+  padding: 1.6rem 1.2rem 1.4rem;
+  text-align: center;
+  background: linear-gradient(180deg, var(--p1) 0%, #FCF7E4 100%);
+  border: 1.5px solid var(--p2);
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(78,92,56,.06);
+  overflow: hidden;
+}
+
+.client-sidebar-profile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(156,171,132,.14), transparent 65%);
+  pointer-events: none;
+}
+
+.sidebar-avatar-wrap {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  margin: 0 auto .8rem;
+  z-index: 1;
+}
+
+.sidebar-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px var(--p3), 0 6px 14px rgba(78,92,56,.18);
+}
+
+.sidebar-avatar-status {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #7DB856;
+  border: 2.5px solid #fff;
+  box-shadow: 0 0 0 1px rgba(78,92,56,.25);
+}
+
+.sidebar-client-name {
+  position: relative;
+  font-family: var(--fh);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink-h);
+  line-height: 1.2;
+  margin-bottom: .18rem;
+  letter-spacing: .2px;
+  z-index: 1;
+}
+
+.sidebar-client-email {
+  position: relative;
+  font-size: .74rem;
+  color: var(--ink-m);
+  font-weight: 500;
+  word-break: break-word;
+  margin-bottom: .95rem;
+  z-index: 1;
+}
+
+.sidebar-level-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .34rem .85rem;
+  border-radius: 999px;
+  font-family: var(--fb);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: #6B4F14;
+  background: linear-gradient(135deg, #F4ECC8 0%, #E8D99A 100%);
+  border: 1px solid #D4BE6C;
+  box-shadow: 0 1px 3px rgba(139,105,20,.18), inset 0 1px 0 rgba(255,255,255,.55);
+  z-index: 1;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   Sidebar client — navigation (section label, icônes, badges)
+   ─────────────────────────────────────────────────────────────── */
+
+.sidebar-nav { padding: .4rem 0 .4rem; }
+
+.sidebar-nav-section-label {
+  display: block;
+  padding: .95rem 1.4rem .35rem;
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  color: var(--p4);
+}
+
+.sidebar-nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(156,171,132,.14);
+  color: var(--p4d);
+  font-size: .9rem;
+  flex-shrink: 0;
+  transition: var(--tr);
+}
+
+.sidebar-nav-link:hover .sidebar-nav-icon {
+  background: rgba(156,171,132,.3);
+  color: var(--p4dd);
+}
+
+.sidebar-nav-badge {
+  margin-left: auto;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: .66rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--p4);
+  box-shadow: 0 1px 3px rgba(78,92,56,.28);
+}
+
+.sidebar-nav-link.active .sidebar-nav-badge { background: var(--ink-h); }
+
+/* ───────────────────────────────────────────────────────────────
+   CTA "Réserver un salon" — bouton principal dashboard client
+   ─────────────────────────────────────────────────────────────── */
+
+.btn-new-booking {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .75rem 1.7rem;
+  border-radius: 999px;
+  font-family: var(--fb);
+  font-size: .88rem;
+  font-weight: 600;
+  letter-spacing: .4px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--p4) 0%, var(--p4d) 100%);
+  border: 1.5px solid var(--p4d);
+  box-shadow: 0 6px 16px rgba(78,92,56,.22), inset 0 1px 0 rgba(255,255,255,.2);
+  text-decoration: none;
+  transition: var(--tr);
+  white-space: nowrap;
+}
+
+.btn-new-booking:hover {
+  background: linear-gradient(135deg, var(--ink-h) 0%, var(--p4dd) 100%);
+  border-color: var(--ink-h);
+  transform: translateY(-1.5px);
+  box-shadow: 0 10px 24px rgba(28,26,20,.28);
+}
+
+.btn-new-booking:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(78,92,56,.25);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   Topbar — bouton "Mon espace / Mon salon / Admin" (parties similaires)
+   Raffinement subtil : accent sage au repos et au hover
+   ─────────────────────────────────────────────────────────────── */
+
+.btn-log {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px transparent, 0 1px 2px rgba(28,26,20,.04);
+}
+
+.btn-log:hover {
+  background: var(--p1);
+  border-color: var(--p4);
+  color: var(--p4dd);
+  box-shadow: 0 4px 12px rgba(78,92,56,.14);
+}
+
 
