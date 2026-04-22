@@ -11,20 +11,20 @@
 
 <div class="info-card" style="border-left-color:#3A7D44">
   <div class="info-row">
-    <span class="info-label">Salon &nbsp</span>
+    <span class="info-label">Salon &nbsp &nbsp</span>
     <span class="info-value">{{ $nomSalon }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Service &nbsp</span>
+    <span class="info-label">Service &nbsp &nbsp</span>
     <span class="info-value">{{ $nomService }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Date &nbsp</span> 
+    <span class="info-label">Date &nbsp &nbsp</span> 
     <span class="info-value">{{ $date }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Heure &nbsp</span>
-    <span class="info-value">{{ $heure }}</span>
+    <span class="info-label">Heure &nbsp &nbsp</span>
+    <span class="info-value">{{ $heure }}</span> 
   </div>
 </div>
 

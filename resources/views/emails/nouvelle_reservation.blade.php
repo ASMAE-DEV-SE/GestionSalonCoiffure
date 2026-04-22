@@ -12,32 +12,32 @@
 
 <div class="info-card">
   <div class="info-row">
-    <span class="info-label">Client </span>
+    <span class="info-label">Client &nbsp &nbsp</span>
     <span class="info-value">{{ $nomClient }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Téléphone </span>
+    <span class="info-label">Téléphone &nbsp &nbsp</span>
     <span class="info-value">{{ $telephoneClient ?: '—' }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Service demandé </span>
+    <span class="info-label">Service demandé &nbsp &nbsp</span>
     <span class="info-value">{{ $nomService }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Date souhaitée </span>
+    <span class="info-label">Date souhaitée &nbsp &nbsp</span>
     <span class="info-value">{{ $date }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Heure</span>
+    <span class="info-label">Heure &nbsp &nbsp</span>
     <span class="info-value">{{ $heure }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Durée </span>
+    <span class="info-label">Durée &nbsp &nbsp</span>
     <span class="info-value">{{ $duree }}</span>
   </div>
   @if($notesClient)
   <div class="info-row">
-    <span class="info-label">Notes client </span>
+    <span class="info-label">Notes client &nbsp &nbsp</span>
     <span class="info-value">{{ $notesClient }}</span>
   </div>
   @endif

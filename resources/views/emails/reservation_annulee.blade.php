@@ -11,28 +11,28 @@
 
 <div class="info-card" style="border-left-color:#C04A3D">
   <div class="info-row">
-    <span class="info-label">Salon </span>
+    <span class="info-label">Salon &nbsp &nbsp</span>
     <span class="info-value">{{ $nomSalon }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Service </span>
+    <span class="info-label">Service &nbsp &nbsp</span>
     <span class="info-value">{{ $nomService }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Date </span>
+    <span class="info-label">Date &nbsp &nbsp</span>
     <span class="info-value">{{ $date }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Heure </span>
+    <span class="info-label">Heure &nbsp &nbsp</span>
     <span class="info-value">{{ $heure }}</span>
   </div>
   <div class="info-row">
-    <span class="info-label">Annulée par </span>
+    <span class="info-label">Annulée par &nbsp &nbsp</span>
     <span class="info-value">{{ $annuleePar === 'salon' ? $nomSalon : 'Vous' }}</span>
   </div>
   @if($motif)
   <div class="info-row">
-    <span class="info-label">Motif </span>
+    <span class="info-label">Motif &nbsp &nbsp</span> 
     <span class="info-value">{{ $motif }}</span>
   </div>
   @endif
