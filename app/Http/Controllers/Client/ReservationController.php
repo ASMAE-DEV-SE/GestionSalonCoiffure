@@ -238,7 +238,16 @@ class ReservationController extends Controller
 
         $reservations = Reservation::with(['salon.ville', 'service', 'employe', 'avis'])
             ->where('client_id', Auth::id())
-            ->when($statut, fn ($query) => $query->where('statut', $statut))
+            ->when($statut === 'confirmee', fn ($q) => $q
+                ->where('statut', 'confirmee')
+                ->where('date_heure', '>=', now()))
+            ->when($statut === 'terminee', fn ($q) => $q->where(fn ($sub) => $sub
+                ->where('statut', 'terminee')
+                ->orWhere(fn ($s) => $s
+                    ->where('statut', 'confirmee')
+                    ->where('date_heure', '<', now()))))
+            ->when($statut && ! in_array($statut, ['confirmee', 'terminee'], true),
+                fn ($q) => $q->where('statut', $statut))
             ->orderByDesc('date_heure')
             ->paginate(10)
             ->withQueryString();
