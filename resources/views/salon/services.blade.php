@@ -20,6 +20,18 @@
 </div>
 
 {{-- Grille services ─────────────────────────────────────── --}}
+@php
+  $categorieImages = [
+    'Coiffure'  => 'brushing.png',
+    'Couleur'   => 'coloration.jpg',
+    'Soins'     => 'soin du visage.jpg',
+    'Ongles'    => 'manucure.jpg',
+    'Massage'   => 'massage.jpg',
+    'Épilation' => 'épilation.jpg',
+    'Barbe'     => 'barbe.jpg',
+    'Autre'     => 'Coupe Personnalisée.jpg',
+  ];
+@endphp
 @foreach($services as $categorie => $liste)
   <div style="margin-bottom:2.5rem" data-cat-section="{{ Str::slug($categorie) }}">
     <h2 style="font-family:var(--fh);font-size:1.3rem;color:var(--ink-h);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--border2)">
@@ -27,7 +39,11 @@
     </h2>
     <div class="svc-grid">
       @foreach($liste as $svc)
+        @php $imgFile = $categorieImages[$svc->categorie] ?? 'Coupe Personnalisée.jpg'; @endphp
         <div class="svc-card {{ !$svc->actif ? 'inactive' : '' }}" data-cat="{{ Str::slug($categorie) }}">
+          <div class="svc-img">
+            <img src="{{ asset('images/' . rawurlencode($imgFile)) }}" alt="{{ $svc->categorie }}" loading="lazy">
+          </div>
           <div class="svc-cat">{{ $svc->categorie }}</div>
           @if(!$svc->actif)<span class="badge-off">Inactif</span>@endif
           <div class="svc-body">
