@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Mail\NouvelAvisMail;
 use App\Mail\Rappel24hMail;
 use App\Mail\Rappel2hMail;
 use App\Mail\ReponseAvisMail;
@@ -25,6 +26,7 @@ class NotificationService
         'rappel_24h'            => 'Rappel : votre rendez-vous chez :salon est demain à :heure pour :service.',
         'rappel_2h'             => 'Rappel : votre rendez-vous chez :salon est dans 2h (:heure) pour :service.',
         'reponse_avis'          => ':salon a répondu à votre avis.',
+        'nouvel_avis'           => 'Nouvel avis (:note/5) de :client sur votre salon.',
     ];
 
     /**
@@ -246,21 +248,68 @@ class NotificationService
      */
     public function notifierReponseAvis(Avis $avis): void
     {
-        $reservation = $avis->reservation;
-        $clientId    = $reservation->client_id;
-        $nomSalon    = $reservation->salon->nom_salon;
-
-        $this->envoyer($clientId, 'reponse_avis', [
-            'salon' => $nomSalon,
-        ]);
-
         try {
-            $client = User::find($clientId);
-            if ($client) {
-                Mail::to($client->email)->send(new ReponseAvisMail($avis));
+            $avis->loadMissing('reservation.client', 'reservation.salon');
+            $reservation = $avis->reservation;
+            if (! $reservation || ! $reservation->client) {
+                Log::warning('notifierReponseAvis : réservation ou client introuvable', [
+                    'avis_id' => $avis->id,
+                ]);
+                return;
+            }
+
+            $clientId = $reservation->client_id;
+            $nomSalon = $reservation->salon?->nom_salon ?? '';
+
+            $this->envoyer($clientId, 'reponse_avis', [
+                'salon' => $nomSalon,
+            ]);
+
+            if ($reservation->client->email) {
+                Mail::to($reservation->client->email)->send(new ReponseAvisMail($avis));
             }
         } catch (\Throwable $e) {
-            Log::error('Erreur email réponse avis', [
+            Log::error('Erreur notification réponse avis', [
+                'avis_id' => $avis->id,
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+     * Notifie le propriétaire du salon qu'un client vient de publier un avis (in-app + email).
+     */
+    public function notifierNouvelAvis(Avis $avis): void
+    {
+        try {
+            $avis->loadMissing('reservation.client', 'reservation.salon.user', 'reservation.service');
+            $reservation = $avis->reservation;
+            if (! $reservation || ! $reservation->salon) {
+                Log::warning('notifierNouvelAvis : réservation ou salon introuvable', [
+                    'avis_id' => $avis->id,
+                ]);
+                return;
+            }
+
+            $salon      = $reservation->salon;
+            $proprio    = $salon->user;
+            $client     = $reservation->client;
+            $nomClient  = $client
+                ? trim(($client->prenom ?? 'Client') . ' ' . substr($client->nom ?? '', 0, 1) . '.')
+                : 'Un client';
+
+            if ($proprio) {
+                $this->envoyer($proprio->id, 'nouvel_avis', [
+                    'note'   => (string) $avis->note,
+                    'client' => $nomClient,
+                ]);
+
+                if ($proprio->email) {
+                    Mail::to($proprio->email)->send(new NouvelAvisMail($avis));
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::error('Erreur notification nouvel avis', [
                 'avis_id' => $avis->id,
                 'message' => $e->getMessage(),
             ]);

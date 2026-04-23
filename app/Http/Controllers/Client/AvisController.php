@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Avis;
 use App\Models\Reservation;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -12,6 +13,9 @@ use Illuminate\Support\Facades\Auth;
 
 class AvisController extends Controller
 {
+    public function __construct(private NotificationService $notifService) {}
+
+
     /*
     |------------------------------------------------------------------
     | Mes avis publiés  GET /client/avis
@@ -80,7 +84,7 @@ class AvisController extends Controller
         }
 
         // Créer l'avis
-        Avis::create([
+        $avis = Avis::create([
             'reservation_id' => $reservation->id,
             'note'           => $request->note,
             'commentaire'    => $request->commentaire,
@@ -99,6 +103,9 @@ class AvisController extends Controller
             'nb_avis'  => $nbAvis,
             'note_moy' => round($noteMoy, 2),
         ]);
+
+        // Notifier le propriétaire du salon (in-app + email)
+        $this->notifService->notifierNouvelAvis($avis);
 
         return redirect()->route('client.dashboard')
             ->with('success', 'Votre avis a été publié. Merci pour votre retour !');
