@@ -37,27 +37,14 @@
     </div>
 
     {{-- ── SERVICES ───────────────────────────────────────────── --}}
-    @php
-      $categorieImages = [
-        'Coiffure'  => 'brushing.png',
-        'Couleur'   => 'coloration.jpg',
-        'Soins'     => 'soin du visage.jpg',
-        'Ongles'    => 'manucure.jpg',
-        'Massage'   => 'massage.jpg',
-        'Épilation' => 'épilation.jpg',
-        'Barbe'     => 'barbe.jpg',
-        'Autre'     => 'Coupe Personnalisée.jpg',
-      ];
-    @endphp
     <div id="tab-services">
       @foreach($servicesByCategorie as $categorie => $services)
         <h2 class="section-title">{{ $categorie }}</h2>
         <div class="services-grid" style="margin-bottom:2rem">
           @foreach($services as $svc)
-            @php $imgFile = $categorieImages[$svc->categorie] ?? 'Coupe Personnalisée.jpg'; @endphp
             <div class="service-row" onclick="selectService({{ $svc->id }}, @json($svc->nom_service), {{ (int)$svc->duree_minu }}, {{ (float)$svc->prix }})">
               <div class="service-row-thumb">
-                <img src="{{ asset('images/' . rawurlencode($imgFile)) }}" alt="{{ $svc->categorie }}" loading="lazy">
+                <img src="{{ $svc->photo_url }}" alt="{{ $svc->nom_service }}" loading="lazy">
               </div>
               <div class="service-row-info">
                 <div class="service-row-name">{{ $svc->nom_service }}</div>

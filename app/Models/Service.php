@@ -15,7 +15,18 @@ class Service extends Model
 
     protected $fillable = [
         'salon_id','nom_service','description',
-        'prix','duree_minu','categorie','actif',
+        'prix','duree_minu','categorie','image','actif',
+    ];
+
+    public const CATEGORIE_IMAGES = [
+        'Coiffure'  => 'brushing.png',
+        'Couleur'   => 'coloration.jpg',
+        'Soins'     => 'soin du visage.jpg',
+        'Ongles'    => 'manucure.jpg',
+        'Massage'   => 'massage.jpg',
+        'Épilation' => 'épilation.jpg',
+        'Barbe'     => 'barbe.jpg',
+        'Autre'     => 'Coupe Personnalisée.jpg',
     ];
 
     protected $casts = [
@@ -44,6 +55,25 @@ class Service extends Model
     public function getPrixFormatAttribute(): string
     {
         return number_format($this->prix, 0, ',', ' ') . ' MAD';
+    }
+
+    /** URL de l'image du service (propre ou fallback catégorie) */
+    public function getPhotoUrlAttribute(): string
+    {
+        if ($this->image) {
+            $storagePath = storage_path('app/public/' . $this->image);
+            if (file_exists($storagePath)) {
+                return asset('storage/' . $this->image);
+            }
+        }
+        $fallback = self::CATEGORIE_IMAGES[$this->categorie] ?? 'Coupe Personnalisée.jpg';
+        return asset('images/' . rawurlencode($fallback));
+    }
+
+    /** True si le service a sa propre image uploadée */
+    public function getHasImageAttribute(): bool
+    {
+        return $this->image && file_exists(storage_path('app/public/' . $this->image));
     }
 
     // ── Scopes ─────────────────────────────────────────────────────

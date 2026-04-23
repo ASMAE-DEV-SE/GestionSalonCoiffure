@@ -7261,4 +7261,57 @@ select.pse-input{cursor:pointer}
 }
 .svc-card .svc-nm { margin-top: 0; }
 
+/* Badge "image par défaut" sur carte service */
+.svc-img-default {
+  position: absolute;
+  bottom: .5rem;
+  left: .5rem;
+  background: rgba(0,0,0,.6);
+  color: #fff;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  padding: .2rem .55rem;
+  z-index: 2;
+}
+
+/* Upload image dans modal service */
+.svc-upload {
+  display: flex;
+  gap: 1rem;
+  align-items: stretch;
+  border: 1.5px dashed var(--border2);
+  padding: .9rem;
+  background: var(--p1);
+}
+.svc-upload-preview {
+  width: 130px;
+  height: 100px;
+  flex-shrink: 0;
+  background: #fff;
+  border: 1.5px solid var(--border2);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.svc-upload-preview img { width: 100%; height: 100%; object-fit: cover; }
+.svc-upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: .5rem;
+}
+.svc-upload-actions {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  justify-content: center;
+  flex: 1;
+}
+
 

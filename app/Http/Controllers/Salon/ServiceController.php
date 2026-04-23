@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ServiceController extends Controller
 {
@@ -61,12 +62,22 @@ class ServiceController extends Controller
             'prix'        => ['required', 'numeric', 'min:0', 'max:99999'],
             'duree_minu'  => ['required', 'integer', 'min:10', 'max:480'],
             'categorie'   => ['required', 'string', 'max:60'],
+            'image'       => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
         ], [
             'nom_service.required' => 'Le nom du service est obligatoire.',
             'prix.required'        => 'Le prix est obligatoire.',
             'duree_minu.required'  => 'La durée est obligatoire.',
             'categorie.required'   => 'La catégorie est obligatoire.',
+            'image.image'          => "Le fichier doit être une image.",
+            'image.mimes'          => "Formats acceptés : JPG, PNG, WEBP.",
+            'image.max'            => "L'image ne doit pas dépasser 5 Mo.",
         ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('services', 'public');
+        } else {
+            unset($data['image']);
+        }
 
         $data['salon_id'] = $salon->id;
         $data['actif']    = $request->boolean('actif');
@@ -106,7 +117,24 @@ class ServiceController extends Controller
             'prix'        => ['required', 'numeric', 'min:0', 'max:99999'],
             'duree_minu'  => ['required', 'integer', 'min:10', 'max:480'],
             'categorie'   => ['required', 'string', 'max:60'],
+            'image'       => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
+        ], [
+            'image.image' => "Le fichier doit être une image.",
+            'image.mimes' => "Formats acceptés : JPG, PNG, WEBP.",
+            'image.max'   => "L'image ne doit pas dépasser 5 Mo.",
         ]);
+
+        if ($request->boolean('image_supprimer') && $service->image) {
+            Storage::disk('public')->delete($service->image);
+            $data['image'] = null;
+        } elseif ($request->hasFile('image')) {
+            if ($service->image) {
+                Storage::disk('public')->delete($service->image);
+            }
+            $data['image'] = $request->file('image')->store('services', 'public');
+        } else {
+            unset($data['image']);
+        }
 
         $data['actif'] = $request->boolean('actif');
         $service->update($data);
@@ -138,6 +166,9 @@ class ServiceController extends Controller
         }
 
         $nom = $service->nom_service;
+        if ($service->image) {
+            Storage::disk('public')->delete($service->image);
+        }
         $service->delete();
 
         return redirect()->route('salon.services.index')

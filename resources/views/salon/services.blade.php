@@ -20,18 +20,6 @@
 </div>
 
 {{-- Grille services ─────────────────────────────────────── --}}
-@php
-  $categorieImages = [
-    'Coiffure'  => 'brushing.png',
-    'Couleur'   => 'coloration.jpg',
-    'Soins'     => 'soin du visage.jpg',
-    'Ongles'    => 'manucure.jpg',
-    'Massage'   => 'massage.jpg',
-    'Épilation' => 'épilation.jpg',
-    'Barbe'     => 'barbe.jpg',
-    'Autre'     => 'Coupe Personnalisée.jpg',
-  ];
-@endphp
 @foreach($services as $categorie => $liste)
   <div style="margin-bottom:2.5rem" data-cat-section="{{ Str::slug($categorie) }}">
     <h2 style="font-family:var(--fh);font-size:1.3rem;color:var(--ink-h);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--border2)">
@@ -39,10 +27,12 @@
     </h2>
     <div class="svc-grid">
       @foreach($liste as $svc)
-        @php $imgFile = $categorieImages[$svc->categorie] ?? 'Coupe Personnalisée.jpg'; @endphp
         <div class="svc-card {{ !$svc->actif ? 'inactive' : '' }}" data-cat="{{ Str::slug($categorie) }}">
           <div class="svc-img">
-            <img src="{{ asset('images/' . rawurlencode($imgFile)) }}" alt="{{ $svc->categorie }}" loading="lazy">
+            <img src="{{ $svc->photo_url }}" alt="{{ $svc->nom_service }}" loading="lazy">
+            @if(!$svc->has_image)
+              <span class="svc-img-default" title="Image par défaut (catégorie)">Par défaut</span>
+            @endif
           </div>
           <div class="svc-cat">{{ $svc->categorie }}</div>
           @if(!$svc->actif)<span class="badge-off">Inactif</span>@endif
@@ -61,7 +51,8 @@
               <span class="svc-stat">RDV : <span>{{ $svc->reservations()->count() }}</span></span>
             </div>
             <div class="svc-actions">
-              <button class="btn-xs btn-xs-e" onclick="openEdit({{ $svc->id }}, '{{ addslashes($svc->nom_service) }}', '{{ addslashes($svc->description) }}', {{ $svc->prix }}, {{ $svc->duree_minu }}, '{{ $svc->categorie }}', {{ $svc->actif ? 'true' : 'false' }})">
+              <button class="btn-xs btn-xs-e"
+                      onclick='openEdit(@json($svc->id), @json($svc->nom_service), @json($svc->description ?? ""), @json((float)$svc->prix), @json((int)$svc->duree_minu), @json($svc->categorie), @json((bool)$svc->actif), @json($svc->has_image ? $svc->photo_url : null))'>
                 Modifier
               </button>
               <form method="POST" action="{{ route('salon.services.destroy', $svc->id) }}"
@@ -92,10 +83,35 @@
       <div class="modal-t" id="modalTitle">Ajouter un service</div>
       <button class="modal-close" onclick="closeModal()">&#10005;</button>
     </div>
-    <form method="POST" id="svcForm" action="{{ route('salon.services.store') }}">
+    <form method="POST" id="svcForm" action="{{ route('salon.services.store') }}" enctype="multipart/form-data">
       @csrf
       <input type="hidden" name="_method" id="formMethod" value="POST">
+      <input type="hidden" name="image_supprimer" id="f_img_supprimer" value="0">
       <div class="modal-body">
+
+        {{-- Upload image --}}
+        <div class="fg">
+          <label style="font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink-b);margin-bottom:.5rem;display:block">
+            Image du service <span style="font-weight:400;font-size:.78rem;color:var(--ink-m);text-transform:none;letter-spacing:0">(optionnel — JPG / PNG / WEBP, 5 Mo max)</span>
+          </label>
+          <div class="svc-upload">
+            <div class="svc-upload-preview" id="f_img_preview">
+              <img id="f_img_preview_img" src="" alt="" style="display:none">
+              <div class="svc-upload-placeholder" id="f_img_placeholder">
+                <div style="font-size:2rem;margin-bottom:.2rem">&#128247;</div>
+                <div style="font-size:.78rem;color:var(--ink-m)">Aucune image — une image par défaut sera utilisée</div>
+              </div>
+            </div>
+            <div class="svc-upload-actions">
+              <label class="btn-xs btn-xs-e" style="cursor:pointer;display:inline-block">
+                <span id="f_img_btn_label">Choisir une image</span>
+                <input type="file" name="image" id="f_img" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="previewImage(this)">
+              </label>
+              <button type="button" class="btn-xs btn-xs-r" id="f_img_remove_btn" style="display:none" onclick="removeImage()">Retirer l'image</button>
+            </div>
+          </div>
+        </div>
+
         <div class="row2m">
           <div class="fg"><label>Nom du service *</label>
             <input type="text" name="nom_service" id="f_nom" class="fi" placeholder="Coupe femme" required></div>
@@ -130,15 +146,53 @@
 
 @push('scripts')
 <script>
+function resetImagePreview() {
+  const img  = document.getElementById('f_img_preview_img');
+  const ph   = document.getElementById('f_img_placeholder');
+  const rm   = document.getElementById('f_img_remove_btn');
+  const file = document.getElementById('f_img');
+  const lbl  = document.getElementById('f_img_btn_label');
+  img.src = ''; img.style.display = 'none';
+  ph.style.display = 'flex';
+  rm.style.display = 'none';
+  file.value = '';
+  lbl.textContent = 'Choisir une image';
+  document.getElementById('f_img_supprimer').value = '0';
+}
+function showImagePreview(url, isExisting) {
+  const img = document.getElementById('f_img_preview_img');
+  const ph  = document.getElementById('f_img_placeholder');
+  const rm  = document.getElementById('f_img_remove_btn');
+  const lbl = document.getElementById('f_img_btn_label');
+  img.src = url; img.style.display = 'block';
+  ph.style.display = 'none';
+  rm.style.display = 'inline-block';
+  lbl.textContent = isExisting ? 'Remplacer l\'image' : 'Changer d\'image';
+}
+function previewImage(input) {
+  if (!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => showImagePreview(e.target.result, false);
+  reader.readAsDataURL(input.files[0]);
+  document.getElementById('f_img_supprimer').value = '0';
+}
+function removeImage() {
+  document.getElementById('f_img').value = '';
+  document.getElementById('f_img_supprimer').value = '1';
+  resetImagePreview();
+  document.getElementById('f_img_supprimer').value = '1';
+}
+
 function openModal() {
   document.getElementById('modalTitle').textContent = 'Ajouter un service';
   document.getElementById('svcForm').action = '{{ route('salon.services.store') }}';
   document.getElementById('formMethod').value = 'POST';
   ['nom','desc','prix','duree'].forEach(f => document.getElementById('f_' + f).value = '');
   document.getElementById('f_actif').checked = true;
+  resetImagePreview();
   document.getElementById('svcModal').style.display = 'flex';
 }
-function openEdit(id, nom, desc, prix, duree, cat, actif) {
+function openEdit(id, nom, desc, prix, duree, cat, actif, imageUrl) {
   document.getElementById('modalTitle').textContent = 'Modifier — ' + nom;
   document.getElementById('svcForm').action = '/salon/services/' + id;
   document.getElementById('formMethod').value = 'PUT';
@@ -148,6 +202,8 @@ function openEdit(id, nom, desc, prix, duree, cat, actif) {
   document.getElementById('f_duree').value = duree;
   document.getElementById('f_cat').value   = cat;
   document.getElementById('f_actif').checked = actif;
+  resetImagePreview();
+  if (imageUrl) { showImagePreview(imageUrl, true); }
   document.getElementById('svcModal').style.display = 'flex';
 }
 function closeModal() { document.getElementById('svcModal').style.display = 'none'; }
