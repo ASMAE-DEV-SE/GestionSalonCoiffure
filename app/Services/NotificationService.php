@@ -58,29 +58,37 @@ class NotificationService
             $user = User::find($userId);
             if (! $user) return $notif;
 
-            match ($type) {
+            $envoye = match ($type) {
                 'reservation_confirmee' => $reservation
-                    ? Mail::to($user->email)->send(new ReservationConfirmeeMail($reservation))
-                    : null,
+                    ? (Mail::to($user->email)->send(new ReservationConfirmeeMail($reservation)) ?: true)
+                    : false,
 
                 'reservation_annulee' => $reservation
-                    ? Mail::to($user->email)->send(new ReservationAnnuleeMail($reservation))
-                    : null,
+                    ? (Mail::to($user->email)->send(new ReservationAnnuleeMail($reservation)) ?: true)
+                    : false,
 
                 'reservation_terminee' => $reservation
-                    ? Mail::to($user->email)->send(new ReservationTermineeMail($reservation))
-                    : null,
+                    ? (Mail::to($user->email)->send(new ReservationTermineeMail($reservation)) ?: true)
+                    : false,
 
                 'rappel_24h' => $reservation
-                    ? Mail::to($user->email)->send(new Rappel24hMail($reservation))
-                    : null,
+                    ? (Mail::to($user->email)->send(new Rappel24hMail($reservation)) ?: true)
+                    : false,
 
                 'rappel_2h' => $reservation
-                    ? Mail::to($user->email)->send(new Rappel2hMail($reservation))
-                    : null,
+                    ? (Mail::to($user->email)->send(new Rappel2hMail($reservation)) ?: true)
+                    : false,
 
-                default => null,
+                default => false,
             };
+
+            if ($envoye) {
+                Log::info('Email notification envoye', [
+                    'type'    => $type,
+                    'user_id' => $userId,
+                    'to'      => $user->email,
+                ]);
+            }
         } catch (\Throwable $e) {
             Log::error('Erreur envoi email notification', [
                 'type'    => $type,
@@ -102,6 +110,8 @@ class NotificationService
             ->with(['client', 'salon.ville', 'service', 'employe'])
             ->get();
 
+        Log::info('Scan reservations expirees', ['trouvees' => $reservations->count()]);
+
         foreach ($reservations as $r) {
             /** @var Reservation $r */
             $r->update([
@@ -117,6 +127,8 @@ class NotificationService
                 'date'    => $r->date_heure->translatedFormat('D d M Y'),
                 'motif'   => $r->motif_annul,
             ], $r);
+
+            Log::info('Reservation expiree annulee', ['reservation_id' => $r->id, 'client_id' => $r->client_id]);
         }
 
         return $reservations->count();
@@ -132,6 +144,8 @@ class NotificationService
             ->with(['client', 'salon.ville', 'service', 'employe'])
             ->get();
 
+        Log::info('Scan reservations a terminer', ['trouvees' => $reservations->count()]);
+
         foreach ($reservations as $r) {
             /** @var Reservation $r */
             $r->update(['statut' => 'terminee']);
@@ -142,6 +156,8 @@ class NotificationService
                 'date'    => $r->date_heure->translatedFormat('D d M Y'),
                 'heure'   => $r->date_heure->format('H:i'),
             ], $r);
+
+            Log::info('Reservation terminee automatiquement', ['reservation_id' => $r->id, 'client_id' => $r->client_id]);
         }
 
         return $reservations->count();
@@ -152,14 +168,19 @@ class NotificationService
      */
     public function envoyerRappels24h(): int
     {
+        $debut = now()->addHours(22);
+        $fin   = now()->addHours(26);
+
         $reservations = Reservation::where('statut', 'confirmee')
             ->where('rappel_24h', false)
-            ->whereBetween('date_heure', [
-                now()->addHours(22),
-                now()->addHours(26),
-            ])
+            ->whereBetween('date_heure', [$debut, $fin])
             ->with(['client', 'salon.ville', 'service', 'employe'])
             ->get();
+
+        Log::info('Scan rappels 24h', [
+            'trouves' => $reservations->count(),
+            'fenetre' => [$debut->toDateTimeString(), $fin->toDateTimeString()],
+        ]);
 
         foreach ($reservations as $r) {
             /** @var Reservation $r */
@@ -171,7 +192,11 @@ class NotificationService
 
             $r->update(['rappel_24h' => true]);
 
-            Log::info('Rappel 24h envoyé', ['reservation_id' => $r->id, 'client_id' => $r->client_id]);
+            Log::info('Rappel 24h envoye', [
+                'reservation_id' => $r->id,
+                'client_id'      => $r->client_id,
+                'date_heure'     => $r->date_heure->toDateTimeString(),
+            ]);
         }
 
         return $reservations->count();
@@ -182,14 +207,19 @@ class NotificationService
      */
     public function envoyerRappels2h(): int
     {
+        $debut = now()->addHour();
+        $fin   = now()->addHours(3);
+
         $reservations = Reservation::where('statut', 'confirmee')
             ->where('rappel_2h', false)
-            ->whereBetween('date_heure', [
-                now()->addHour(),
-                now()->addHours(3),
-            ])
+            ->whereBetween('date_heure', [$debut, $fin])
             ->with(['client', 'salon.ville', 'service', 'employe'])
             ->get();
+
+        Log::info('Scan rappels 2h', [
+            'trouves' => $reservations->count(),
+            'fenetre' => [$debut->toDateTimeString(), $fin->toDateTimeString()],
+        ]);
 
         foreach ($reservations as $r) {
             /** @var Reservation $r */
@@ -200,6 +230,12 @@ class NotificationService
             ], $r);
 
             $r->update(['rappel_2h' => true]);
+
+            Log::info('Rappel 2h envoye', [
+                'reservation_id' => $r->id,
+                'client_id'      => $r->client_id,
+                'date_heure'     => $r->date_heure->toDateTimeString(),
+            ]);
         }
 
         return $reservations->count();

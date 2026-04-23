@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Services\NotificationService;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Commande : php artisan rappels:envoyer
@@ -29,6 +30,8 @@ class EnvoyerRappels extends Command
     public function handle(): int
     {
         $dryRun = $this->option('dry-run');
+
+        Log::info('Rappels: demarrage', ['dry_run' => $dryRun, 'now' => now()->toDateTimeString()]);
 
         if ($dryRun) {
             $this->warn('⚠ Mode dry-run — aucun SMS ne sera envoyé.');
@@ -75,7 +78,16 @@ class EnvoyerRappels extends Command
 
         $this->line('');
         $this->line(str_repeat('─', 50));
-        $this->info('Terminé. Total : ' . ($nb24h + $nb2h + $nbExpirees + $nbTerminees) . ' actions traitées.');
+        $total = $nb24h + $nb2h + $nbExpirees + $nbTerminees;
+        $this->info('Terminé. Total : ' . $total . ' actions traitées.');
+
+        Log::info('Rappels: termine', [
+            'rappels_24h'         => $nb24h,
+            'rappels_2h'          => $nb2h,
+            'reservations_annulees' => $nbExpirees,
+            'reservations_terminees' => $nbTerminees,
+            'total'               => $total,
+        ]);
 
         return Command::SUCCESS;
     }

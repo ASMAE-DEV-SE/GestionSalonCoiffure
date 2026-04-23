@@ -10,6 +10,7 @@ use App\Services\ReservationService;
 use App\Services\GestionnaireDisponibilite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ReservationController extends Controller
 {
@@ -140,6 +141,13 @@ class ReservationController extends Controller
             $data['notes_client'] ?? null
         );
 
+        Log::info('Client: reservations creees', [
+            'client_id'        => Auth::id(),
+            'salon_id'         => $salonModel->id,
+            'reservation_ids'  => $reservations->pluck('id')->all(),
+            'nb_services'      => count($data['selections']),
+        ]);
+
         $request->session()->forget("wizard_{$salonModel->id}");
 
         return redirect()->route('reservations.confirmation', $reservations->first()->id);
@@ -236,6 +244,11 @@ class ReservationController extends Controller
     {
         $statut = $request->query('statut');
 
+        Log::info('Client: liste reservations consultee', [
+            'client_id' => Auth::id(),
+            'statut'    => $statut,
+        ]);
+
         $reservations = Reservation::with(['salon.ville', 'service', 'employe', 'avis'])
             ->where('client_id', Auth::id())
             ->when($statut === 'confirmee', fn ($q) => $q
@@ -269,14 +282,27 @@ class ReservationController extends Controller
         $reservation = Reservation::where('client_id', Auth::id())->findOrFail($id);
 
         if (! $reservation->peutEtreAnnulee()) {
+            Log::warning('Client: tentative annulation refusee', [
+                'client_id'      => Auth::id(),
+                'reservation_id' => $id,
+                'statut_actuel'  => $reservation->statut,
+            ]);
             return back()->with('error', 'Cette réservation ne peut plus être annulée.');
         }
+
+        $motif = $request->input('motif_annul', 'Annulation par le client');
 
         $reservation->update([
             'statut' => 'annulee',
             'annulee_par' => 'client',
             'date_annul' => now(),
-            'motif_annul' => $request->input('motif_annul', 'Annulation par le client'),
+            'motif_annul' => $motif,
+        ]);
+
+        Log::info('Client: reservation annulee', [
+            'client_id'      => Auth::id(),
+            'reservation_id' => $id,
+            'motif'          => $motif,
         ]);
 
         return back()->with('success', 'La réservation a été annulée avec succès.');
