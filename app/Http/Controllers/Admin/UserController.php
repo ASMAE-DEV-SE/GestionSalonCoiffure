@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Ville;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -52,7 +53,8 @@ class UserController extends Controller
 
     public function create(): View
     {
-        return view('admin.user_form', ['user' => null]);
+        $villes = Ville::orderBy('nom_ville')->get();
+        return view('admin.user_form', ['user' => null, 'villes' => $villes]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -64,6 +66,8 @@ class UserController extends Controller
             'role'         => ['required', 'in:admin,salon,client'],
             'mot_de_passe' => ['required', Password::min(8)],
             'telephone'    => ['nullable', 'string', 'max:20'],
+            'ville_id'     => ['nullable', 'exists:villes,id'],
+            'quartier'     => ['nullable', 'string', 'max:80'],
         ]);
 
         $user = User::create([
@@ -73,6 +77,8 @@ class UserController extends Controller
             'role'         => $data['role'],
             'mot_de_passe' => Hash::make($data['mot_de_passe']),
             'telephone'    => $data['telephone'] ?? null,
+            'ville_id'     => $data['ville_id'] ?? null,
+            'quartier'     => $data['quartier'] ?? null,
         ]);
 
         Log::info('Admin: utilisateur cree', ['admin_id' => Auth::id(), 'new_user_id' => $user->id, 'role' => $user->role]);
@@ -117,8 +123,9 @@ class UserController extends Controller
 
     public function edit(int $id): View
     {
-        $user = User::findOrFail($id);
-        return view('admin.user_form', compact('user'));
+        $user   = User::findOrFail($id);
+        $villes = Ville::orderBy('nom_ville')->get();
+        return view('admin.user_form', compact('user', 'villes'));
     }
 
     public function update(Request $request, int $id): RedirectResponse
@@ -126,14 +133,31 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         $data = $request->validate([
-            'nom'       => ['required', 'string', 'max:80'],
-            'prenom'    => ['required', 'string', 'max:80'],
-            'email'     => ['required', 'email', 'unique:users,email,' . $user->id],
-            'role'      => ['required', 'in:admin,salon,client'],
-            'telephone' => ['nullable', 'string', 'max:20'],
+            'nom'          => ['required', 'string', 'max:80'],
+            'prenom'       => ['required', 'string', 'max:80'],
+            'email'        => ['required', 'email', 'unique:users,email,' . $user->id],
+            'role'         => ['required', 'in:admin,salon,client'],
+            'telephone'    => ['nullable', 'string', 'max:20'],
+            'ville_id'     => ['nullable', 'exists:villes,id'],
+            'quartier'     => ['nullable', 'string', 'max:80'],
+            'mot_de_passe' => ['nullable', Password::min(8)],
         ]);
 
-        $user->update($data);
+        $updatable = [
+            'nom'       => $data['nom'],
+            'prenom'    => $data['prenom'],
+            'email'     => $data['email'],
+            'role'      => $data['role'],
+            'telephone' => $data['telephone'] ?? null,
+            'ville_id'  => $data['ville_id'] ?? null,
+            'quartier'  => $data['quartier'] ?? null,
+        ];
+
+        if (! empty($data['mot_de_passe'])) {
+            $updatable['mot_de_passe'] = Hash::make($data['mot_de_passe']);
+        }
+
+        $user->update($updatable);
 
         Log::info('Admin: utilisateur mis a jour', ['admin_id' => Auth::id(), 'user_id' => $id]);
 

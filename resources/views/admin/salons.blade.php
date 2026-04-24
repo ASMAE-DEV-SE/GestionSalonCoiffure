@@ -71,6 +71,7 @@
           <td>
             <div style="display:flex;gap:.4rem;flex-wrap:wrap">
               <a href="{{ route('admin.salons.show', $s->id) }}" class="admin-table-action">Voir</a>
+              <a href="{{ route('admin.salons.edit', $s->id) }}" class="admin-table-action">Modifier</a>
               @if($s->valide !== 1)
                 <form method="POST" action="{{ route('admin.salons.valider', $s->id) }}">
                   @csrf

@@ -10,6 +10,7 @@
   </div>
   <div class="admin-header-actions">
     <a href="{{ route('admin.salons.index') }}" class="btn-admin-ghost">&#8592; Retour</a>
+    <a href="{{ route('admin.salons.edit', $salon->id) }}" class="btn-admin-dark">&#9998; Modifier</a>
     @if($salon->valide !== 1)
       <form method="POST" action="{{ route('admin.salons.valider', $salon->id) }}" style="display:inline">
         @csrf

@@ -58,6 +58,22 @@
             </select>
             @error('role')<div style="color:#C04A3D;font-size:.72rem;margin-top:.3rem">{{ $message }}</div>@enderror
           </div>
+          <div>
+            <label class="pse-label">Ville</label>
+            <select name="ville_id" class="pse-input">
+              <option value="">—</option>
+              @foreach(($villes ?? []) as $v)
+                <option value="{{ $v->id }}" {{ (string) old('ville_id', $user->ville_id ?? '') === (string) $v->id ? 'selected' : '' }}>{{ $v->nom_ville }}</option>
+              @endforeach
+            </select>
+            @error('ville_id')<div style="color:#C04A3D;font-size:.72rem;margin-top:.3rem">{{ $message }}</div>@enderror
+          </div>
+          <div>
+            <label class="pse-label">Quartier</label>
+            <input type="text" name="quartier" class="pse-input"
+                   value="{{ old('quartier', $user->quartier ?? '') }}">
+            @error('quartier')<div style="color:#C04A3D;font-size:.72rem;margin-top:.3rem">{{ $message }}</div>@enderror
+          </div>
         </div>
 
         {{-- Mot de passe --}}

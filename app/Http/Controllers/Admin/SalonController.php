@@ -72,6 +72,40 @@ class SalonController extends Controller
         return view('admin.salon_detail', compact('salon', 'stats'));
     }
 
+    public function edit(int $id): View
+    {
+        $salon  = Salon::with(['user', 'ville'])->findOrFail($id);
+        $villes = Ville::orderBy('nom_ville')->get();
+
+        return view('admin.salon_form', compact('salon', 'villes'));
+    }
+
+    public function update(Request $request, int $id): RedirectResponse
+    {
+        $salon = Salon::findOrFail($id);
+
+        $data = $request->validate([
+            'nom_salon'   => ['required', 'string', 'max:120'],
+            'ville_id'    => ['required', 'exists:villes,id'],
+            'adresse'     => ['required', 'string', 'max:255'],
+            'quartier'    => ['nullable', 'string', 'max:80'],
+            'code_postal' => ['nullable', 'string', 'max:10'],
+            'telephone'   => ['nullable', 'string', 'max:20'],
+            'email'       => ['nullable', 'email', 'max:180'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'rib'         => ['nullable', 'string', 'max:60'],
+            'latitude'    => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude'   => ['nullable', 'numeric', 'between:-180,180'],
+        ]);
+
+        $salon->update($data);
+
+        Log::info('Admin: salon mis a jour', ['admin_id' => Auth::id(), 'salon_id' => $id]);
+
+        return redirect()->route('admin.salons.show', $salon->id)
+                         ->with('success', "Salon « {$salon->nom_salon} » mis à jour.");
+    }
+
     public function valider(int $id): RedirectResponse
     {
         $salon = Salon::with(['user', 'ville'])->findOrFail($id);

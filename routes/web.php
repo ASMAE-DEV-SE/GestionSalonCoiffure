@@ -131,6 +131,8 @@ Route::middleware(['auth', 'role:salon'])->prefix('salon')->name('salon.')->grou
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/salons', [AdminSalonController::class, 'index'])->name('salons.index');
+    Route::get('/salons/{id}/edit', [AdminSalonController::class, 'edit'])->name('salons.edit');
+    Route::put('/salons/{id}', [AdminSalonController::class, 'update'])->name('salons.update');
     Route::get('/salons/{id}', [AdminSalonController::class, 'show'])->name('salons.show');
     Route::post('/salons/{id}/valider', [AdminSalonController::class, 'valider'])->name('salons.valider');
     Route::post('/salons/{id}/suspendre', [AdminSalonController::class, 'suspendre'])->name('salons.suspendre');
