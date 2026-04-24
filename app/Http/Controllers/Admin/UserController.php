@@ -71,14 +71,15 @@ class UserController extends Controller
         ]);
 
         $user = User::create([
-            'nom'          => $data['nom'],
-            'prenom'       => $data['prenom'],
-            'email'        => $data['email'],
-            'role'         => $data['role'],
-            'mot_de_passe' => Hash::make($data['mot_de_passe']),
-            'telephone'    => $data['telephone'] ?? null,
-            'ville_id'     => $data['ville_id'] ?? null,
-            'quartier'     => $data['quartier'] ?? null,
+            'nom'              => $data['nom'],
+            'prenom'           => $data['prenom'],
+            'email'            => $data['email'],
+            'role'             => $data['role'],
+            'mot_de_passe'     => Hash::make($data['mot_de_passe']),
+            'telephone'        => $data['telephone'] ?? null,
+            'ville_id'         => $data['ville_id'] ?? null,
+            'quartier'         => $data['quartier'] ?? null,
+            'email_verifie_le' => $request->boolean('email_verifie') ? now() : null,
         ]);
 
         Log::info('Admin: utilisateur cree', ['admin_id' => Auth::id(), 'new_user_id' => $user->id, 'role' => $user->role]);
@@ -155,6 +156,13 @@ class UserController extends Controller
 
         if (! empty($data['mot_de_passe'])) {
             $updatable['mot_de_passe'] = Hash::make($data['mot_de_passe']);
+        }
+
+        $verifie = $request->boolean('email_verifie');
+        if ($verifie && ! $user->email_verifie_le) {
+            $updatable['email_verifie_le'] = now();
+        } elseif (! $verifie && $user->email_verifie_le) {
+            $updatable['email_verifie_le'] = null;
         }
 
         $user->update($updatable);

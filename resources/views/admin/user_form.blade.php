@@ -20,6 +20,7 @@
     </div>
     <div style="padding:2rem">
 
+      @php $verifieDefault = isset($user) ? (bool) $user->email_verifie_le : false; @endphp
       <form method="POST"
             action="{{ isset($user) ? route('admin.users.update', $user->id) : route('admin.users.store') }}">
         @csrf
@@ -73,6 +74,18 @@
             <input type="text" name="quartier" class="pse-input"
                    value="{{ old('quartier', $user->quartier ?? '') }}">
             @error('quartier')<div style="color:#C04A3D;font-size:.72rem;margin-top:.3rem">{{ $message }}</div>@enderror
+          </div>
+          <div style="grid-column:1/-1;display:flex;align-items:center;gap:.6rem;padding:.6rem 0">
+            <input type="hidden" name="email_verifie" value="0">
+            <input type="checkbox" id="email_verifie" name="email_verifie" value="1"
+                   {{ old('email_verifie', $verifieDefault) ? 'checked' : '' }}
+                   style="width:18px;height:18px;cursor:pointer">
+            <label for="email_verifie" style="font-size:.85rem;font-weight:600;color:var(--ink-h);cursor:pointer">
+              Email vérifié
+              @if(isset($user) && $user->email_verifie_le)
+                <span style="font-size:.72rem;color:var(--ink-m);font-weight:500">(vérifié le {{ $user->email_verifie_le->translatedFormat('d M Y') }})</span>
+              @endif
+            </label>
           </div>
         </div>
 

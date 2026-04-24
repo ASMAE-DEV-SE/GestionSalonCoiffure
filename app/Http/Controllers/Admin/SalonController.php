@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class SalonController extends Controller
@@ -96,7 +97,24 @@ class SalonController extends Controller
             'rib'         => ['nullable', 'string', 'max:60'],
             'latitude'    => ['nullable', 'numeric', 'between:-90,90'],
             'longitude'   => ['nullable', 'numeric', 'between:-180,180'],
+            'valide'      => ['required', 'in:-1,0,1'],
+            'photo'       => ['nullable', 'image', 'mimes:jpeg,png,webp', 'max:5120'],
+            'horaires'    => ['nullable', 'array'],
         ]);
+
+        $data['valide']   = (int) $data['valide'];
+        $data['horaires'] = $this->buildHoraires($request);
+
+        if ($request->hasFile('photo')) {
+            if ($salon->photo) {
+                Storage::disk('public')->delete($salon->photo);
+            }
+            $data['photo'] = $request->file('photo')->store('salons', 'public');
+        }
+
+        if ($data['valide'] === 1 && ! $salon->date_valid) {
+            $data['date_valid'] = now();
+        }
 
         $salon->update($data);
 
@@ -104,6 +122,23 @@ class SalonController extends Controller
 
         return redirect()->route('admin.salons.show', $salon->id)
                          ->with('success', "Salon « {$salon->nom_salon} » mis à jour.");
+    }
+
+    private function buildHoraires(Request $request): array
+    {
+        $jours    = ['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'];
+        $horaires = [];
+
+        foreach ($jours as $jour) {
+            $ferme = $request->boolean("h_{$jour}_ferme", false);
+            $horaires[$jour] = [
+                'debut' => $ferme ? null : $request->input("h_{$jour}_debut"),
+                'fin'   => $ferme ? null : $request->input("h_{$jour}_fin"),
+                'ferme' => $ferme,
+            ];
+        }
+
+        return $horaires;
     }
 
     public function valider(int $id): RedirectResponse
