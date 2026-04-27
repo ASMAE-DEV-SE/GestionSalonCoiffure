@@ -157,6 +157,20 @@ class GestionnaireDisponibilite
         $jours = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
         $jour  = $jours[$date->dayOfWeek];
 
+        $horaires = $salon->horaires;
+
+        // Fallback : si aucun horaire n'est configuré, on suppose le salon ouvert
+        // 9h-19h du lundi au samedi (dimanche fermé). Évite que le calendrier
+        // de réservation soit entièrement bloqué tant que le gérant n'a pas
+        // renseigné ses horaires.
+        if (empty($horaires) || ! isset($horaires[$jour])) {
+            if ($jour === 'dimanche') return null;
+            return [
+                Carbon::parse($date->toDateString() . ' 09:00'),
+                Carbon::parse($date->toDateString() . ' 19:00'),
+            ];
+        }
+
         if (! $salon->estOuvert($jour)) return null;
 
         $debut = $salon->heureOuverture($jour) ?? '09:00';
