@@ -35,8 +35,15 @@ class ReservationService
             'date_heure' => $data['date_heure'] ?? null,
         ]);
 
-        $service   = Service::findOrFail($data['service_id']);
-        $employe   = isset($data['employe_id']) ? Employe::find($data['employe_id']) : null;
+        $service = Service::where('salon_id', $salon->id)
+            ->findOrFail($data['service_id']);
+
+        $employe = null;
+        if (! empty($data['employe_id'])) {
+            $employe = Employe::where('salon_id', $salon->id)
+                ->findOrFail($data['employe_id']);
+        }
+
         $dateHeure = Carbon::parse($data['date_heure']);
 
         if (! $this->disponibilite->estDisponible($salon, $service, $dateHeure, $employe)) {
@@ -86,10 +93,19 @@ class ReservationService
         ]);
 
         // Validation préalable : toutes les dispos avant de créer quoi que ce soit
+        // Service et employé doivent appartenir au salon en cours pour empêcher
+        // la réservation cross-tenant via manipulation des IDs côté client.
         $parsed = [];
         foreach ($selections as $sel) {
-            $service   = Service::findOrFail($sel['service_id']);
-            $employe   = !empty($sel['employe_id']) ? Employe::find($sel['employe_id']) : null;
+            $service = Service::where('salon_id', $salon->id)
+                ->findOrFail($sel['service_id']);
+
+            $employe = null;
+            if (! empty($sel['employe_id'])) {
+                $employe = Employe::where('salon_id', $salon->id)
+                    ->findOrFail($sel['employe_id']);
+            }
+
             $dateHeure = Carbon::parse($sel['date_heure']);
 
             if (! $this->disponibilite->estDisponible($salon, $service, $dateHeure, $employe)) {
