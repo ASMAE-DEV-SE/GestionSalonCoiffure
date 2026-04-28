@@ -14,17 +14,18 @@ use App\Models\Avis;
 class SalonDemoSeeder extends Seeder
 {
     /**
-     * Règle d'or : ce seeder ne touche JAMAIS à une donnée existante d'un
-     * salon, d'un employé ou d'un service — photos comprises.
+     * Règle d'or : ce seeder n'écrit JAMAIS dans la colonne photo/image
+     * d'un salon, d'un employé ou d'un service — sous aucun prétexte.
      *
-     * Salons / employés / services utilisent firstOrCreate : si la ligne
-     * existe déjà (un gérant a personnalisé son nom, ses prix, ses
-     * spécialités, sa photo…), aucun champ n'est réécrasé. Seules les
-     * lignes manquantes sont créées avec les valeurs de démo.
+     * - firstOrCreate sur Salon/Employe/Service : si la ligne existe,
+     *   aucun champ n'est réécrasé (nom, adresse, prix, spécialités,
+     *   horaires, photo… tout est conservé tel que personnalisé).
+     * - Aucune photo de démo n'est attachée automatiquement : le rendu
+     *   visuel des salons sans photo passe par le placeholder géré dans
+     *   le modèle (Salon::getPhotoUrlAttribute), pas par le seeder.
      *
-     * Le helper attacherPhotoSiVide() ne renseigne la photo que si la
-     * colonne est vide ET que le fichier de démo existe sur disque, donc
-     * un upload utilisateur est strictement préservé.
+     * Pour bootstrapper des photos de démo sur une installation neuve,
+     * passez par le dashboard salon (upload manuel).
      */
     public function run(): void
     {
@@ -251,31 +252,7 @@ class SalonDemoSeeder extends Seeder
             ]);
         }
 
-        // Photos de démo — réattachées UNIQUEMENT si la colonne est vide
-        // et que le fichier existe encore dans storage/app/public/. Aucune
-        // photo personnalisée par un gérant ou un admin n'est jamais touchée.
-        $this->attacherPhotoSiVide($salon1, 'salons/elegance.jpg');
-        $this->attacherPhotoSiVide($salon2, 'salons/prestige_hair_studio.jpg');
-        $this->attacherPhotoSiVide($salon3, 'salons/atelier_beaute.jpg');
-
         $this->command->info('✓ SalonDemoSeeder : 3 salons, 4 employés, 12 services, 3 réservations, 1 avis.');
         $this->command->line('  → contact@elegance-rabat.ma / Salon@2026!');
-    }
-
-    /**
-     * Préserve toute photo existante. N'écrit dans la colonne $field que
-     * si elle est vide ET que $relativePath existe sur le disque public.
-     */
-    private function attacherPhotoSiVide($model, string $relativePath, string $field = 'photo'): void
-    {
-        if (! empty($model->{$field})) {
-            return;
-        }
-        if (! file_exists(storage_path('app/public/' . $relativePath))) {
-            return;
-        }
-        // saveQuietly évite events/observers et timestamps si on en ajoute plus tard.
-        $model->{$field} = $relativePath;
-        $model->save();
     }
 }
