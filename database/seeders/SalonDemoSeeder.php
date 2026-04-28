@@ -13,6 +13,12 @@ use App\Models\Avis;
 
 class SalonDemoSeeder extends Seeder
 {
+    /**
+     * Règle d'or : ce seeder ne touche JAMAIS aux colonnes photo/image
+     * existantes. Si une photo a été uploadée par un salon ou un admin,
+     * elle est strictement préservée. Un fichier de démo n'est ré-attaché
+     * QUE si la colonne est vide ET que le fichier existe sur disque.
+     */
     public function run(): void
     {
         $rabatId = \App\Models\Ville::where('nom_ville', 'Rabat')->value('id');
@@ -238,7 +244,31 @@ class SalonDemoSeeder extends Seeder
             ]);
         }
 
+        // Photos de démo — réattachées UNIQUEMENT si la colonne est vide
+        // et que le fichier existe encore dans storage/app/public/. Aucune
+        // photo personnalisée par un gérant ou un admin n'est jamais touchée.
+        $this->attacherPhotoSiVide($salon1, 'salons/elegance.jpg');
+        $this->attacherPhotoSiVide($salon2, 'salons/prestige_hair_studio.jpg');
+        $this->attacherPhotoSiVide($salon3, 'salons/atelier_beaute.jpg');
+
         $this->command->info('✓ SalonDemoSeeder : 3 salons, 4 employés, 12 services, 3 réservations, 1 avis.');
         $this->command->line('  → contact@elegance-rabat.ma / Salon@2026!');
+    }
+
+    /**
+     * Préserve toute photo existante. N'écrit dans la colonne $field que
+     * si elle est vide ET que $relativePath existe sur le disque public.
+     */
+    private function attacherPhotoSiVide($model, string $relativePath, string $field = 'photo'): void
+    {
+        if (! empty($model->{$field})) {
+            return;
+        }
+        if (! file_exists(storage_path('app/public/' . $relativePath))) {
+            return;
+        }
+        // saveQuietly évite events/observers et timestamps si on en ajoute plus tard.
+        $model->{$field} = $relativePath;
+        $model->save();
     }
 }

@@ -105,11 +105,15 @@ class SalonController extends Controller
         $data['valide']   = (int) $data['valide'];
         $data['horaires'] = $this->buildHoraires($request);
 
+        // Sans nouveau fichier, on retire la clé : aucun chemin ne doit
+        // jamais venir écraser la photo existante du salon.
         if ($request->hasFile('photo')) {
             if ($salon->photo) {
                 Storage::disk('public')->delete($salon->photo);
             }
             $data['photo'] = $request->file('photo')->store('salons', 'public');
+        } else {
+            unset($data['photo']);
         }
 
         if ($data['valide'] === 1 && ! $salon->date_valid) {

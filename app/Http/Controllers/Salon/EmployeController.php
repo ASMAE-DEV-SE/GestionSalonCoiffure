@@ -63,10 +63,13 @@ class EmployeController extends Controller
         $data['specialites'] = $request->specialites ?? [];
         $data['horaires']    = $this->buildHoraires($request);
 
-        // Upload photo
+        // Upload photo. Pas de fichier → ne pas créer la colonne avec une
+        // valeur vide, on laisse photo NULL et le placeholder s'affiche.
         if ($request->hasFile('photo')) {
             $data['photo'] = $request->file('photo')
                 ->store('employes', 'public');
+        } else {
+            unset($data['photo']);
         }
 
         Employe::create($data);
@@ -103,12 +106,15 @@ class EmployeController extends Controller
         $data['specialites'] = $request->specialites ?? [];
         $data['horaires']    = $this->buildHoraires($request);
 
-        // Nouvelle photo
+        // Nouvelle photo. En l'absence de fichier on retire la clé pour
+        // ne JAMAIS écraser la photo de l'employé.
         if ($request->hasFile('photo')) {
             if ($employe->photo) {
                 Storage::disk('public')->delete($employe->photo);
             }
             $data['photo'] = $request->file('photo')->store('employes', 'public');
+        } else {
+            unset($data['photo']);
         }
 
         $employe->update($data);

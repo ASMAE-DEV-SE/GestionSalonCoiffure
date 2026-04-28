@@ -60,12 +60,16 @@ class ProfilSalonController extends Controller
             'photo.max'          => 'La photo principale ne doit pas dépasser 5 Mo.',
         ]);
 
-        // Upload nouvelle photo principale
+        // Upload nouvelle photo principale.
+        // Sans nouveau fichier on retire explicitement la clé pour ne JAMAIS
+        // écraser la photo existante, même si la validation la renvoyait.
         if ($request->hasFile('photo')) {
             if ($salon->photo) {
                 Storage::disk('public')->delete($salon->photo);
             }
             $data['photo'] = $request->file('photo')->store('salons', 'public');
+        } else {
+            unset($data['photo']);
         }
 
         // Construire le JSON horaires
