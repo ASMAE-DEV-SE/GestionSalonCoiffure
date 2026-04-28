@@ -14,10 +14,17 @@ use App\Models\Avis;
 class SalonDemoSeeder extends Seeder
 {
     /**
-     * Règle d'or : ce seeder ne touche JAMAIS aux colonnes photo/image
-     * existantes. Si une photo a été uploadée par un salon ou un admin,
-     * elle est strictement préservée. Un fichier de démo n'est ré-attaché
-     * QUE si la colonne est vide ET que le fichier existe sur disque.
+     * Règle d'or : ce seeder ne touche JAMAIS à une donnée existante d'un
+     * salon, d'un employé ou d'un service — photos comprises.
+     *
+     * Salons / employés / services utilisent firstOrCreate : si la ligne
+     * existe déjà (un gérant a personnalisé son nom, ses prix, ses
+     * spécialités, sa photo…), aucun champ n'est réécrasé. Seules les
+     * lignes manquantes sont créées avec les valeurs de démo.
+     *
+     * Le helper attacherPhotoSiVide() ne renseigne la photo que si la
+     * colonne est vide ET que le fichier de démo existe sur disque, donc
+     * un upload utilisateur est strictement préservé.
      */
     public function run(): void
     {
@@ -50,7 +57,7 @@ class SalonDemoSeeder extends Seeder
             'email_verifie_le' => now(),
         ]);
 
-        $salon1 = Salon::updateOrCreate(['user_id' => $gerant1->id], [
+        $salon1 = Salon::firstOrCreate(['user_id' => $gerant1->id], [
             'ville_id'    => $rabatId,
             'nom_salon'   => 'Elegance Coiffure',
             'adresse'     => '12, Rue Ibn Sina',
@@ -70,7 +77,7 @@ class SalonDemoSeeder extends Seeder
         ]);
 
         // Employés salon 1
-        $emp1 = Employe::updateOrCreate(['email' => 'fatima.z@elegance.ma'], [
+        $emp1 = Employe::firstOrCreate(['email' => 'fatima.z@elegance.ma'], [
             'salon_id'    => $salon1->id,
             'nom'         => 'Zahra',
             'prenom'      => 'Fatima',
@@ -80,7 +87,7 @@ class SalonDemoSeeder extends Seeder
             'actif'       => true,
         ]);
 
-        $emp2 = Employe::updateOrCreate(['email' => 'sara.m@elegance.ma'], [
+        $emp2 = Employe::firstOrCreate(['email' => 'sara.m@elegance.ma'], [
             'salon_id'    => $salon1->id,
             'nom'         => 'Moussaoui',
             'prenom'      => 'Sara',
@@ -91,12 +98,12 @@ class SalonDemoSeeder extends Seeder
         ]);
 
         // Services salon 1
-        $svc1 = Service::updateOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Coupe femme'],         ['prix' => 120, 'duree_minu' => 45,  'categorie' => 'Coiffure', 'actif' => 1, 'description' => 'Coupe, shampooing et brushing inclus.']);
-        $svc2 = Service::updateOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Coupe + Brushing'],    ['prix' => 160, 'duree_minu' => 60,  'categorie' => 'Coiffure', 'actif' => 1, 'description' => 'Coupe sur mesure avec brushing volume longue durée.']);
-        $svc3 = Service::updateOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Coloration globale'],  ['prix' => 280, 'duree_minu' => 90,  'categorie' => 'Couleur',  'actif' => 1, 'description' => 'Coloration uniforme, produits inclus.']);
-        $svc4 = Service::updateOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Mèches / Balayage'],   ['prix' => 380, 'duree_minu' => 120, 'categorie' => 'Couleur',  'actif' => 1, 'description' => 'Balayage naturel. Brushing inclus.']);
-        $svc5 = Service::updateOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Brushing seul'],       ['prix' => 80,  'duree_minu' => 30,  'categorie' => 'Coiffure', 'actif' => 1, 'description' => 'Brushing volume et brillance.']);
-        $svc6 = Service::updateOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Soin visage hydratant'],['prix' => 190, 'duree_minu' => 60, 'categorie' => 'Soins',    'actif' => 1, 'description' => 'Nettoyage, gommage et masque hydratant.']);
+        $svc1 = Service::firstOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Coupe femme'],         ['prix' => 120, 'duree_minu' => 45,  'categorie' => 'Coiffure', 'actif' => 1, 'description' => 'Coupe, shampooing et brushing inclus.']);
+        $svc2 = Service::firstOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Coupe + Brushing'],    ['prix' => 160, 'duree_minu' => 60,  'categorie' => 'Coiffure', 'actif' => 1, 'description' => 'Coupe sur mesure avec brushing volume longue durée.']);
+        $svc3 = Service::firstOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Coloration globale'],  ['prix' => 280, 'duree_minu' => 90,  'categorie' => 'Couleur',  'actif' => 1, 'description' => 'Coloration uniforme, produits inclus.']);
+        $svc4 = Service::firstOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Mèches / Balayage'],   ['prix' => 380, 'duree_minu' => 120, 'categorie' => 'Couleur',  'actif' => 1, 'description' => 'Balayage naturel. Brushing inclus.']);
+        $svc5 = Service::firstOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Brushing seul'],       ['prix' => 80,  'duree_minu' => 30,  'categorie' => 'Coiffure', 'actif' => 1, 'description' => 'Brushing volume et brillance.']);
+        $svc6 = Service::firstOrCreate(['salon_id' => $salon1->id, 'nom_service' => 'Soin visage hydratant'],['prix' => 190, 'duree_minu' => 60, 'categorie' => 'Soins',    'actif' => 1, 'description' => 'Nettoyage, gommage et masque hydratant.']);
 
         // ══════════════════════════════════════════════════════════
         // SALON 2 — Prestige Hair Studio (Hay Riad)
@@ -110,7 +117,7 @@ class SalonDemoSeeder extends Seeder
             'email_verifie_le' => now(),
         ]);
 
-        $salon2 = Salon::updateOrCreate(['user_id' => $gerant2->id], [
+        $salon2 = Salon::firstOrCreate(['user_id' => $gerant2->id], [
             'ville_id'    => $rabatId,
             'nom_salon'   => 'Prestige Hair Studio',
             'adresse'     => '45, Avenue Mohammed VI',
@@ -129,7 +136,7 @@ class SalonDemoSeeder extends Seeder
             'date_valid'  => now()->subMonths(5),
         ]);
 
-        Employe::updateOrCreate(['email' => 'khadija@prestige.ma'], [
+        Employe::firstOrCreate(['email' => 'khadija@prestige.ma'], [
             'salon_id'    => $salon2->id,
             'nom'         => 'El Idrissi',
             'prenom'      => 'Khadija',
@@ -139,9 +146,9 @@ class SalonDemoSeeder extends Seeder
             'actif'       => true,
         ]);
 
-        Service::updateOrCreate(['salon_id' => $salon2->id, 'nom_service' => 'Coupe femme premium'], ['prix' => 150, 'duree_minu' => 60,  'categorie' => 'Coiffure', 'actif' => 1, 'description' => 'Consultation + coupe + brushing.']);
-        Service::updateOrCreate(['salon_id' => $salon2->id, 'nom_service' => 'Lissage brésilien'],  ['prix' => 550, 'duree_minu' => 180, 'categorie' => 'Couleur',  'actif' => 1, 'description' => 'Kératine longue durée. 4 à 6 mois.']);
-        Service::updateOrCreate(['salon_id' => $salon2->id, 'nom_service' => 'Manucure classique'], ['prix' => 110, 'duree_minu' => 45,  'categorie' => 'Ongles',   'actif' => 1, 'description' => 'Soin mains + vernis.']);
+        Service::firstOrCreate(['salon_id' => $salon2->id, 'nom_service' => 'Coupe femme premium'], ['prix' => 150, 'duree_minu' => 60,  'categorie' => 'Coiffure', 'actif' => 1, 'description' => 'Consultation + coupe + brushing.']);
+        Service::firstOrCreate(['salon_id' => $salon2->id, 'nom_service' => 'Lissage brésilien'],  ['prix' => 550, 'duree_minu' => 180, 'categorie' => 'Couleur',  'actif' => 1, 'description' => 'Kératine longue durée. 4 à 6 mois.']);
+        Service::firstOrCreate(['salon_id' => $salon2->id, 'nom_service' => 'Manucure classique'], ['prix' => 110, 'duree_minu' => 45,  'categorie' => 'Ongles',   'actif' => 1, 'description' => 'Soin mains + vernis.']);
 
         // ══════════════════════════════════════════════════════════
         // SALON 3 — L'Atelier Beauté (Souissi)
@@ -155,7 +162,7 @@ class SalonDemoSeeder extends Seeder
             'email_verifie_le' => now(),
         ]);
 
-        $salon3 = Salon::updateOrCreate(['user_id' => $gerant3->id], [
+        $salon3 = Salon::firstOrCreate(['user_id' => $gerant3->id], [
             'ville_id'    => $rabatId,
             'nom_salon'   => "L'Atelier Beauté",
             'adresse'     => '8, Rue Patrice Lumumba',
@@ -174,7 +181,7 @@ class SalonDemoSeeder extends Seeder
             'date_valid'  => now()->subMonths(8),
         ]);
 
-        $emp3 = Employe::updateOrCreate(['email' => 'sara.mk@atelier.ma'], [
+        $emp3 = Employe::firstOrCreate(['email' => 'sara.mk@atelier.ma'], [
             'salon_id'    => $salon3->id,
             'nom'         => 'Moukrim',
             'prenom'      => 'Sara',
@@ -184,9 +191,9 @@ class SalonDemoSeeder extends Seeder
             'actif'       => true,
         ]);
 
-        Service::updateOrCreate(['salon_id' => $salon3->id, 'nom_service' => 'Soin visage éclat'], ['prix' => 220, 'duree_minu' => 75, 'categorie' => 'Soins',   'actif' => 1, 'description' => 'Rituel : démaquillage, peeling, masque, sérum.']);
-        Service::updateOrCreate(['salon_id' => $salon3->id, 'nom_service' => 'Massage relaxant'],  ['prix' => 280, 'duree_minu' => 60, 'categorie' => 'Massage', 'actif' => 1, 'description' => 'Massage corps complet aux huiles essentielles.']);
-        Service::updateOrCreate(['salon_id' => $salon3->id, 'nom_service' => 'Hammam & gommage'],  ['prix' => 250, 'duree_minu' => 90, 'categorie' => 'Soins',   'actif' => 1, 'description' => 'Hammam traditionnel + savon beldi et kessa.']);
+        Service::firstOrCreate(['salon_id' => $salon3->id, 'nom_service' => 'Soin visage éclat'], ['prix' => 220, 'duree_minu' => 75, 'categorie' => 'Soins',   'actif' => 1, 'description' => 'Rituel : démaquillage, peeling, masque, sérum.']);
+        Service::firstOrCreate(['salon_id' => $salon3->id, 'nom_service' => 'Massage relaxant'],  ['prix' => 280, 'duree_minu' => 60, 'categorie' => 'Massage', 'actif' => 1, 'description' => 'Massage corps complet aux huiles essentielles.']);
+        Service::firstOrCreate(['salon_id' => $salon3->id, 'nom_service' => 'Hammam & gommage'],  ['prix' => 250, 'duree_minu' => 90, 'categorie' => 'Soins',   'actif' => 1, 'description' => 'Hammam traditionnel + savon beldi et kessa.']);
 
         // ══════════════════════════════════════════════════════════
         // RÉSERVATIONS DE DÉMO
