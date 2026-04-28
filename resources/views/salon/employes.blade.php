@@ -62,7 +62,7 @@
         </div>
         <div class="emp-foot">
           <button class="tbl-btn tbl-btn-e"
-                  onclick="openEditEmp({{ $emp->id }}, '{{ $emp->prenom }}', '{{ $emp->nom }}', '{{ $emp->email }}', '{{ $emp->tel }}')">
+                  onclick='openEditEmp(@json($emp->id), @json($emp->prenom), @json($emp->nom), @json($emp->email ?? ""), @json($emp->tel ?? ""), @json($emp->specialites ?? []))'>
             Modifier
           </button>
           <form method="POST" action="{{ route('salon.employes.destroy', $emp->id) }}"
@@ -121,14 +121,21 @@
 
 @push('scripts')
 <script>
+function setSpecialitesChecked(values) {
+  const set = new Set(values || []);
+  document.querySelectorAll('#empForm input[name="specialites[]"]').forEach(cb => {
+    cb.checked = set.has(cb.value);
+  });
+}
 function openEmpModal() {
   document.getElementById('empModalTitle').textContent = 'Ajouter un(e) employé(e)';
   document.getElementById('empForm').action = '{{ route('salon.employes.store') }}';
   document.getElementById('empMethod').value = 'POST';
   ['prenom','nom','email','tel'].forEach(f => document.getElementById('ep_' + f).value = '');
+  setSpecialitesChecked([]);
   document.getElementById('empModal').style.display = 'flex';
 }
-function openEditEmp(id, prenom, nom, email, tel) {
+function openEditEmp(id, prenom, nom, email, tel, specialites) {
   document.getElementById('empModalTitle').textContent = 'Modifier — ' + prenom + ' ' + nom;
   document.getElementById('empForm').action = '/salon/employes/' + id;
   document.getElementById('empMethod').value = 'PUT';
@@ -136,6 +143,7 @@ function openEditEmp(id, prenom, nom, email, tel) {
   document.getElementById('ep_nom').value    = nom;
   document.getElementById('ep_email').value  = email;
   document.getElementById('ep_tel').value    = tel;
+  setSpecialitesChecked(specialites);
   document.getElementById('empModal').style.display = 'flex';
 }
 function closeEmpModal() { document.getElementById('empModal').style.display = 'none'; }

@@ -102,9 +102,26 @@ class EmployeController extends Controller
             'photo'        => ['nullable', 'image', 'mimes:jpeg,png,webp', 'max:2048'],
         ]);
 
-        $data['actif']       = $request->boolean('actif');
-        $data['specialites'] = $request->specialites ?? [];
-        $data['horaires']    = $this->buildHoraires($request);
+        $data['actif'] = $request->boolean('actif');
+
+        // Spécialités : ne réécrire que si le formulaire les a transmises.
+        // Sinon on préserve la liste existante (le modal d'édition rapide
+        // n'a pas toujours les checkboxes pré-cochées et un envoi sans
+        // payload effacerait la liste).
+        if ($request->has('specialites')) {
+            $data['specialites'] = $request->specialites ?? [];
+        } else {
+            unset($data['specialites']);
+        }
+
+        // Horaires : gérés sur la page Disponibilités (route dédiée).
+        // Le modal d'édition rapide ne les expose pas : on ne les touche
+        // que si le formulaire a explicitement envoyé un champ horaire.
+        if ($request->hasAny(['h_lundi_debut', 'h_lundi_ferme', 'horaires_lundi_debut', 'horaires_lundi_ferme'])) {
+            $data['horaires'] = $this->buildHoraires($request);
+        } else {
+            unset($data['horaires']);
+        }
 
         // Nouvelle photo. En l'absence de fichier on retire la clé pour
         // ne JAMAIS écraser la photo de l'employé.
