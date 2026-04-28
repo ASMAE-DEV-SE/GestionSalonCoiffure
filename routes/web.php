@@ -98,14 +98,12 @@ Route::middleware(['auth', 'role:salon'])->prefix('salon')->name('salon.')->grou
     Route::get('/profil', [ProfilSalonController::class, 'edit'])->name('profil.edit');
     Route::put('/profil', [ProfilSalonController::class, 'update'])->name('profil.update');
     Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
-    Route::get('/services/create', [ServiceController::class, 'create'])->name('svcForm');
     Route::post('/services', [ServiceController::class, 'store'])->name('services.store');
     Route::get('/services/{id}/edit', [ServiceController::class, 'edit'])->name('services.edit');
     Route::put('/services/{id}', [ServiceController::class, 'update'])->name('services.update');
     Route::delete('/services/{id}', [ServiceController::class, 'destroy'])->name('services.destroy');
     Route::patch('/services/{id}/toggle', [ServiceController::class, 'toggleActif'])->name('services.toggle');
     Route::get('/employes', [EmployeController::class, 'index'])->name('employes.index');
-    Route::get('/employes/create', [EmployeController::class, 'index'])->name('empForm');
     Route::post('/employes', [EmployeController::class, 'store'])->name('employes.store');
     Route::put('/employes/{id}', [EmployeController::class, 'update'])->name('employes.update');
     Route::delete('/employes/{id}', [EmployeController::class, 'destroy'])->name('employes.destroy');
