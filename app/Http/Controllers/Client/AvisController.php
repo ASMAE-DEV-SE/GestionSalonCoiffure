@@ -91,18 +91,7 @@ class AvisController extends Controller
         ]);
 
         // Recalculer note_moy et nb_avis du salon
-        $salon  = $reservation->salon;
-        $nbAvis = Avis::whereHas('reservation',
-                      fn($q) => $q->where('salon_id', $salon->id)
-                  )->count();
-        $noteMoy = Avis::whereHas('reservation',
-                       fn($q) => $q->where('salon_id', $salon->id)
-                   )->avg('note');
-
-        $salon->update([
-            'nb_avis'  => $nbAvis,
-            'note_moy' => round($noteMoy, 2),
-        ]);
+        $reservation->salon->recalculerStatsAvis();
 
         // Notifier le propriétaire du salon (in-app + email)
         $this->notifService->notifierNouvelAvis($avis);

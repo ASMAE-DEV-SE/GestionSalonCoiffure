@@ -80,10 +80,6 @@
     <div class="avis-mod-foot">
       <div class="avis-mod-signal-by">ID #{{ $a->id }} · RDV {{ $a->reservation->date_heure->translatedFormat('d M Y') }}</div>
       <div class="avis-mod-actions">
-        <form method="POST" action="{{ route('admin.avis.approuver', $a->id) }}">
-          @csrf
-          <button type="submit" class="btn-mod-approve">&#10003; Maintenir</button>
-        </form>
         <form method="POST" action="{{ route('admin.avis.destroy', $a->id) }}"
               onsubmit="return confirm('Supprimer définitivement cet avis ?')">
           @csrf @method('DELETE')

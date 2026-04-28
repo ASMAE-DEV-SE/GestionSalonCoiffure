@@ -46,17 +46,23 @@ class AvisController extends Controller
         return view('admin.avis', compact('avis', 'stats', 'salons'));
     }
 
-    public function approuver(int $id): RedirectResponse
-    {
-        Log::info('Admin: avis approuve', ['admin_id' => Auth::id(), 'avis_id' => $id]);
-        return back()->with('success', 'Avis maintenu.');
-    }
-
     public function destroy(int $id): RedirectResponse
     {
-        Avis::findOrFail($id)->delete();
+        $avis  = Avis::with('reservation.salon')->findOrFail($id);
+        $salon = $avis->reservation?->salon;
 
-        Log::info('Admin: avis supprime', ['admin_id' => Auth::id(), 'avis_id' => $id]);
+        $avis->delete();
+
+        // La note moyenne et le compteur d'avis du salon doivent refléter
+        // la suppression — sinon le salon garde une moyenne calculée sur
+        // un avis qui n'existe plus en base.
+        $salon?->recalculerStatsAvis();
+
+        Log::info('Admin: avis supprime', [
+            'admin_id' => Auth::id(),
+            'avis_id'  => $id,
+            'salon_id' => $salon?->id,
+        ]);
 
         return back()->with('success', 'Avis supprimé.');
     }

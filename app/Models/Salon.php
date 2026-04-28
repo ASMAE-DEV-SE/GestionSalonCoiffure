@@ -288,4 +288,23 @@ class Salon extends Model
             'id'               // PK reservations
         );
     }
+
+    /**
+     * Recalcule note_moy et nb_avis depuis la table avis.
+     *
+     * À appeler après toute opération qui ajoute, supprime ou modifie un avis
+     * lié à ce salon (publication client, suppression admin, suppression de
+     * réservation cascadée…).
+     */
+    public function recalculerStatsAvis(): void
+    {
+        $stats = Avis::whereHas('reservation', fn ($q) => $q->where('salon_id', $this->id))
+            ->selectRaw('COUNT(*) AS nb, AVG(note) AS moy')
+            ->first();
+
+        $this->update([
+            'nb_avis'  => (int) ($stats->nb ?? 0),
+            'note_moy' => $stats && $stats->nb > 0 ? round((float) $stats->moy, 2) : 0,
+        ]);
+    }
 }

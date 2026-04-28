@@ -149,7 +149,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::put('/villes/{id}', [AdminVilleController::class, 'update'])->name('villes.update');
     Route::delete('/villes/{id}', [AdminVilleController::class, 'destroy'])->name('villes.destroy');
     Route::get('/avis', [AdminAvisController::class, 'index'])->name('avis.index');
-    Route::post('/avis/{id}/approuver', [AdminAvisController::class, 'approuver'])->name('avis.approuver');
     Route::delete('/avis/{id}', [AdminAvisController::class, 'destroy'])->name('avis.destroy');
     Route::get('/statistiques', [StatistiqueController::class, 'index'])->name('statistiques.index');
     Route::get('/statistiques/export', [StatistiqueController::class, 'export'])->name('statistiques.export');
