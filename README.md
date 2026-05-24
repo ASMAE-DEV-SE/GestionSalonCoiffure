@@ -180,7 +180,7 @@ php artisan storage:link
 php artisan serve --port=8000
 ```
 
-L'application est accessible sur : **[](https://salonify.ma/)**
+L'application est accessible sur : **[https://salonify.ma/]**
 
 ---
 
